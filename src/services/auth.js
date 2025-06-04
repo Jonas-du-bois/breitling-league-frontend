@@ -28,7 +28,7 @@ export default {
    * Récupère les informations de l'utilisateur connecté
    */
   getUser() {
-    return api.get('/me');
+    return api.get('/profile');
   },
 
   /**

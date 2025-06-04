@@ -13,8 +13,9 @@
     <div v-else-if="user" class="user-info">
       <h3>Bienvenue, {{ user.name }} !</h3>
       <p><strong>Email :</strong> {{ user.email }}</p>
-      <p v-if="user.nom"><strong>Nom complet :</strong> {{ user.nom }}</p>
-      <p><strong>Date d'inscription :</strong> {{ formatDate(user.date_inscription) }}</p>
+      <p v-if="user.name"><strong>Nom complet :</strong> {{ user.name }}</p>
+      <p><strong>Date d'inscription :</strong> {{ formatDate(user.registration_date) }}</p>
+      <p><strong>Token d'authentification :</strong> <code class="token">{{ token }}</code></p>
       
       <div class="actions">
         <button @click="logout" class="btn-danger">
@@ -60,7 +61,8 @@ export default {
       user: this.initialUser,
       loading: false,
       error: null,
-      apiResponse: null
+      apiResponse: null,
+      token: localStorage.getItem('token') || 'Non disponible'
     };
   },
   created() {
@@ -100,6 +102,7 @@ export default {
         await auth.logout();
         localStorage.removeItem('token');
         this.user = null;
+        this.token = 'Non disponible';
         this.$emit('logout');
       } catch (error) {
         console.error('Erreur lors de la déconnexion', error);
@@ -235,5 +238,20 @@ pre {
   padding: 20px;
   color: #666;
   font-style: italic;
+}
+
+.token {
+  display: block;
+  padding: 8px;
+  margin-top: 5px;
+  background: #f0f0f0;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  word-break: break-all;
+  font-family: monospace;
+  font-size: 14px;
+  color: #333;
+  max-height: 100px;
+  overflow-y: auto;
 }
 </style>
