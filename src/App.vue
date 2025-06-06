@@ -1,34 +1,9 @@
 <script>
-import LoginForm from './components/LoginForm.vue';
-import UserProfile from './components/UserProfile.vue';
+import TestProgressView from '@/views/TestProgressViewNew.vue';
 
 export default {
   components: {
-    LoginForm,
-    UserProfile
-  },
-  data() {
-    return {
-      authenticated: false,
-      user: null
-    };
-  },
-  created() {
-    // Vérifier si un token est déjà stocké
-    const token = localStorage.getItem('token');
-    if (token) {
-      this.authenticated = true;
-    }
-  },
-  methods: {
-    handleLoginSuccess(data) {
-      this.authenticated = true;
-      this.user = data.user;
-    },
-    handleLogout() {
-      this.authenticated = false;
-      this.user = null;
-    }
+    TestProgressView
   }
 }
 </script>
@@ -36,23 +11,16 @@ export default {
 <template>
   <div class="app-container">
     <header class="app-header">
-      <h1>Test d'Authentification API</h1>
+      <h1>Breitling League - Test du Composable useProgress</h1>
+      <p>Vue de test avec les vraies structures API Postman/Scribe</p>
     </header>
     
     <main class="app-content">
-      <div v-if="!authenticated">
-        <LoginForm @login-success="handleLoginSuccess" />
-      </div>
-      <div v-else>
-        <UserProfile 
-          :initial-user="user"
-          @logout="handleLogout"
-        />
-      </div>
+      <TestProgressView />
     </main>
     
     <footer class="app-footer">
-      <p>Breitling League - Test d'authentification API</p>
+      <p>Breitling League - Frontend avec composables adaptés aux vraies API</p>
     </footer>
   </div>
 </template>
@@ -63,32 +31,101 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .app-header {
-  text-align: center;
-  margin-bottom: 30px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 1rem 2rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .app-header h1 {
+  margin: 0;
+  font-weight: 600;
+  font-size: 1.8rem;
+}
+
+.app-navigation {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+  align-items: center;
+}
+
+.nav-btn {
+  padding: 0.5rem 1rem;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  background: transparent;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
   font-weight: 500;
-  color: #35495e;
+  transition: all 0.3s ease;
+}
+
+.nav-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.nav-btn.active {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: white;
+}
+
+.logout-btn {
+  margin-left: auto;
+  border-color: #ff6b6b;
+}
+
+.logout-btn:hover {
+  background: #ff6b6b;
+  border-color: #ff6b6b;
+}
+
+.app-content {
+  flex: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 2rem;
 }
 
 .app-footer {
   text-align: center;
-  margin-top: 40px;
-  padding-top: 20px;
+  padding: 1rem;
+  background: #f8f9fa;
   border-top: 1px solid #eee;
   color: #666;
   font-size: 14px;
+  margin-top: auto;
 }
 
 body {
   margin: 0;
-  background-color: #f9f9f9;
+  background-color: #f8fafc;
+}
+
+@media (max-width: 768px) {
+  .app-header {
+    padding: 1rem;
+  }
+  
+  .app-navigation {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .logout-btn {
+    margin-left: 0;
+  }
+  
+  .app-content {
+    padding: 1rem;
+  }
 }
 </style>
