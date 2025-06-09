@@ -7,21 +7,18 @@ export default {
 <template>
   <div class="app-container">
     <header class="app-header">
-      <h1>Breitling League - Test des Composables</h1>
-      <p>Vue de test avec les vraies structures API Postman/Scribe</p>
+      <h1>Breitling League - Système de Quiz</h1>
+      <p>Application de gestion des quiz avec système polymorphique</p>
       
       <nav class="app-navigation">
         <router-link to="/" class="nav-btn" active-class="active">
-          📊 Test Progression
+          📊 Dashboard
         </router-link>
-        <router-link to="/test-quiz-updated" class="nav-btn" active-class="active">
+        <router-link to="/test-quiz" class="nav-btn" active-class="active">
           🎯 Test Quiz
         </router-link>
-        <router-link to="/quiz-user-journey" class="nav-btn" active-class="active">
-          🎮 Parcours Quiz
-        </router-link>
-        <router-link to="/user-quiz-test" class="nav-btn" active-class="active">
-          🧪 Test Utilisateur Quiz
+        <router-link to="/login" class="nav-btn" active-class="active">
+          🔐 Connexion
         </router-link>
       </nav>
     </header>

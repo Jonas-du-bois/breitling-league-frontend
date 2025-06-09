@@ -201,5 +201,72 @@ export default {
     }
     
     return converted;
-  }
+  },
+
+  /**
+   * Récupère le challenge hebdomadaire actuel
+   * @returns {Promise} Promesse contenant le challenge de la semaine
+   */
+  getCurrentWeeklyChallenge() {
+    console.log('📅 Service Quiz - Récupération du challenge hebdomadaire actuel');
+    return api.get('/quiz/weekly/current');
+  },
+
+  /**
+   * Récupère le progrès détaillé de l'utilisateur
+   * @returns {Promise} Promesse contenant le progrès par type de quiz
+   */
+  getUserProgress() {
+    console.log('📊 Service Quiz - Récupération du progrès utilisateur détaillé');
+    return api.get('/quiz/progress');
+  },
+
+  /**
+   * Récupère une instance de quiz spécifique
+   * @param {number} instanceId - ID de l'instance de quiz
+   * @returns {Promise} Promesse contenant l'instance de quiz
+   */
+  getQuizInstance(instanceId) {
+    console.log(`🎯 Service Quiz - Récupération de l'instance ${instanceId}`);
+    return api.get(`/quiz/instances/${instanceId}`);
+  },
+
+  /**
+   * Récupère les quiz recommandés pour l'utilisateur
+   * @returns {Promise} Promesse contenant les recommandations personnalisées
+   */
+  getRecommendations() {
+    console.log('💡 Service Quiz - Récupération des recommandations');
+    return api.get('/quiz/recommendations');
+  },
+
+  /**
+   * Marque un quiz comme favori
+   * @param {number} quizTypeId - ID du type de quiz
+   * @returns {Promise} Promesse contenant la confirmation
+   */
+  toggleFavorite(quizTypeId) {
+    console.log(`❤️ Service Quiz - Toggle favori pour le type ${quizTypeId}`);
+    return api.post(`/quiz/types/${quizTypeId}/favorite`);
+  },
+
+  /**
+   * Récupère l'historique des quiz terminés
+   * @param {Object} filters - Filtres optionnels
+   * @returns {Promise} Promesse contenant l'historique
+   */
+  getHistory(filters = {}) {
+    console.log('📜 Service Quiz - Récupération de l\'historique', filters);
+    return api.get('/quiz/history', { params: filters });
+  },
+
+  /**
+   * Récupère une instance de quiz spécifique
+   * @param {number} quizInstanceId - ID de l'instance de quiz
+   * @returns {Promise} Promesse contenant les données de l'instance
+   */
+  getInstance(quizInstanceId) {
+    console.log('🔍 Service Quiz - Récupération instance:', quizInstanceId);
+    return api.get(`/quiz/instance/${quizInstanceId}`);
+  },
 };
