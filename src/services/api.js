@@ -15,9 +15,12 @@ const api = axios.create({
 // Intercepteur pour ajouter le token d'authentification à chaque requête
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('auth_token');
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+      config.headers.Authorization = token; 
+      console.log('🔑 Token ajouté à la requête:', token);
+    } else {
+      console.warn('⚠️ Aucun token d\'authentification trouvé');
     }
     return config;
   },
@@ -38,11 +41,10 @@ api.interceptors.response.use(
       // Le serveur a répondu avec un code d'erreur
       const { status, data } = error.response;
       
-      switch (status) {
-        case 401:
+      switch (status) {        case 401:
           // Token expiré ou invalide
           console.warn('Session expirée. Redirection vers la page de connexion.');
-          localStorage.removeItem('token');
+          localStorage.removeItem('auth_token'); // Correction: utiliser 'auth_token' au lieu de 'token'
           // Éviter la redirection automatique ici pour laisser le composant gérer
           break;
           

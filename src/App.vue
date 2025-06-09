@@ -1,22 +1,33 @@
 <script>
-import TestProgressView from '@/views/TestProgressViewNew.vue';
-
 export default {
-  components: {
-    TestProgressView
-  }
+  name: 'App'
 }
 </script>
 
 <template>
   <div class="app-container">
     <header class="app-header">
-      <h1>Breitling League - Test du Composable useProgress</h1>
+      <h1>Breitling League - Test des Composables</h1>
       <p>Vue de test avec les vraies structures API Postman/Scribe</p>
+      
+      <nav class="app-navigation">
+        <router-link to="/" class="nav-btn" active-class="active">
+          📊 Test Progression
+        </router-link>
+        <router-link to="/test-quiz-updated" class="nav-btn" active-class="active">
+          🎯 Test Quiz
+        </router-link>
+        <router-link to="/quiz-user-journey" class="nav-btn" active-class="active">
+          🎮 Parcours Quiz
+        </router-link>
+        <router-link to="/user-quiz-test" class="nav-btn" active-class="active">
+          🧪 Test Utilisateur Quiz
+        </router-link>
+      </nav>
     </header>
     
     <main class="app-content">
-      <TestProgressView />
+      <router-view />
     </main>
     
     <footer class="app-footer">
