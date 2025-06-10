@@ -5,11 +5,6 @@ import QuizTestView from '@/views/QuizTestView.vue'
 import LoginView from '@/views/LoginView.vue'
 import QuizPage from '@/views/QuizPage.vue'
 import QuizReviewPage from '@/views/QuizReviewPage.vue'
-import { createRouter, createWebHistory } from 'vue-router'
-import QuizDashboard from '@/views/QuizDashboard.vue'
-import QuizPlay from '@/views/QuizPlay.vue'
-import QuizTestView from '@/views/QuizTestView.vue'
-import LoginView from '@/views/LoginView.vue'
 
 const routes = [
   {
@@ -45,8 +40,8 @@ const routes = [
     path: '/quiz/:id/play',
     name: 'QuizPlay',
     component: QuizPlay,
-  },
     meta: { title: 'Quiz en Cours', requiresAuth: true }
+  },
   {
     path: '/quiz/:quizId/start',
     name: 'QuizPage',
@@ -71,7 +66,7 @@ const routes = [
     name: 'TestQuiz',
     component: QuizTestView,
     meta: { title: 'Sélection de Quiz', requiresAuth: true }
-  }
+  },
   {
     path: '/quiz',
     name: 'Quiz',
