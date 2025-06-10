@@ -1,4 +1,60 @@
+/* Tailwind CSS */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom Properties for ChapterCard */
 :root {
+  /* Dimensions */
+  --dimensions-width-full: 402px;
+  --dimensions-width-full-bothmargins: 338px;
+  --spacing-32: 32px;
+  
+  /* Colors */
+  --card-background-color-light: #FFFFFF;
+  --card-text-color-dark: #072C54;
+  --card-stroke-color: #072C54;
+  --color-secondary-black: #000000;
+  --color-primary-blue-100: #072C54;
+  --color-primary-yellow-100: #FFC72C;
+  --color-secondary-grey-100: #09091A;
+  --icon-color-dark-default: #09091A;
+  --badge-label-color-light: #76787B;
+  
+  /* Typography */
+  --fontfamily-default: "Italian Plate No2";
+  --fontsize-32: 32px;
+  --fontsize-20: 20px;
+}
+
+/* Import Design Tokens */
+@import './assets/design-tokens.css';
+
+/* Import Typography System */
+@import './assets/typography.css';
+
+:root {
+  /* Dimensions */
+  --dimensions-width-full: 402px;
+  --dimensions-width-full-bothmargins: 338px;
+  --spacing-32: 32px;
+
+  /* Colors */
+  --card-background-color-light: #FFFFFF;
+  --card-text-color-dark: #072C54;
+  --card-stroke-color: #072C54;
+  --color-secondary-black: #000000;
+  --color-primary-blue-100: #072C54;
+  --color-primary-yellow-100: #FFC72C;
+  --color-secondary-grey-100: #09091A;
+  --icon-color-dark-default: #09091A;
+  --badge-label-color-light: #76787B;
+
+  /* Typography */
+  --fontfamily-default: "Italian Plate No2";
+  --fontsize-32: 32px;
+  --fontsize-20: 20px;
+
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;

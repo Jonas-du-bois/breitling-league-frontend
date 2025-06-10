@@ -1,0 +1,281 @@
+/**
+ * Typography System
+ * 
+ * Typography styles and text utilities for consistent text rendering.
+ * Based on Figma design specifications and brand guidelines.
+ */
+
+/* ===== TYPOGRAPHY CSS CUSTOM PROPERTIES ===== */
+
+:root {
+  /* Font Families */
+  --fontfamily-default: "Italian Plate No2", "Helvetica Neue", Arial, sans-serif;
+  --fontfamily-secondary: "Inter", "Segoe UI", Tahoma, sans-serif;
+  --fontfamily-mono: "Monaco", "Menlo", "Ubuntu Mono", monospace;
+  
+  /* Button Typography */
+  --button-label-color-dark: #072C54;
+  --button-fontsize: 16px;
+  --button-font-weight: 700;
+  --button-letter-spacing: 1.92px;
+  --button-line-height: normal;
+  
+  /* Extended Typography Scale */
+  --font-size-xs: 12px;
+  --font-size-sm: 14px;
+  --font-size-base: 16px;
+  --font-size-lg: 18px;
+  --font-size-xl: 20px;
+  --font-size-2xl: 24px;
+  --font-size-3xl: 30px;
+  --font-size-4xl: 36px;
+  --font-size-5xl: 48px;
+  --font-size-6xl: 60px;
+  
+  /* Font Weights */
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+  --font-weight-black: 900;
+  
+  /* Line Heights */
+  --line-height-tight: 1.25;
+  --line-height-snug: 1.375;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.625;
+  --line-height-loose: 2;
+  
+  /* Letter Spacing */
+  --letter-spacing-tighter: -0.5px;
+  --letter-spacing-tight: -0.25px;
+  --letter-spacing-normal: 0px;
+  --letter-spacing-wide: 0.5px;
+  --letter-spacing-wider: 1px;
+  --letter-spacing-widest: 1.92px;
+}
+
+/* ===== BASE TYPOGRAPHY CLASSES ===== */
+
+.typography-button {
+  color: var(--button-label-color-dark, #072C54);
+  font-family: var(--fontfamily-default, "Italian Plate No2");
+  font-size: var(--button-fontsize, 16px);
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  letter-spacing: 1.92px;
+  text-transform: uppercase;
+}
+
+/* ===== HEADING STYLES ===== */
+
+.typography-h1 {
+  font-family: var(--fontfamily-default, "Italian Plate No2");
+  font-size: var(--font-size-6xl, 60px);
+  font-weight: var(--font-weight-bold, 700);
+  line-height: var(--line-height-tight, 1.25);
+  letter-spacing: var(--letter-spacing-tight, -0.25px);
+  text-transform: uppercase;
+}
+
+.typography-h2 {
+  font-family: var(--fontfamily-default, "Italian Plate No2");
+  font-size: var(--font-size-5xl, 48px);
+  font-weight: var(--font-weight-bold, 700);
+  line-height: var(--line-height-tight, 1.25);
+  letter-spacing: var(--letter-spacing-normal, 0px);
+  text-transform: uppercase;
+}
+
+.typography-h3 {
+  font-family: var(--fontfamily-default, "Italian Plate No2");
+  font-size: var(--font-size-4xl, 36px);
+  font-weight: var(--font-weight-bold, 700);
+  line-height: var(--line-height-snug, 1.375);
+  letter-spacing: var(--letter-spacing-normal, 0px);
+  text-transform: uppercase;
+}
+
+.typography-h4 {
+  font-family: var(--fontfamily-default, "Italian Plate No2");
+  font-size: var(--font-size-3xl, 30px);
+  font-weight: var(--font-weight-semibold, 600);
+  line-height: var(--line-height-snug, 1.375);
+  letter-spacing: var(--letter-spacing-normal, 0px);
+}
+
+.typography-h5 {
+  font-family: var(--fontfamily-default, "Italian Plate No2");
+  font-size: var(--font-size-2xl, 24px);
+  font-weight: var(--font-weight-semibold, 600);
+  line-height: var(--line-height-normal, 1.5);
+  letter-spacing: var(--letter-spacing-normal, 0px);
+}
+
+.typography-h6 {
+  font-family: var(--fontfamily-default, "Italian Plate No2");
+  font-size: var(--font-size-xl, 20px);
+  font-weight: var(--font-weight-semibold, 600);
+  line-height: var(--line-height-normal, 1.5);
+  letter-spacing: var(--letter-spacing-normal, 0px);
+}
+
+/* ===== BODY TEXT STYLES ===== */
+
+.typography-body-large {
+  font-family: var(--fontfamily-secondary, "Inter");
+  font-size: var(--font-size-lg, 18px);
+  font-weight: var(--font-weight-normal, 400);
+  line-height: var(--line-height-relaxed, 1.625);
+  letter-spacing: var(--letter-spacing-normal, 0px);
+}
+
+.typography-body {
+  font-family: var(--fontfamily-secondary, "Inter");
+  font-size: var(--font-size-base, 16px);
+  font-weight: var(--font-weight-normal, 400);
+  line-height: var(--line-height-normal, 1.5);
+  letter-spacing: var(--letter-spacing-normal, 0px);
+}
+
+.typography-body-small {
+  font-family: var(--fontfamily-secondary, "Inter");
+  font-size: var(--font-size-sm, 14px);
+  font-weight: var(--font-weight-normal, 400);
+  line-height: var(--line-height-normal, 1.5);
+  letter-spacing: var(--letter-spacing-normal, 0px);
+}
+
+.typography-caption {
+  font-family: var(--fontfamily-secondary, "Inter");
+  font-size: var(--font-size-xs, 12px);
+  font-weight: var(--font-weight-normal, 400);
+  line-height: var(--line-height-normal, 1.5);
+  letter-spacing: var(--letter-spacing-wide, 0.5px);
+}
+
+/* ===== SPECIALIZED TEXT STYLES ===== */
+
+.typography-label {
+  font-family: var(--fontfamily-secondary, "Inter");
+  font-size: var(--font-size-sm, 14px);
+  font-weight: var(--font-weight-medium, 500);
+  line-height: var(--line-height-normal, 1.5);
+  letter-spacing: var(--letter-spacing-wide, 0.5px);
+  text-transform: uppercase;
+}
+
+.typography-code {
+  font-family: var(--fontfamily-mono, "Monaco");
+  font-size: var(--font-size-sm, 14px);
+  font-weight: var(--font-weight-normal, 400);
+  line-height: var(--line-height-normal, 1.5);
+  letter-spacing: var(--letter-spacing-normal, 0px);
+}
+
+/* ===== BREITLING LEAGUE SPECIFIC STYLES ===== */
+
+.typography-quiz-title {
+  font-family: var(--fontfamily-default, "Italian Plate No2");
+  font-size: var(--font-size-3xl, 30px);
+  font-weight: var(--font-weight-bold, 700);
+  line-height: var(--line-height-tight, 1.25);
+  letter-spacing: var(--letter-spacing-wide, 0.5px);
+  text-transform: uppercase;
+  color: var(--breitling-navy, #1a365d);
+}
+
+.typography-score {
+  font-family: var(--fontfamily-default, "Italian Plate No2");
+  font-size: var(--font-size-4xl, 36px);
+  font-weight: var(--font-weight-black, 900);
+  line-height: var(--line-height-tight, 1.25);
+  letter-spacing: var(--letter-spacing-wider, 1px);
+  color: var(--breitling-gold, #FFC72C);
+}
+
+.typography-rank {
+  font-family: var(--fontfamily-default, "Italian Plate No2");
+  font-size: var(--font-size-2xl, 24px);
+  font-weight: var(--font-weight-bold, 700);
+  line-height: var(--line-height-snug, 1.375);
+  letter-spacing: var(--letter-spacing-widest, 1.92px);
+  text-transform: uppercase;
+  color: var(--button-label-color-dark, #072C54);
+}
+
+.typography-timer {
+  font-family: var(--fontfamily-mono, "Monaco");
+  font-size: var(--font-size-xl, 20px);
+  font-weight: var(--font-weight-bold, 700);
+  line-height: var(--line-height-tight, 1.25);
+  letter-spacing: var(--letter-spacing-wider, 1px);
+  color: var(--danger-color, #dc3545);
+}
+
+/* ===== UTILITY CLASSES ===== */
+
+/* Text Colors */
+.text-primary { color: var(--primary-color, #007bff); }
+.text-secondary { color: var(--secondary-color, #6c757d); }
+.text-success { color: var(--success-color, #28a745); }
+.text-danger { color: var(--danger-color, #dc3545); }
+.text-warning { color: var(--warning-color, #ffc107); }
+.text-info { color: var(--info-color, #17a2b8); }
+.text-dark { color: var(--button-label-color-dark, #072C54); }
+.text-muted { color: var(--gray-600, #6c757d); }
+.text-white { color: var(--white, #ffffff); }
+
+/* Breitling Brand Colors */
+.text-breitling-gold { color: var(--breitling-gold, #FFC72C); }
+.text-breitling-navy { color: var(--breitling-navy, #1a365d); }
+
+/* Text Transforms */
+.text-uppercase { text-transform: uppercase; }
+.text-lowercase { text-transform: lowercase; }
+.text-capitalize { text-transform: capitalize; }
+.text-normal-case { text-transform: none; }
+
+/* Font Weights */
+.font-light { font-weight: var(--font-weight-light, 300); }
+.font-normal { font-weight: var(--font-weight-normal, 400); }
+.font-medium { font-weight: var(--font-weight-medium, 500); }
+.font-semibold { font-weight: var(--font-weight-semibold, 600); }
+.font-bold { font-weight: var(--font-weight-bold, 700); }
+.font-extrabold { font-weight: var(--font-weight-extrabold, 800); }
+.font-black { font-weight: var(--font-weight-black, 900); }
+
+/* Text Alignment */
+.text-left { text-align: left; }
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+.text-justify { text-align: justify; }
+
+/* Letter Spacing */
+.tracking-tighter { letter-spacing: var(--letter-spacing-tighter, -0.5px); }
+.tracking-tight { letter-spacing: var(--letter-spacing-tight, -0.25px); }
+.tracking-normal { letter-spacing: var(--letter-spacing-normal, 0px); }
+.tracking-wide { letter-spacing: var(--letter-spacing-wide, 0.5px); }
+.tracking-wider { letter-spacing: var(--letter-spacing-wider, 1px); }
+.tracking-widest { letter-spacing: var(--letter-spacing-widest, 1.92px); }
+
+/* ===== RESPONSIVE TYPOGRAPHY ===== */
+
+@media (max-width: 768px) {
+  .typography-h1 { font-size: var(--font-size-4xl, 36px); }
+  .typography-h2 { font-size: var(--font-size-3xl, 30px); }
+  .typography-h3 { font-size: var(--font-size-2xl, 24px); }
+  .typography-quiz-title { font-size: var(--font-size-2xl, 24px); }
+  .typography-score { font-size: var(--font-size-3xl, 30px); }
+}
+
+@media (max-width: 480px) {
+  .typography-h1 { font-size: var(--font-size-3xl, 30px); }
+  .typography-h2 { font-size: var(--font-size-2xl, 24px); }
+  .typography-h3 { font-size: var(--font-size-xl, 20px); }
+  .typography-quiz-title { font-size: var(--font-size-xl, 20px); }
+  .typography-score { font-size: var(--font-size-2xl, 24px); }
+}

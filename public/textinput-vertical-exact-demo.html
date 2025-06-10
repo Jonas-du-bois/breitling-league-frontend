@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TextInput Vertical Exact Demo (input.txt)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Italian Plate No2', 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        
+        .demo-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        }
+        
+        .demo-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .demo-title {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #072C54;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, #072C54, #39A05D);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .demo-subtitle {
+            font-size: 1.25rem;
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .design-specs {
+            background: #f0f4f8;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .design-specs h3 {
+            color: #072C54;
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+        }
+        
+        .design-specs ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .design-specs li {
+            margin-bottom: 6px;
+            color: #555;
+            position: relative;
+            padding-left: 20px;
+        }
+        
+        .design-specs li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #39A05D;
+            font-weight: bold;
+        }
+        
+        .demo-section {
+            margin-bottom: 60px;
+        }
+        
+        .section-title {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #072C54;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .horizontal-demo {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 40px;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+        }
+        
+        .input-demo-card {
+            background: #f8f9fa;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-align: center;
+            min-width: 250px;
+        }
+        
+        .input-demo-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #072C54;
+            margin-bottom: 8px;
+        }
+        
+        .card-description {
+            font-size: 0.875rem;
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+        
+        .card-specs {
+            font-size: 0.75rem;
+            color: #888;
+            margin-bottom: 15px;
+            line-height: 1.3;
+            border-top: 1px solid #eee;
+            padding-top: 10px;
+        }
+        
+        /* Mock Exact Components based on input.txt */
+        .mock-vertical-exact {
+            width: 160px; /* w-40 */
+            height: 128px; /* h-32 */
+            border-radius: 8px;
+            font-family: 'Italian Plate No2', Arial, sans-serif;
+            font-size: 16px;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px; /* gap-2.5 */
+            flex-wrap: wrap;
+            align-content: center;
+            overflow: hidden;
+            box-sizing: border-box;
+            margin: 0 auto;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+        
+        .mock-vertical-exact:hover {
+            transform: translateY(-2px);
+        }
+        
+        /* Status True (Correct) - from input.txt */
+        .mock-vertical-exact.status-true {
+            padding: 24px; /* p-6 */
+            background: #ECFEF2; /* bg-color-functional-success-10 */
+            outline: 1px solid #39A05D; /* outline-color-functional-success-100 */
+            outline-offset: -1px;
+            color: #39A05D; /* text-color-functional-success-100 */
+            font-weight: 500; /* font-medium */
+        }
+        
+        /* Status False (Wrong) - from input.txt */
+        .mock-vertical-exact.status-false {
+            padding: 10px 24px; /* px-6 py-2.5 */
+            background: #FFEBE9; /* bg-color-functional-error-10 */
+            outline: 1px solid #B9473B; /* outline-color-functional-error-100 */
+            outline-offset: -1px;
+            color: #B9473B; /* text-color-functional-error-100 */
+            font-weight: 500; /* font-medium */
+        }
+        
+        /* Status Selected - from input.txt */
+        .mock-vertical-exact.status-selected {
+            padding: 24px; /* p-6 */
+            background: #FAF0C7; /* bg-color-primary-yellow-25 */
+            outline: 1px solid #072C54; /* outline-color-primary-blue-100 */
+            outline-offset: -1px;
+            color: #09091A; /* text-color-secondary-black */
+            font-weight: 600; /* font-semibold */
+        }
+        
+        /* Default State */
+        .mock-vertical-exact.default {
+            padding: 24px; /* p-6 */
+            background: white;
+            outline: 1px solid #072C54;
+            outline-offset: -1px;
+            color: #09091A;
+            font-weight: 600; /* font-semibold */
+        }
+        
+        .mock-image {
+            width: 144px; /* w-36 */
+            height: 96px; /* h-24 */
+            background: #e1e5e9;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: #6c757d;
+            margin-bottom: 8px;
+            flex-shrink: 0;
+        }
+        
+        .mock-vertical-exact.status-true .mock-image {
+            background: #d1fae5;
+            color: #39A05D;
+        }
+        
+        .mock-vertical-exact.status-false .mock-image {
+            background: #fee2e2;
+            color: #B9473B;
+        }
+        
+        .mock-vertical-exact.status-selected .mock-image {
+            background: #fef3cd;
+            color: #d97706;
+        }
+        
+        .response-text {
+            flex: 1;
+            justify-content: flex-start;
+            text-align: center;
+            line-height: 1.2;
+        }
+        
+        .points-display {
+            justify-content: flex-start;
+            text-align: center;
+            margin-top: 4px;
+        }
+        
+        .code-section {
+            background: #2d3748;
+            color: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 30px;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .code-section h4 {
+            color: #68d391;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+        
+        .code-block {
+            background: #1a202c;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            overflow-x: auto;
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
+        
+        .color-palette {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .color-item {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        
+        .color-swatch {
+            width: 100%;
+            height: 40px;
+            border-radius: 4px;
+            margin-bottom: 8px;
+            border: 1px solid #ddd;
+        }
+        
+        .color-name {
+            font-weight: 600;
+            color: #333;
+            font-size: 0.9rem;
+        }
+        
+        .color-hex {
+            color: #666;
+            font-size: 0.8rem;
+            font-family: monospace;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .demo-title {
+                font-size: 2rem;
+            }
+            
+            .horizontal-demo {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .input-demo-card {
+                width: 100%;
+                max-width: 350px;
+            }
+            
+            .color-palette {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <div class="demo-header">
+            <h1 class="demo-title">TextInput Vertical Exact Demo</h1>
+            <p class="demo-subtitle">
+                Components built exactly from input.txt specifications<br>
+                Precise colors, padding, and layout implementation
+            </p>
+        </div>
+        
+        <!-- Design Specifications from input.txt -->
+        <div class="design-specs">
+            <h3>🎯 Exact Specifications from input.txt</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 15px;">
+                <div>
+                    <h4 style="color: #39A05D; margin-bottom: 8px;">Status True (Correct)</h4>
+                    <ul>
+                        <li>Colors: #39A05D, #ECFEF2</li>
+                        <li>Padding: p-6 (24px all sides)</li>
+                        <li>Font: medium weight (500)</li>
+                        <li>Points: separate div display</li>
+                        <li>Italian Plate No2 font family</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 style="color: #B9473B; margin-bottom: 8px;">Status False (Wrong)</h4>
+                    <ul>
+                        <li>Colors: #B9473B, #FFEBE9</li>
+                        <li>Padding: px-6 py-2.5 (24px H, 10px V)</li>
+                        <li>Font: medium weight (500)</li>
+                        <li>No points display</li>
+                        <li>Italian Plate No2 font family</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 style="color: #072C54; margin-bottom: 8px;">Status Selected</h4>
+                    <ul>
+                        <li>Colors: #072C54, #09091A, #FAF0C7</li>
+                        <li>Padding: p-6 (24px all sides)</li>
+                        <li>Font: semibold weight (600)</li>
+                        <li>Blue outline border</li>
+                        <li>Italian Plate No2 font family</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 style="color: #333; margin-bottom: 8px;">Default State</h4>
+                    <ul>
+                        <li>Colors: #072C54, #09091A, #FFFFFF</li>
+                        <li>Padding: p-6 (24px all sides)</li>
+                        <li>Font: semibold weight (600)</li>
+                        <li>Blue outline border</li>
+                        <li>Italian Plate No2 font family</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Visual Examples -->
+        <div class="demo-section">
+            <h2 class="section-title">📱 Visual Implementation - All Four Exact States</h2>
+            
+            <div class="horizontal-demo">
+                <!-- Default State -->
+                <div class="input-demo-card">
+                    <h3 class="card-title">Default</h3>
+                    <p class="card-description">Base state with white background</p>
+                    <p class="card-specs">
+                        BG: #FFFFFF • Border: #072C54 • Text: #09091A<br>
+                        Padding: p-6 • Font: semibold (600)
+                    </p>
+                    <div class="mock-vertical-exact default">
+                        <div class="mock-image">144 × 96px</div>
+                        <div class="response-text">Response</div>
+                    </div>
+                </div>
+                
+                <!-- Status Selected -->
+                <div class="input-demo-card">
+                    <h3 class="card-title">Selected</h3>
+                    <p class="card-description">Light yellow background (#FAF0C7)</p>
+                    <p class="card-specs">
+                        BG: #FAF0C7 • Border: #072C54 • Text: #09091A<br>
+                        Padding: p-6 • Font: semibold (600)
+                    </p>
+                    <div class="mock-vertical-exact status-selected">
+                        <div class="mock-image">Selected</div>
+                        <div class="response-text">Selected Response</div>
+                    </div>
+                </div>
+                
+                <!-- Status True (Correct) -->
+                <div class="input-demo-card">
+                    <h3 class="card-title">Correct (Status True)</h3>
+                    <p class="card-description">Green styling with points display</p>
+                    <p class="card-specs">
+                        BG: #ECFEF2 • Border: #39A05D • Text: #39A05D<br>
+                        Padding: p-6 • Font: medium (500)
+                    </p>
+                    <div class="mock-vertical-exact status-true">
+                        <div class="mock-image">Correct</div>
+                        <div class="response-text">Correct Answer</div>
+                        <div class="points-display">+ 1000</div>
+                    </div>
+                </div>
+                
+                <!-- Status False (Wrong) -->
+                <div class="input-demo-card">
+                    <h3 class="card-title">Wrong (Status False)</h3>
+                    <p class="card-description">Red styling with different padding</p>
+                    <p class="card-specs">
+                        BG: #FFEBE9 • Border: #B9473B • Text: #B9473B<br>
+                        Padding: px-6 py-2.5 • Font: medium (500)
+                    </p>
+                    <div class="mock-vertical-exact status-false">
+                        <div class="mock-image">Wrong</div>
+                        <div class="response-text">Wrong Answer</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Color Palette -->
+        <div class="demo-section">
+            <h2 class="section-title">🎨 Exact Color Palette (from input.txt)</h2>
+            <div class="color-palette">
+                <div class="color-item">
+                    <div class="color-swatch" style="background-color: #39A05D;"></div>
+                    <div class="color-name">Success Green</div>
+                    <div class="color-hex">#39A05D</div>
+                </div>
+                <div class="color-item">
+                    <div class="color-swatch" style="background-color: #ECFEF2;"></div>
+                    <div class="color-name">Success Background</div>
+                    <div class="color-hex">#ECFEF2</div>
+                </div>
+                <div class="color-item">
+                    <div class="color-swatch" style="background-color: #B9473B;"></div>
+                    <div class="color-name">Error Red</div>
+                    <div class="color-hex">#B9473B</div>
+                </div>
+                <div class="color-item">
+                    <div class="color-swatch" style="background-color: #FFEBE9;"></div>
+                    <div class="color-name">Error Background</div>
+                    <div class="color-hex">#FFEBE9</div>
+                </div>
+                <div class="color-item">
+                    <div class="color-swatch" style="background-color: #072C54;"></div>
+                    <div class="color-name">Primary Blue</div>
+                    <div class="color-hex">#072C54</div>
+                </div>
+                <div class="color-item">
+                    <div class="color-swatch" style="background-color: #09091A;"></div>
+                    <div class="color-name">Secondary Black</div>
+                    <div class="color-hex">#09091A</div>
+                </div>
+                <div class="color-item">
+                    <div class="color-swatch" style="background-color: #FAF0C7;"></div>
+                    <div class="color-name">Primary Yellow 25</div>
+                    <div class="color-hex">#FAF0C7</div>
+                </div>
+                <div class="color-item">
+                    <div class="color-swatch" style="background-color: #FFFFFF; border: 2px solid #ddd;"></div>
+                    <div class="color-name">White</div>
+                    <div class="color-hex">#FFFFFF</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Code Examples -->
+        <div class="code-section">
+            <h4>💻 HTML/CSS Implementation Examples</h4>
+            
+            <div class="code-block">
+                <strong style="color: #68d391;">Status True (Correct Answer):</strong><br>
+                &lt;div class="w-40 h-32 p-6 bg-color-functional-success-10 rounded-lg outline outline-1 outline-offset-[-1px] outline-color-functional-success-100 inline-flex justify-center items-center gap-2.5 flex-wrap content-center overflow-hidden"&gt;<br>
+                &nbsp;&nbsp;&lt;img class="w-36 h-24" src="https://placehold.co/143x97" /&gt;<br>
+                &nbsp;&nbsp;&lt;div class="flex-1 justify-start text-color-functional-success-100 text-base font-medium font-['Italian_Plate_No2']"&gt;Response&lt;/div&gt;<br>
+                &nbsp;&nbsp;&lt;div class="justify-start text-color-functional-success-100 text-base font-medium font-['Italian_Plate_No2']"&gt;+ 1000&lt;/div&gt;<br>
+                &lt;/div&gt;
+            </div>
+            
+            <div class="code-block">
+                <strong style="color: #f56565;">Status False (Wrong Answer):</strong><br>
+                &lt;div class="w-40 h-32 px-6 py-2.5 bg-color-functional-error-10 rounded-lg outline outline-1 outline-offset-[-1px] outline-color-functional-error-100 inline-flex justify-center items-center gap-2.5 flex-wrap content-center overflow-hidden"&gt;<br>
+                &nbsp;&nbsp;&lt;img class="w-36 h-24" src="https://placehold.co/143x97" /&gt;<br>
+                &nbsp;&nbsp;&lt;div class="flex-1 justify-start text-color-functional-error-100 text-base font-medium font-['Italian_Plate_No2']"&gt;Response&lt;/div&gt;<br>
+                &lt;/div&gt;
+            </div>
+            
+            <div class="code-block">
+                <strong style="color: #d69e2e;">Status Selected:</strong><br>
+                &lt;div class="w-40 h-32 p-6 bg-color-primary-yellow-25 rounded-lg outline outline-1 outline-offset-[-1px] outline-color-primary-blue-100 inline-flex justify-center items-center gap-2.5 flex-wrap content-center overflow-hidden"&gt;<br>
+                &nbsp;&nbsp;&lt;img class="w-36 h-24" src="https://placehold.co/143x97" /&gt;<br>
+                &nbsp;&nbsp;&lt;div class="flex-1 justify-start text-color-secondary-black text-base font-semibold font-['Italian_Plate_No2']"&gt;Response&lt;/div&gt;<br>
+                &lt;/div&gt;
+            </div>
+        </div>
+    </div>
+</body>
+</html>

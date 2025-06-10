@@ -1,0 +1,650 @@
+Table/row
+<div class="w-96 px-8 py-2 border-b border-color-secondary-black inline-flex justify-between items-center">
+    <div class="w-6 justify-center text-color-secondary-black text-xs font-normal font-['Italian_Plate_No2']">C1</div>
+    <div class="w-12 justify-center text-color-secondary-black text-xs font-normal font-['Italian_Plate_No2']">C2</div>
+    <div class="w-24 justify-center text-color-secondary-black text-xs font-normal font-['Italian_Plate_No2']">C3</div>
+    <div class="w-9 justify-center text-color-secondary-black text-xs font-normal font-['Italian_Plate_No2']">Country</div>
+    <div class="w-11 justify-center text-color-secondary-black text-xs font-normal font-['Italian_Plate_No2']">C5</div>
+</div>
+09091A; // 
+// C1
+text-color-secondary-black
+text-xs
+font-normal
+font-['Italian_Plate_No2']
+---
+// C2
+text-color-secondary-black
+text-xs
+font-normal
+font-['Italian_Plate_No2']
+---
+// C3
+text-color-secondary-black
+text-xs
+font-normal
+font-['Italian_Plate_No2']
+---
+// Country
+text-color-secondary-black
+text-xs
+font-normal
+font-['Italian_Plate_No2']
+---
+// C5
+text-color-secondary-black
+text-xs
+font-normal
+font-['Italian_Plate_No2']
+
+table row header 
+<div class="w-96 px-8 py-2 border-b-2 border-color-secondary-black inline-flex justify-between items-center">
+    <div class="w-6 justify-center text-color-secondary-black text-xs font-normal font-['Italian_Plate_No2']">Rank</div>
+    <div class="w-12 opacity-0 justify-center text-color-secondary-black text-xs font-normal font-['Italian_Plate_No2']">Avatar</div>
+    <div class="w-24 justify-center text-color-secondary-black text-xs font-normal font-['Italian_Plate_No2']">Pseudo</div>
+    <div class="w-9 justify-center text-color-secondary-black text-xs font-normal font-['Italian_Plate_No2']">Country</div>
+    <div class="w-11 justify-center text-color-secondary-black text-xs font-normal font-['Italian_Plate_No2']">Score</div>
+</div>
+09091A; // 
+// Rank
+text-color-secondary-black
+text-xs
+font-normal
+font-['Italian_Plate_No2']
+---
+// Avatar
+text-color-secondary-black
+text-xs
+font-normal
+font-['Italian_Plate_No2']
+---
+// Pseudo
+text-color-secondary-black
+text-xs
+font-normal
+font-['Italian_Plate_No2']
+---
+// Country
+text-color-secondary-black
+text-xs
+font-normal
+font-['Italian_Plate_No2']
+---
+// Score
+text-color-secondary-black
+text-xs
+font-normal
+font-['Italian_Plate_No2']
+
+Table Row Player general
+<div class="w-96 px-8 py-1 inline-flex justify-between items-center">
+    <div class="w-6 justify-center text-color-secondary-black text-xs font-normal font-['Italian_Plate_No2']">####</div>
+    <div class="w-9 h-12 relative">
+        <div class="w-9 h-12 left-0 top-0 absolute bg-color-secondary-black"></div>
+    </div>
+    <div class="w-24 justify-center text-color-secondary-black text-xs font-normal font-['Italian_Plate_No2']">pseudo user can take more place</div>
+    <div class="w-9 justify-center text-color-secondary-black text-xs font-normal font-['Italian_Plate_No2']">###</div>
+    <div class="w-11 justify-center text-color-secondary-black text-xs font-normal font-['Italian_Plate_No2']">#’###’###</div>
+</div>
+09091A; // 
+// ####
+text-color-secondary-black
+text-xs
+font-normal
+font-['Italian_Plate_No2']
+---
+// pseudo user can take more place
+text-color-secondary-black
+text-xs
+font-normal
+font-['Italian_Plate_No2']
+---
+// ###
+text-color-secondary-black
+text-xs
+font-normal
+font-['Italian_Plate_No2']
+---
+// #’###’###
+text-color-secondary-black
+text-xs
+font-normal
+font-['Italian_Plate_No2']
+
+Table row player current-user
+<div class="bg-color-primary-yellow-100 inline-flex justify-start items-start">
+    <div class="w-96 px-8 py-1 flex justify-between items-center">
+        <div class="w-6 justify-center text-color-secondary-black text-xs font-semibold font-['Italian_Plate_No2']">####</div>
+        <div class="w-9 h-12 relative">
+            <div class="w-9 h-12 left-0 top-0 absolute bg-color-secondary-black"></div>
+        </div>
+        <div class="w-24 justify-center text-color-secondary-black text-xs font-semibold font-['Italian_Plate_No2']">pseudo user can take more place</div>
+        <div class="w-9 justify-center text-color-secondary-black text-xs font-semibold font-['Italian_Plate_No2']">###</div>
+        <div class="w-11 justify-center text-color-secondary-black text-xs font-semibold font-['Italian_Plate_No2']">#’###’###</div>
+    </div>
+</div>
+09091A; // 
+FFC72C; // 
+// ####
+text-color-secondary-black
+text-xs
+font-semibold
+font-['Italian_Plate_No2']
+---
+// pseudo user can take more place
+text-color-secondary-black
+text-xs
+font-semibold
+font-['Italian_Plate_No2']
+---
+// ###
+text-color-secondary-black
+text-xs
+font-semibold
+font-['Italian_Plate_No2']
+---
+// #’###’###
+text-color-secondary-black
+text-xs
+font-semibold
+font-['Italian_Plate_No2']
+
+table body full
+<div class="inline-flex flex-col justify-start items-start">
+    <div data-status="current-user" class="bg-color-primary-yellow-100 inline-flex justify-start items-start">
+        <div class="w-96 px-8 py-1 flex justify-between items-center">
+            <div class="w-6 justify-center text-color-secondary-black text-xs font-semibold font-['Italian_Plate_No2']">####</div>
+            <div class="w-9 h-12 relative">
+                <div class="w-9 h-12 left-0 top-0 absolute bg-color-secondary-black"></div>
+            </div>
+            <div class="w-24 justify-center text-color-secondary-black text-xs font-semibold font-['Italian_Plate_No2']">pseudo user can take more place</div>
+            <div class="w-9 justify-center text-color-secondary-black text-xs font-semibold font-['Italian_Plate_No2']">###</div>
+            <div class="w-11 justify-center text-color-secondary-black text-xs font-semibold font-['Italian_Plate_No2']">#’###’###</div>
+        </div>
+    </div>
+    <div data-status="default" class="inline-flex justify-start items-start">
+        <div class="w-96 px-8 py-1 flex justify-between items-center">
+            <div class="w-6 justify-center text-color-secondary-black text-xs font-normal font-['Italian_Plate_No2']">####</div>
+            <div class="w-9 h-12 relative">
+                <div class="w-9 h-12 left-0 top-0 absolute bg-color-secondary-black"></div>
+            </div>
+            <div class="w-24 justify-center text-color-secondary-black text-xs font-normal font-['Italian_Plate_No2']">pseudo user can take more place</div>
+            <div class="w-9 justify-center text-color-secondary-black text-xs font-normal font-['Italian_Plate_No2']">###</div>
+            <div class="w-11 justify-center text-color-secondary-black text-xs font-normal font-['Italian_Plate_No2']">#’###’###</div>
+        </div>
+    </div>
+    <div data-status="default" class="inline-flex justify-start items-start">
+        <div class="w-96 px-8 py-1 flex justify-between items-center">
+            <div class="w-6 justify-center text-color-secondary-black text-xs font-normal font-['Italian_Plate_No2']">####</div>
+            <div class="w-9 h-12 relative">
+                <div class="w-9 h-12 left-0 top-0 absolute bg-color-secondary-black"></div>
+            </div>
+            <div class="w-24 justify-center text-color-secondary-black text-xs font-normal font-['Italian_Plate_No2']">pseudo user can take more place</div>
+            <div class="w-9 justify-center text-color-secondary-black text-xs font-normal font-['Italian_Plate_No2']">###</div>
+            <div class="w-11 justify-center text-color-secondary-black text-xs font-normal font-['Italian_Plate_No2']">#’###’###</div>
+        </div>
+    </div>
+    <div data-status="default" class="inline-flex justify-start items-start">
+        <div class="w-96 px-8 py-1 flex justify-between items-center">
+            <div class="w-6 justify-center text-color-secondary-black text-xs font-normal font-['Italian_Plate_No2']">####</div>
+            <div class="w-9 h-12 relative">
+                <div class="w-9 h-12 left-0 top-0 absolute bg-color-secondary-black"></div>
+            </div>
+            <div class="w-24 justify-center text-color-secondary-black text-xs font-normal font-['Italian_Plate_No2']">pseudo user can take more place</div>
+            <div class="w-9 justify-center text-color-secondary-black text-xs font-normal font-['Italian_Plate_No2']">###</div>
+            <div class="w-11 justify-center text-color-secondary-black text-xs font-normal font-['Italian_Plate_No2']">#’###’###</div>
+        </div>
+    </div>
+    <div data-status="default" class="inline-flex justify-start items-start">
+        <div class="w-96 px-8 py-1 flex justify-between items-center">
+            <div class="w-6 justify-center text-color-secondary-black text-xs font-normal font-['Italian_Plate_No2']">####</div>
+            <div class="w-9 h-12 relative">
+                <div class="w-9 h-12 left-0 top-0 absolute bg-color-secondary-black"></div>
+            </div>
+            <div class="w-24 justify-center text-color-secondary-black text-xs font-normal font-['Italian_Plate_No2']">pseudo user can take more place</div>
+            <div class="w-9 justify-center text-color-secondary-black text-xs font-normal font-['Italian_Plate_No2']">###</div>
+            <div class="w-11 justify-center text-color-secondary-black text-xs font-normal font-['Italian_Plate_No2']">#’###’###</div>
+        </div>
+    </div>
+    <div data-status="default" class="inline-flex justify-start items-start">
+        <div class="w-96 px-8 py-1 flex justify-between items-center">
+            <div class="w-6 justify-center text-color-secondary-black text-xs font-normal font-['Italian_Plate_No2']">####</div>
+            <div class="w-9 h-12 relative">
+                <div class="w-9 h-12 left-0 top-0 absolute bg-color-secondary-black"></div>
+            </div>
+            <div class="w-24 justify-center text-color-secondary-black text-xs font-normal font-['Italian_Plate_No2']">pseudo user can take more place</div>
+            <div class="w-9 justify-center text-color-secondary-black text-xs font-normal font-['Italian_Plate_No2']">###</div>
+            <div class="w-11 justify-center text-color-secondary-black text-xs font-normal font-['Italian_Plate_No2']">#’###’###</div>
+        </div>
+    </div>
+    <div data-status="default" class="inline-flex justify-start items-start">
+        <div class="w-96 px-8 py-1 flex justify-between items-center">
+            <div class="w-6 justify-center text-color-secondary-black text-xs font-normal font-['Italian_Plate_No2']">####</div>
+            <div class="w-9 h-12 relative">
+                <div class="w-9 h-12 left-0 top-0 absolute bg-color-secondary-black"></div>
+            </div>
+            <div class="w-24 justify-center text-color-secondary-black text-xs font-normal font-['Italian_Plate_No2']">pseudo user can take more place</div>
+            <div class="w-9 justify-center text-color-secondary-black text-xs font-normal font-['Italian_Plate_No2']">###</div>
+            <div class="w-11 justify-center text-color-secondary-black text-xs font-normal font-['Italian_Plate_No2']">#’###’###</div>
+        </div>
+    </div>
+    <div data-status="default" class="inline-flex justify-start items-start">
+        <div class="w-96 px-8 py-1 flex justify-between items-center">
+            <div class="w-6 justify-center text-color-secondary-black text-xs font-normal font-['Italian_Plate_No2']">####</div>
+            <div class="w-9 h-12 relative">
+                <div class="w-9 h-12 left-0 top-0 absolute bg-color-secondary-black"></div>
+            </div>
+            <div class="w-24 justify-center text-color-secondary-black text-xs font-normal font-['Italian_Plate_No2']">pseudo user can take more place</div>
+            <div class="w-9 justify-center text-color-secondary-black text-xs font-normal font-['Italian_Plate_No2']">###</div>
+            <div class="w-11 justify-center text-color-secondary-black text-xs font-normal font-['Italian_Plate_No2']">#’###’###</div>
+        </div>
+    </div>
+    <div data-status="default" class="inline-flex justify-start items-start">
+        <div class="w-96 px-8 py-1 flex justify-between items-center">
+            <div class="w-6 justify-center text-color-secondary-black text-xs font-normal font-['Italian_Plate_No2']">####</div>
+            <div class="w-9 h-12 relative">
+                <div class="w-9 h-12 left-0 top-0 absolute bg-color-secondary-black"></div>
+            </div>
+            <div class="w-24 justify-center text-color-secondary-black text-xs font-normal font-['Italian_Plate_No2']">pseudo user can take more place</div>
+            <div class="w-9 justify-center text-color-secondary-black text-xs font-normal font-['Italian_Plate_No2']">###</div>
+            <div class="w-11 justify-center text-color-secondary-black text-xs font-normal font-['Italian_Plate_No2']">#’###’###</div>
+        </div>
+    </div>
+    <div data-status="default" class="inline-flex justify-start items-start">
+        <div class="w-96 px-8 py-1 flex justify-between items-center">
+            <div class="w-6 justify-center text-color-secondary-black text-xs font-normal font-['Italian_Plate_No2']">####</div>
+            <div class="w-9 h-12 relative">
+                <div class="w-9 h-12 left-0 top-0 absolute bg-color-secondary-black"></div>
+            </div>
+            <div class="w-24 justify-center text-color-secondary-black text-xs font-normal font-['Italian_Plate_No2']">pseudo user can take more place</div>
+            <div class="w-9 justify-center text-color-secondary-black text-xs font-normal font-['Italian_Plate_No2']">###</div>
+            <div class="w-11 justify-center text-color-secondary-black text-xs font-normal font-['Italian_Plate_No2']">#’###’###</div>
+        </div>
+    </div>
+    <div data-status="default" class="inline-flex justify-start items-start">
+        <div class="w-96 px-8 py-1 flex justify-between items-center">
+            <div class="w-6 justify-center text-color-secondary-black text-xs font-normal font-['Italian_Plate_No2']">####</div>
+            <div class="w-9 h-12 relative">
+                <div class="w-9 h-12 left-0 top-0 absolute bg-color-secondary-black"></div>
+            </div>
+            <div class="w-24 justify-center text-color-secondary-black text-xs font-normal font-['Italian_Plate_No2']">pseudo user can take more place</div>
+            <div class="w-9 justify-center text-color-secondary-black text-xs font-normal font-['Italian_Plate_No2']">###</div>
+            <div class="w-11 justify-center text-color-secondary-black text-xs font-normal font-['Italian_Plate_No2']">#’###’###</div>
+        </div>
+    </div>
+</div>
+09091A; // 
+FFC72C; // 
+// ####
+text-color-secondary-black
+text-xs
+font-semibold
+font-['Italian_Plate_No2']
+---
+// pseudo user can take more place
+text-color-secondary-black
+text-xs
+font-semibold
+font-['Italian_Plate_No2']
+---
+// ###
+text-color-secondary-black
+text-xs
+font-semibold
+font-['Italian_Plate_No2']
+---
+// #’###’###
+text-color-secondary-black
+text-xs
+font-semibold
+font-['Italian_Plate_No2']
+---
+// ####
+text-color-secondary-black
+text-xs
+font-normal
+font-['Italian_Plate_No2']
+---
+// pseudo user can take more place
+text-color-secondary-black
+text-xs
+font-normal
+font-['Italian_Plate_No2']
+---
+// ###
+text-color-secondary-black
+text-xs
+font-normal
+font-['Italian_Plate_No2']
+---
+// #’###’###
+text-color-secondary-black
+text-xs
+font-normal
+font-['Italian_Plate_No2']
+---
+// ####
+text-color-secondary-black
+text-xs
+font-normal
+font-['Italian_Plate_No2']
+---
+// pseudo user can take more place
+text-color-secondary-black
+text-xs
+font-normal
+font-['Italian_Plate_No2']
+---
+// ###
+text-color-secondary-black
+text-xs
+font-normal
+font-['Italian_Plate_No2']
+---
+// #’###’###
+text-color-secondary-black
+text-xs
+font-normal
+font-['Italian_Plate_No2']
+---
+// ####
+text-color-secondary-black
+text-xs
+font-normal
+font-['Italian_Plate_No2']
+---
+// pseudo user can take more place
+text-color-secondary-black
+text-xs
+font-normal
+font-['Italian_Plate_No2']
+---
+// ###
+text-color-secondary-black
+text-xs
+font-normal
+font-['Italian_Plate_No2']
+---
+// #’###’###
+text-color-secondary-black
+text-xs
+font-normal
+font-['Italian_Plate_No2']
+---
+// ####
+text-color-secondary-black
+text-xs
+font-normal
+font-['Italian_Plate_No2']
+---
+// pseudo user can take more place
+text-color-secondary-black
+text-xs
+font-normal
+font-['Italian_Plate_No2']
+---
+// ###
+text-color-secondary-black
+text-xs
+font-normal
+font-['Italian_Plate_No2']
+---
+// #’###’###
+text-color-secondary-black
+text-xs
+font-normal
+font-['Italian_Plate_No2']
+---
+// ####
+text-color-secondary-black
+text-xs
+font-normal
+font-['Italian_Plate_No2']
+---
+// pseudo user can take more place
+text-color-secondary-black
+text-xs
+font-normal
+font-['Italian_Plate_No2']
+---
+// ###
+text-color-secondary-black
+text-xs
+font-normal
+font-['Italian_Plate_No2']
+---
+// #’###’###
+text-color-secondary-black
+text-xs
+font-normal
+font-['Italian_Plate_No2']
+---
+// ####
+text-color-secondary-black
+text-xs
+font-normal
+font-['Italian_Plate_No2']
+---
+// pseudo user can take more place
+text-color-secondary-black
+text-xs
+font-normal
+font-['Italian_Plate_No2']
+---
+// ###
+text-color-secondary-black
+text-xs
+font-normal
+font-['Italian_Plate_No2']
+---
+// #’###’###
+text-color-secondary-black
+text-xs
+font-normal
+font-['Italian_Plate_No2']
+---
+// ####
+text-color-secondary-black
+text-xs
+font-normal
+font-['Italian_Plate_No2']
+---
+// pseudo user can take more place
+text-color-secondary-black
+text-xs
+font-normal
+font-['Italian_Plate_No2']
+---
+// ###
+text-color-secondary-black
+text-xs
+font-normal
+font-['Italian_Plate_No2']
+---
+// #’###’###
+text-color-secondary-black
+text-xs
+font-normal
+font-['Italian_Plate_No2']
+---
+// ####
+text-color-secondary-black
+text-xs
+font-normal
+font-['Italian_Plate_No2']
+---
+// pseudo user can take more place
+text-color-secondary-black
+text-xs
+font-normal
+font-['Italian_Plate_No2']
+---
+// ###
+text-color-secondary-black
+text-xs
+font-normal
+font-['Italian_Plate_No2']
+---
+// #’###’###
+text-color-secondary-black
+text-xs
+font-normal
+font-['Italian_Plate_No2']
+---
+// ####
+text-color-secondary-black
+text-xs
+font-normal
+font-['Italian_Plate_No2']
+---
+// pseudo user can take more place
+text-color-secondary-black
+text-xs
+font-normal
+font-['Italian_Plate_No2']
+---
+// ###
+text-color-secondary-black
+text-xs
+font-normal
+font-['Italian_Plate_No2']
+---
+// #’###’###
+text-color-secondary-black
+text-xs
+font-normal
+font-['Italian_Plate_No2']
+---
+// ####
+text-color-secondary-black
+text-xs
+font-normal
+font-['Italian_Plate_No2']
+---
+// pseudo user can take more place
+text-color-secondary-black
+text-xs
+font-normal
+font-['Italian_Plate_No2']
+---
+// ###
+text-color-secondary-black
+text-xs
+font-normal
+font-['Italian_Plate_No2']
+---
+// #’###’###
+text-color-secondary-black
+text-xs
+font-normal
+font-['Italian_Plate_No2']
+
+table body extract
+<div class="inline-flex flex-col justify-start items-start">
+    <div data-status="default" class="inline-flex justify-start items-start">
+        <div class="w-96 px-8 py-1 flex justify-between items-center">
+            <div class="w-6 justify-center text-color-secondary-black text-xs font-normal font-['Italian_Plate_No2']">####</div>
+            <div class="w-9 h-12 relative">
+                <div class="w-9 h-12 left-0 top-0 absolute bg-color-secondary-black"></div>
+            </div>
+            <div class="w-24 justify-center text-color-secondary-black text-xs font-normal font-['Italian_Plate_No2']">pseudo user can take more place</div>
+            <div class="w-9 justify-center text-color-secondary-black text-xs font-normal font-['Italian_Plate_No2']">###</div>
+            <div class="w-11 justify-center text-color-secondary-black text-xs font-normal font-['Italian_Plate_No2']">#’###’###</div>
+        </div>
+    </div>
+    <div data-status="current-user" class="bg-color-primary-yellow-100 inline-flex justify-start items-start">
+        <div class="w-96 px-8 py-1 flex justify-between items-center">
+            <div class="w-6 justify-center text-color-secondary-black text-xs font-semibold font-['Italian_Plate_No2']">####</div>
+            <div class="w-9 h-12 relative">
+                <div class="w-9 h-12 left-0 top-0 absolute bg-color-secondary-black"></div>
+            </div>
+            <div class="w-24 justify-center text-color-secondary-black text-xs font-semibold font-['Italian_Plate_No2']">pseudo user can take more place</div>
+            <div class="w-9 justify-center text-color-secondary-black text-xs font-semibold font-['Italian_Plate_No2']">###</div>
+            <div class="w-11 justify-center text-color-secondary-black text-xs font-semibold font-['Italian_Plate_No2']">#’###’###</div>
+        </div>
+    </div>
+    <div data-status="default" class="inline-flex justify-start items-start">
+        <div class="w-96 px-8 py-1 flex justify-between items-center">
+            <div class="w-6 justify-center text-color-secondary-black text-xs font-normal font-['Italian_Plate_No2']">####</div>
+            <div class="w-9 h-12 relative">
+                <div class="w-9 h-12 left-0 top-0 absolute bg-color-secondary-black"></div>
+            </div>
+            <div class="w-24 justify-center text-color-secondary-black text-xs font-normal font-['Italian_Plate_No2']">pseudo user can take more place</div>
+            <div class="w-9 justify-center text-color-secondary-black text-xs font-normal font-['Italian_Plate_No2']">###</div>
+            <div class="w-11 justify-center text-color-secondary-black text-xs font-normal font-['Italian_Plate_No2']">#’###’###</div>
+        </div>
+    </div>
+</div>
+09091A; // 
+FFC72C; // 
+// ####
+text-color-secondary-black
+text-xs
+font-normal
+font-['Italian_Plate_No2']
+---
+// pseudo user can take more place
+text-color-secondary-black
+text-xs
+font-normal
+font-['Italian_Plate_No2']
+---
+// ###
+text-color-secondary-black
+text-xs
+font-normal
+font-['Italian_Plate_No2']
+---
+// #’###’###
+text-color-secondary-black
+text-xs
+font-normal
+font-['Italian_Plate_No2']
+---
+// ####
+text-color-secondary-black
+text-xs
+font-semibold
+font-['Italian_Plate_No2']
+---
+// pseudo user can take more place
+text-color-secondary-black
+text-xs
+font-semibold
+font-['Italian_Plate_No2']
+---
+// ###
+text-color-secondary-black
+text-xs
+font-semibold
+font-['Italian_Plate_No2']
+---
+// #’###’###
+text-color-secondary-black
+text-xs
+font-semibold
+font-['Italian_Plate_No2']
+---
+// ####
+text-color-secondary-black
+text-xs
+font-normal
+font-['Italian_Plate_No2']
+---
+// pseudo user can take more place
+text-color-secondary-black
+text-xs
+font-normal
+font-['Italian_Plate_No2']
+---
+// ###
+text-color-secondary-black
+text-xs
+font-normal
+font-['Italian_Plate_No2']
+---
+// #’###’###
+text-color-secondary-black
+text-xs
+font-normal
+font-['Italian_Plate_No2']

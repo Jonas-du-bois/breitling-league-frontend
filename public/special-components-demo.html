@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Special Components Demo - Breitling League</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        
+        /* Custom font family for Italian_Plate_No2 fallback */
+        .font-italian-plate {
+            font-family: 'Italian_Plate_No2', 'Inter', sans-serif;
+        }
+
+        /* Color system based on component.txt specifications */
+        .text-color-primary-yellow-100 {
+            color: #FFC72C;
+        }
+
+        .text-color-primary-yellow-10 {
+            color: #FDF8E9;
+        }
+
+        .bg-color-primary-yellow-100 {
+            background-color: #FFC72C;
+        }
+
+        .bg-color-primary-yellow-10 {
+            background-color: #FDF8E9;
+        }
+
+        .bg-color-primary-yellow-25 {
+            background-color: #FAF0C7;
+        }
+
+        .bg-color-primary-blue-100 {
+            background-color: #072C54;
+        }
+
+        /* Custom text sizes */
+        .text-10px {
+            font-size: 10px;
+        }
+
+        /* Demo styling */
+        .demo-container {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .component-showcase {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .interactive-button {
+            transition: all 0.3s ease;
+        }
+
+        .interactive-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div id="app" class="demo-container p-8">
+        <!-- Header -->
+        <div class="text-center mb-12">
+            <h1 class="text-5xl font-bold text-gray-800 mb-4">✨ Special Components Demo</h1>
+            <p class="text-xl text-gray-600 mb-2">Breitling League - Interactive Component Showcase</p>
+            <p class="text-sm text-gray-500">Based on exact specifications from components.txt</p>
+        </div>
+
+        <!-- Carousel Slides Showcase -->
+        <section class="mb-16">
+            <div class="component-showcase p-8">
+                <h2 class="text-3xl font-bold text-gray-800 mb-6">🎠 Carousel Slides</h2>
+                <p class="text-gray-600 mb-8">Prize carousel slides with navigation indicators</p>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- First Prize -->
+                    <div class="text-center">
+                        <h3 class="text-lg font-semibold mb-4 text-gray-700">First Prize Slide</h3>
+                        <carousel-slide 
+                            prize-label="First prize"
+                            prize-description="Avenger B01 Chronograph 44 Night Mission"
+                            :active-slide="1"
+                            :total-slides="3">
+                        </carousel-slide>
+                    </div>
+
+                    <!-- Second Prize -->
+                    <div class="text-center">
+                        <h3 class="text-lg font-semibold mb-4 text-gray-700">Second Prize Slide</h3>
+                        <carousel-slide 
+                            prize-label="Second prize"
+                            prize-description="Top Time B01 Triumph"
+                            :active-slide="1"
+                            :total-slides="3">
+                        </carousel-slide>
+                    </div>
+
+                    <!-- Third Prize -->
+                    <div class="text-center">
+                        <h3 class="text-lg font-semibold mb-4 text-gray-700">Third Prize Slide</h3>
+                        <carousel-slide 
+                            prize-label="Third prize"
+                            prize-description="Avenger B01 Chronograph 44 Night Mission"
+                            :active-slide="2"
+                            :total-slides="3">
+                        </carousel-slide>
+                    </div>
+                </div>
+
+                <!-- Interactive Carousel -->
+                <div class="mt-12 text-center">
+                    <h3 class="text-xl font-semibold mb-4 text-gray-700">Interactive Carousel</h3>
+                    <div class="flex justify-center mb-4">
+                        <carousel-slide 
+                            :prize-label="currentPrize.label"
+                            :prize-description="currentPrize.description"
+                            :active-slide="currentSlideIndex"
+                            :total-slides="3">
+                        </carousel-slide>
+                    </div>
+                    <button 
+                        @click="nextSlide"
+                        class="interactive-button px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 font-semibold">
+                        Next Slide →
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bonus Tickets Showcase -->
+        <section class="mb-16">
+            <div class="component-showcase p-8">
+                <h2 class="text-3xl font-bold text-gray-800 mb-6">🎫 Bonus Tickets</h2>
+                <p class="text-gray-600 mb-8">Reward tickets in different sizes with customizable bonus values</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Default Size Tickets -->
+                    <div class="text-center">
+                        <h3 class="text-lg font-semibold mb-4 text-gray-700">Default Size Tickets</h3>
+                        <div class="flex justify-center items-center space-x-6">
+                            <div class="text-center">
+                                <bonus-ticket size="default" bonus-value="+3"></bonus-ticket>
+                                <p class="text-sm text-gray-500 mt-2">+3 Bonus</p>
+                            </div>
+                            <div class="text-center">
+                                <bonus-ticket size="default" bonus-value="+5"></bonus-ticket>
+                                <p class="text-sm text-gray-500 mt-2">+5 Bonus</p>
+                            </div>
+                            <div class="text-center">
+                                <bonus-ticket size="default" bonus-value="+10"></bonus-ticket>
+                                <p class="text-sm text-gray-500 mt-2">+10 Bonus</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Small Size Tickets -->
+                    <div class="text-center">
+                        <h3 class="text-lg font-semibold mb-4 text-gray-700">Small Size Tickets</h3>
+                        <div class="flex justify-center items-center space-x-4">
+                            <div class="text-center">
+                                <bonus-ticket size="small" bonus-value="+1"></bonus-ticket>
+                                <p class="text-xs text-gray-500 mt-1">+1</p>
+                            </div>
+                            <div class="text-center">
+                                <bonus-ticket size="small" bonus-value="+2"></bonus-ticket>
+                                <p class="text-xs text-gray-500 mt-1">+2</p>
+                            </div>
+                            <div class="text-center">
+                                <bonus-ticket size="small" bonus-value="+4"></bonus-ticket>
+                                <p class="text-xs text-gray-500 mt-1">+4</p>
+                            </div>
+                            <div class="text-center">
+                                <bonus-ticket size="small" bonus-value="+7"></bonus-ticket>
+                                <p class="text-xs text-gray-500 mt-1">+7</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Streak Components Showcase -->
+        <section class="mb-16">
+            <div class="component-showcase p-8">
+                <h2 class="text-3xl font-bold text-gray-800 mb-6">🔥 Streak Components</h2>
+                <p class="text-gray-600 mb-8">Progress tracking with individual steps and complete streak displays</p>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                    <!-- Individual Streak Steps -->
+                    <div>
+                        <h3 class="text-xl font-semibold mb-4 text-gray-700">Individual Streak Steps</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-center space-x-4">
+                                <streak-step state="done"></streak-step>
+                                <span class="text-gray-600">Done State</span>
+                            </div>
+                            <div class="flex items-center space-x-4">
+                                <streak-step state="non-done"></streak-step>
+                                <span class="text-gray-600">Non-Done State</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Complete Streak Components -->
+                    <div>
+                        <h3 class="text-xl font-semibold mb-4 text-gray-700">Complete Streak</h3>
+                        <div class="space-y-6">
+                            <div>
+                                <p class="text-sm text-gray-600 mb-2">Default Progress (3/5)</p>
+                                <streak-component></streak-component>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-600 mb-2">Complete Streak (5/5)</p>
+                                <streak-component :steps="fullStreakSteps"></streak-component>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-600 mb-2">Interactive Streak</p>
+                                <streak-component :steps="interactiveStreakSteps"></streak-component>
+                                <button 
+                                    @click="advanceStreak"
+                                    class="interactive-button mt-2 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 text-sm">
+                                    Advance Progress
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Streak Global Showcase -->
+        <section class="mb-16">
+            <div class="component-showcase p-8">
+                <h2 class="text-3xl font-bold text-gray-800 mb-6">🌟 Streak Global Component</h2>
+                <p class="text-gray-600 mb-8">Complete streak system with bonus tickets and progress tracking</p>
+                
+                <div class="text-center">
+                    <div class="inline-block">
+                        <streak-global></streak-global>
+                    </div>
+                    <div class="mt-8 text-left max-w-2xl mx-auto">
+                        <h4 class="text-lg font-semibold mb-4">Component Features:</h4>
+                        <ul class="list-disc list-inside space-y-2 text-gray-600">
+                            <li>Small bonus tickets (+1, +2, +4, +5, +6, +7) around the edges</li>
+                            <li>Central streak progress indicator (5 steps)</li>
+                            <li>Main bonus ticket (+3) prominently displayed</li>
+                            <li>Exact sizing and positioning per specifications</li>
+                            <li>Color-coded progress states (done vs non-done)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Technical Specifications -->
+        <section class="mb-16">
+            <div class="component-showcase p-8">
+                <h2 class="text-3xl font-bold text-gray-800 mb-6">🔧 Technical Specifications</h2>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Color Palette -->
+                    <div>
+                        <h3 class="text-xl font-semibold mb-4">Color Palette</h3>
+                        <div class="space-y-3">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-6 h-6 bg-color-primary-yellow-100 rounded border"></div>
+                                <span class="font-mono text-sm">#FFC72C - Primary Yellow 100</span>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <div class="w-6 h-6 bg-color-primary-yellow-10 rounded border"></div>
+                                <span class="font-mono text-sm">#FDF8E9 - Primary Yellow 10</span>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <div class="w-6 h-6 bg-color-primary-yellow-25 rounded border"></div>
+                                <span class="font-mono text-sm">#FAF0C7 - Primary Yellow 25</span>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <div class="w-6 h-6 bg-color-primary-blue-100 rounded border"></div>
+                                <span class="font-mono text-sm">#072C54 - Primary Blue 100</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Typography -->
+                    <div>
+                        <h3 class="text-xl font-semibold mb-4">Typography</h3>
+                        <div class="space-y-3">
+                            <div>
+                                <p class="font-bold text-color-primary-yellow-100 text-xl font-italian-plate uppercase">FIRST PRIZE</p>
+                                <span class="text-sm text-gray-500">text-xl, font-bold, uppercase</span>
+                            </div>
+                            <div>
+                                <p class="font-bold text-color-primary-yellow-10 text-xs font-inter">Prize Description</p>
+                                <span class="text-sm text-gray-500">text-xs, font-bold</span>
+                            </div>
+                            <div>
+                                <p class="font-bold text-white text-base font-italian-plate uppercase bg-color-primary-blue-100 px-2 py-1 inline-block">+3</p>
+                                <span class="text-sm text-gray-500 ml-2">text-base, font-bold, uppercase</span>
+                            </div>
+                            <div>
+                                <p class="font-bold text-white text-10px font-italian-plate uppercase bg-color-primary-blue-100 px-2 py-1 inline-block">+1</p>
+                                <span class="text-sm text-gray-500 ml-2">text-[10px], font-bold, uppercase</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="text-center text-gray-500 text-sm">
+            <p>Breitling League Special Components - Implemented per exact specifications</p>
+            <p class="mt-2">All components follow the design system defined in components.txt</p>
+        </footer>
+    </div>
+
+    <script>
+        const { createApp } = Vue;
+
+        // Carousel Slide Component
+        const CarouselSlide = {
+            props: {
+                prizeLabel: { type: String, required: true },
+                prizeDescription: { type: String, required: true },
+                activeSlide: { type: Number, default: 0 },
+                totalSlides: { type: Number, default: 3 }
+            },
+            template: `
+                <div class="w-96 h-64 relative">
+                    <div class="w-96 h-64 p-8 left-0 top-0 absolute bg-gradient-to-l from-black to-black/0 inline-flex flex-col justify-end items-start gap-6">
+                        <div class="self-stretch flex flex-col justify-start items-start gap-2.5">
+                            <div class="self-stretch justify-start text-color-primary-yellow-100 text-xl font-bold font-inter uppercase">{{ prizeLabel }}</div>
+                            <div class="w-40 justify-start text-color-primary-yellow-10 text-xs font-bold font-inter">{{ prizeDescription }}</div>
+                        </div>
+                        <div class="inline-flex justify-center items-end gap-1">
+                            <div 
+                                v-for="(slide, index) in totalSlides" 
+                                :key="index"
+                                :data-state="index === activeSlide ? 'current' : 'default'"
+                                class="w-7 h-1 relative"
+                            >
+                                <div 
+                                    class="w-7 h-1 left-0 top-0 absolute"
+                                    :class="index === activeSlide ? 'bg-color-primary-yellow-100' : 'bg-color-primary-yellow-10'"
+                                ></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `
+        };
+
+        // Bonus Ticket Component
+        const BonusTicket = {
+            props: {
+                size: { type: String, default: 'default', validator: value => ['default', 'small'].includes(value) },
+                bonusValue: { type: String, default: '+X' }
+            },
+            computed: {
+                sizeClasses() {
+                    return this.size === 'default' ? 'w-12 h-12' : 'w-7 h-7';
+                },
+                innerSizeClasses() {
+                    return this.size === 'default' 
+                        ? 'w-11 h-11 left-[3.90px] top-[3.90px]' 
+                        : 'w-6 h-6 left-[2.34px] top-[2.34px]';
+                },
+                textSizeClasses() {
+                    return this.size === 'default' ? 'text-base' : 'text-10px';
+                },
+                textPositionClasses() {
+                    return this.size === 'default' 
+                        ? 'w-4 h-3 left-[17.71px] top-[19.79px]' 
+                        : 'w-2.5 h-1.5 left-[10.62px] top-[11.88px]';
+                }
+            },
+            template: `
+                <div class="relative" :class="sizeClasses">
+                    <div class="absolute overflow-hidden" :class="sizeClasses">
+                        <div class="absolute bg-color-primary-blue-100" :class="innerSizeClasses"></div>
+                    </div>
+                    <div 
+                        class="absolute justify-start text-white font-bold font-italian-plate uppercase"
+                        :class="[textSizeClasses, textPositionClasses]"
+                    >
+                        {{ bonusValue }}
+                    </div>
+                </div>
+            `
+        };
+
+        // Streak Step Component
+        const StreakStep = {
+            props: {
+                state: { type: String, default: 'non-done', validator: value => ['done', 'non-done'].includes(value) }
+            },
+            computed: {
+                stateClass() {
+                    return this.state === 'done' ? 'bg-color-primary-yellow-100' : 'bg-color-primary-yellow-25';
+                }
+            },
+            template: `
+                <div class="w-4 h-4 relative">
+                    <div class="w-4 h-4 left-0 top-0 absolute rounded-full" :class="stateClass"></div>
+                </div>
+            `
+        };
+
+        // Streak Component
+        const StreakComponent = {
+            props: {
+                steps: {
+                    type: Array,
+                    default: () => [
+                        { state: 'done' },
+                        { state: 'done' },
+                        { state: 'done' },
+                        { state: 'non-done' },
+                        { state: 'non-done' }
+                    ]
+                }
+            },
+            components: { StreakStep },
+            template: `
+                <div class="inline-flex justify-start items-center gap-1">
+                    <streak-step 
+                        v-for="(step, index) in steps" 
+                        :key="index"
+                        :state="step.state"
+                    ></streak-step>
+                </div>
+            `
+        };
+
+        // Streak Global Component
+        const StreakGlobal = {
+            components: { BonusTicket, StreakComponent },
+            template: `
+                <div class="w-80 inline-flex justify-between items-center">
+                    <bonus-ticket size="small" bonus-value="+1"></bonus-ticket>
+                    <bonus-ticket size="small" bonus-value="+2"></bonus-ticket>
+                    
+                    <div class="flex justify-start items-center gap-1">
+                        <streak-step state="done"></streak-step>
+                        <streak-step state="done"></streak-step>
+                        <streak-step state="done"></streak-step>
+                        <streak-step state="non-done"></streak-step>
+                        <streak-step state="non-done"></streak-step>
+                    </div>
+                    
+                    <bonus-ticket size="default" bonus-value="+3"></bonus-ticket>
+                    <bonus-ticket size="small" bonus-value="+4"></bonus-ticket>
+                    <bonus-ticket size="small" bonus-value="+5"></bonus-ticket>
+                    <bonus-ticket size="small" bonus-value="+6"></bonus-ticket>
+                    <bonus-ticket size="small" bonus-value="+7"></bonus-ticket>
+                </div>
+            `
+        };
+
+        // Main App
+        createApp({
+            components: {
+                CarouselSlide,
+                BonusTicket,
+                StreakStep,
+                StreakComponent,
+                StreakGlobal
+            },
+            data() {
+                return {
+                    currentSlideIndex: 0,
+                    prizes: [
+                        { label: 'First prize', description: 'Avenger B01 Chronograph 44 Night Mission' },
+                        { label: 'Second prize', description: 'Top Time B01 Triumph' },
+                        { label: 'Third prize', description: 'Avenger B01 Chronograph 44 Night Mission' }
+                    ],
+                    interactiveStreakSteps: [
+                        { state: 'done' },
+                        { state: 'done' },
+                        { state: 'non-done' },
+                        { state: 'non-done' },
+                        { state: 'non-done' }
+                    ],
+                    fullStreakSteps: [
+                        { state: 'done' },
+                        { state: 'done' },
+                        { state: 'done' },
+                        { state: 'done' },
+                        { state: 'done' }
+                    ]
+                };
+            },
+            computed: {
+                currentPrize() {
+                    return this.prizes[this.currentSlideIndex];
+                }
+            },
+            methods: {
+                nextSlide() {
+                    this.currentSlideIndex = (this.currentSlideIndex + 1) % 3;
+                },
+                advanceStreak() {
+                    const nextNonDoneIndex = this.interactiveStreakSteps.findIndex(step => step.state === 'non-done');
+                    if (nextNonDoneIndex !== -1) {
+                        this.interactiveStreakSteps[nextNonDoneIndex].state = 'done';
+                    } else {
+                        // Reset all to non-done if all are done
+                        this.interactiveStreakSteps.forEach(step => {
+                            step.state = 'non-done';
+                        });
+                        this.interactiveStreakSteps[0].state = 'done';
+                    }
+                }
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>

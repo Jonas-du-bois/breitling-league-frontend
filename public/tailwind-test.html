@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tailwind Colors Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'color-secondary-black': '#000000',
+                        'color-primary-blue-100': '#072C54',
+                        'card-text-color-dark': '#072C54',
+                        'card-stroke-color': '#072C54',
+                        'color-secondary-grey-100': '#09091A',
+                        'icon-color-dark-(default)': '#09091A',
+                        'badge-label-color-light': '#76787B',
+                        'color-primary-yellow-100': '#FFC72C',
+                        'card-background-color-light': '#FFFFFF',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="p-8 bg-gray-100">
+    <h1 class="text-3xl font-bold mb-8 text-color-secondary-black">Tailwind Custom Colors Test</h1>
+    
+    <div class="grid grid-cols-3 gap-4">
+        <div class="p-4 bg-color-secondary-black text-white">
+            <h3 class="font-semibold">color-secondary-black</h3>
+            <p>#000000</p>
+        </div>
+        
+        <div class="p-4 bg-color-primary-blue-100 text-white">
+            <h3 class="font-semibold">color-primary-blue-100</h3>
+            <p>#072C54</p>
+        </div>
+        
+        <div class="p-4 bg-card-text-color-dark text-white">
+            <h3 class="font-semibold">card-text-color-dark</h3>
+            <p>#072C54</p>
+        </div>
+        
+        <div class="p-4 bg-color-secondary-grey-100 text-white">
+            <h3 class="font-semibold">color-secondary-grey-100</h3>
+            <p>#09091A</p>
+        </div>
+        
+        <div class="p-4 bg-badge-label-color-light text-white">
+            <h3 class="font-semibold">badge-label-color-light</h3>
+            <p>#76787B</p>
+        </div>
+        
+        <div class="p-4 bg-color-primary-yellow-100 text-black">
+            <h3 class="font-semibold">color-primary-yellow-100</h3>
+            <p>#FFC72C</p>
+        </div>
+        
+        <div class="p-4 bg-card-background-color-light border border-gray-300 text-black">
+            <h3 class="font-semibold">card-background-color-light</h3>
+            <p>#FFFFFF</p>
+        </div>
+    </div>
+      <div class="mt-8 p-6 bg-card-background-color-light border border-card-stroke-color">
+        <h2 class="text-2xl font-bold text-card-text-color-dark mb-4 font-italian-plate-no2">ChapterCard with Proper Tailwind Classes</h2>
+        <div class="w-96 h-6 bg-color-primary-yellow-100 flex items-center justify-center relative">
+            <span class="text-color-secondary-black font-semibold font-italian-plate-no2">08D 12H 24M</span>
+            <div class="w-11 h-11 bg-color-primary-yellow-100 border border-color-secondary-black rounded-[100px] absolute left-[47px] top-[-19px] flex items-center justify-center">
+                <span class="text-color-secondary-black font-semibold font-italian-plate-no2">x2</span>
+            </div>
+        </div>
+        <div class="mt-8">
+            <h3 class="text-xl font-semibold font-italian-plate-no2 text-card-text-color-dark uppercase">Aviation History</h3>
+            <div class="flex justify-between items-center mt-4">
+                <div>
+                    <span class="text-color-primary-yellow-100 text-3xl font-semibold font-italian-plate-no2">450'300</span>
+                    <span class="text-color-primary-blue-100 text-xl font-semibold font-italian-plate-no2"> pts left</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,290 @@
+Component for special folder
+
+Carrousel slide=1
+<div class="w-96 h-64 relative">
+    <div class="w-96 h-64 p-8 left-0 top-0 absolute bg-gradient-to-l from-black to-black/0 inline-flex flex-col justify-end items-start gap-6">
+        <div class="self-stretch flex flex-col justify-start items-start gap-2.5">
+            <div class="self-stretch justify-start text-color-primary-yellow-100 text-xl font-bold font-['Inter'] uppercase">First prize</div>
+            <div class="w-40 justify-start text-color-primary-yellow-10 text-xs font-bold font-['Inter']">Avenger B01 Chronograph 44 Night Mission</div>
+        </div>
+        <div class="inline-flex justify-center items-end gap-1">
+            <div data-state="default" class="w-7 h-1 relative">
+                <div class="w-7 h-1 left-0 top-0 absolute bg-color-primary-yellow-10"></div>
+            </div>
+            <div data-state="current" class="w-7 h-1 relative">
+                <div class="w-7 h-1 left-0 top-0 absolute bg-color-primary-yellow-100"></div>
+            </div>
+            <div data-state="default" class="w-7 h-1 relative">
+                <div class="w-7 h-1 left-0 top-0 absolute bg-color-primary-yellow-10"></div>
+            </div>
+        </div>
+    </div>
+</div>
+FDF8E9; // 
+FFC72C; // 
+
+// First prize
+text-color-primary-yellow-100
+text-xl
+font-bold
+font-['Inter']
+uppercase
+---
+// Avenger B01 Chronograph 44 Night Mission
+text-color-primary-yellow-10
+text-xs
+font-bold
+font-['Inter']
+
+Carrousel slide=2
+<div class="inline-flex flex-col justify-start items-start gap-2.5">
+    <div class="w-96 h-64 relative">
+        <div class="w-96 h-64 p-8 left-0 top-0 absolute bg-gradient-to-l from-black to-black/0 inline-flex flex-col justify-end items-start gap-6">
+            <div class="self-stretch flex flex-col justify-start items-start gap-2.5">
+                <div class="self-stretch justify-start text-color-primary-yellow-100 text-xl font-bold font-['Inter'] uppercase">Second prize</div>
+                <div class="w-40 justify-start text-color-primary-yellow-10 text-xs font-bold font-['Inter']">Top Time B01 Triumph</div>
+            </div>
+            <div class="inline-flex justify-center items-end gap-1">
+                <div data-state="default" class="w-7 h-1 relative">
+                    <div class="w-7 h-1 left-0 top-0 absolute bg-color-primary-yellow-10"></div>
+                </div>
+                <div data-state="current" class="w-7 h-1 relative">
+                    <div class="w-7 h-1 left-0 top-0 absolute bg-color-primary-yellow-100"></div>
+                </div>
+                <div data-state="default" class="w-7 h-1 relative">
+                    <div class="w-7 h-1 left-0 top-0 absolute bg-color-primary-yellow-10"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+FDF8E9; // 
+FFC72C; // 
+
+// Second prize
+text-color-primary-yellow-100
+text-xl
+font-bold
+font-['Inter']
+uppercase
+---
+// Top Time B01 Triumph
+text-color-primary-yellow-10
+text-xs
+font-bold
+font-['Inter']
+
+Carrousel slide=3
+<div class="inline-flex flex-col justify-start items-start gap-2.5">
+    <div class="w-96 h-64 relative">
+        <div class="w-96 h-64 p-8 left-0 top-0 absolute bg-gradient-to-l from-black to-black/0 inline-flex flex-col justify-end items-start gap-6">
+            <div class="self-stretch flex flex-col justify-start items-start gap-2.5">
+                <div class="self-stretch justify-start text-color-primary-yellow-100 text-xl font-bold font-['Inter'] uppercase">Third prize</div>
+                <div class="w-40 justify-start text-color-primary-yellow-10 text-xs font-bold font-['Inter']">Avenger B01 Chronograph 44 Night Mission</div>
+            </div>
+            <div class="inline-flex justify-center items-end gap-1">
+                <div data-state="default" class="w-7 h-1 relative">
+                    <div class="w-7 h-1 left-0 top-0 absolute bg-color-primary-yellow-10"></div>
+                </div>
+                <div data-state="default" class="w-7 h-1 relative">
+                    <div class="w-7 h-1 left-0 top-0 absolute bg-color-primary-yellow-10"></div>
+                </div>
+                <div data-state="current" class="w-7 h-1 relative">
+                    <div class="w-7 h-1 left-0 top-0 absolute bg-color-primary-yellow-100"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+FDF8E9; // 
+FFC72C; // 
+// Third prize
+text-color-primary-yellow-100
+text-xl
+font-bold
+font-['Inter']
+uppercase
+---
+// Avenger B01 Chronograph 44 Night Mission
+text-color-primary-yellow-10
+text-xs
+font-bold
+font-['Inter']
+
+streak-global
+<div class="w-80 inline-flex justify-between items-center">
+    <div data-size="small" class="w-7 h-7 relative">
+        <div class="w-7 h-7 left-0 top-0 absolute overflow-hidden">
+            <div class="w-6 h-6 left-[2.34px] top-[2.34px] absolute bg-color-primary-blue-100"></div>
+        </div>
+        <div class="w-2.5 h-1.5 left-[10.62px] top-[11.88px] absolute justify-start text-white text-[10px] font-bold font-['Italian_Plate_No2'] uppercase">+1</div>
+    </div>
+    <div data-size="small" class="w-7 h-7 relative">
+        <div class="w-7 h-7 left-0 top-0 absolute overflow-hidden">
+            <div class="w-6 h-6 left-[2.34px] top-[2.34px] absolute bg-color-primary-blue-100"></div>
+        </div>
+        <div class="w-2.5 h-1.5 left-[10.62px] top-[11.88px] absolute justify-start text-white text-[10px] font-bold font-['Italian_Plate_No2'] uppercase">+2</div>
+    </div>
+    <div class="flex justify-start items-center gap-1">
+        <div data-state="done" class="w-4 h-4 relative">
+            <div class="w-4 h-4 left-0 top-0 absolute bg-color-primary-yellow-100 rounded-full"></div>
+        </div>
+        <div data-state="done" class="w-4 h-4 relative">
+            <div class="w-4 h-4 left-0 top-0 absolute bg-color-primary-yellow-100 rounded-full"></div>
+        </div>
+        <div data-state="done" class="w-4 h-4 relative">
+            <div class="w-4 h-4 left-0 top-0 absolute bg-color-primary-yellow-100 rounded-full"></div>
+        </div>
+        <div data-state="non-done" class="w-4 h-4 relative">
+            <div class="w-4 h-4 left-0 top-0 absolute bg-color-primary-yellow-25 rounded-full"></div>
+        </div>
+        <div data-state="non-done" class="w-4 h-4 relative">
+            <div class="w-4 h-4 left-0 top-0 absolute bg-color-primary-yellow-25 rounded-full"></div>
+        </div>
+    </div>
+    <div data-size="default" class="w-12 h-12 relative">
+        <div class="w-12 h-12 left-0 top-0 absolute overflow-hidden">
+            <div class="w-11 h-11 left-[3.90px] top-[3.90px] absolute bg-color-primary-blue-100"></div>
+        </div>
+        <div class="w-4 h-3 left-[17.71px] top-[19.79px] absolute justify-start text-white text-base font-bold font-['Italian_Plate_No2'] uppercase">+3</div>
+    </div>
+    <div data-size="small" class="w-7 h-7 relative">
+        <div class="w-7 h-7 left-0 top-0 absolute overflow-hidden">
+            <div class="w-6 h-6 left-[2.34px] top-[2.34px] absolute bg-color-primary-blue-100"></div>
+        </div>
+        <div class="w-2.5 h-1.5 left-[10.62px] top-[11.88px] absolute justify-start text-white text-[10px] font-bold font-['Italian_Plate_No2'] uppercase">+4</div>
+    </div>
+    <div data-size="small" class="w-7 h-7 relative">
+        <div class="w-7 h-7 left-0 top-0 absolute overflow-hidden">
+            <div class="w-6 h-6 left-[2.34px] top-[2.34px] absolute bg-color-primary-blue-100"></div>
+        </div>
+        <div class="w-2.5 h-1.5 left-[10.62px] top-[11.88px] absolute justify-start text-white text-[10px] font-bold font-['Italian_Plate_No2'] uppercase">+5</div>
+    </div>
+    <div data-size="small" class="w-7 h-7 relative">
+        <div class="w-7 h-7 left-0 top-0 absolute overflow-hidden">
+            <div class="w-6 h-6 left-[2.34px] top-[2.34px] absolute bg-color-primary-blue-100"></div>
+        </div>
+        <div class="w-2.5 h-1.5 left-[10.62px] top-[11.88px] absolute justify-start text-white text-[10px] font-bold font-['Italian_Plate_No2'] uppercase">+6</div>
+    </div>
+    <div data-size="small" class="w-7 h-7 relative">
+        <div class="w-7 h-7 left-0 top-0 absolute overflow-hidden">
+            <div class="w-6 h-6 left-[2.34px] top-[2.34px] absolute bg-color-primary-blue-100"></div>
+        </div>
+        <div class="w-2.5 h-1.5 left-[10.62px] top-[11.88px] absolute justify-start text-white text-[10px] font-bold font-['Italian_Plate_No2'] uppercase">+7</div>
+    </div>
+</div>
+072C54; // 
+FAF0C7; // 
+FFC72C; // 
+FFFFFF; // 
+// +1
+text-white
+text-[10px]
+font-bold
+font-['Italian_Plate_No2']
+uppercase
+---
+// +2
+text-white
+text-[10px]
+font-bold
+font-['Italian_Plate_No2']
+uppercase
+---
+// +3
+text-white
+text-base
+font-bold
+font-['Italian_Plate_No2']
+uppercase
+---
+// +4
+text-white
+text-[10px]
+font-bold
+font-['Italian_Plate_No2']
+uppercase
+---
+// +5
+text-white
+text-[10px]
+font-bold
+font-['Italian_Plate_No2']
+uppercase
+---
+// +6
+text-white
+text-[10px]
+font-bold
+font-['Italian_Plate_No2']
+uppercase
+---
+// +7
+text-white
+text-[10px]
+font-bold
+font-['Italian_Plate_No2']
+uppercase
+
+bonus-ticket size default
+<div class="w-12 h-12 relative">
+    <div class="w-12 h-12 left-0 top-0 absolute overflow-hidden">
+        <div class="w-11 h-11 left-[3.90px] top-[3.90px] absolute bg-color-primary-blue-100"></div>
+    </div>
+    <div class="w-4 h-3 left-[17.71px] top-[19.79px] absolute justify-start text-white text-base font-bold font-['Italian_Plate_No2'] uppercase">+X</div>
+</div>
+072C54; // 
+FFFFFF; // 
+// +X
+text-white
+text-base
+font-bold
+font-['Italian_Plate_No2']
+uppercase
+
+Bonus-ticket size small
+<div class="w-7 h-7 relative">
+    <div class="w-7 h-7 left-0 top-0 absolute overflow-hidden">
+        <div class="w-6 h-6 left-[2.34px] top-[2.34px] absolute bg-color-primary-blue-100"></div>
+    </div>
+    <div class="w-2.5 h-1.5 left-[10.62px] top-[11.88px] absolute justify-start text-white text-[10px] font-bold font-['Italian_Plate_No2'] uppercase">+X</div>
+</div>
+072C54; // 
+FFFFFF; // 
+// +X
+text-white
+text-[10px]
+font-bold
+font-['Italian_Plate_No2']
+uppercase
+
+Streakstep non-done
+<div class="w-4 h-4 relative">
+    <div class="w-4 h-4 left-0 top-0 absolute bg-color-primary-yellow-25 rounded-full"></div>
+</div>
+FAF0C7; // 
+
+streakstep done
+<div class="w-4 h-4 bg-color-primary-yellow-100 rounded-full"></div>
+FFC72C; // 
+
+streak
+<div class="inline-flex justify-start items-center gap-1">
+    <div data-state="done" class="w-4 h-4 relative">
+        <div class="w-4 h-4 left-0 top-0 absolute bg-color-primary-yellow-100 rounded-full"></div>
+    </div>
+    <div data-state="done" class="w-4 h-4 relative">
+        <div class="w-4 h-4 left-0 top-0 absolute bg-color-primary-yellow-100 rounded-full"></div>
+    </div>
+    <div data-state="done" class="w-4 h-4 relative">
+        <div class="w-4 h-4 left-0 top-0 absolute bg-color-primary-yellow-100 rounded-full"></div>
+    </div>
+    <div data-state="non-done" class="w-4 h-4 relative">
+        <div class="w-4 h-4 left-0 top-0 absolute bg-color-primary-yellow-25 rounded-full"></div>
+    </div>
+    <div data-state="non-done" class="w-4 h-4 relative">
+        <div class="w-4 h-4 left-0 top-0 absolute bg-color-primary-yellow-25 rounded-full"></div>
+    </div>
+</div>
+FAF0C7; // 
+FFC72C; // 

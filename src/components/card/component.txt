@@ -1,0 +1,151 @@
+Card question
+<div class="w-80 h-44 px-9 pb-16 bg-color-secondary-white rounded-lg shadow-[0px_4px_8px_0px_rgba(255,199,43,0.40)] inline-flex flex-col justify-center items-center gap-8">
+    <div class="flex flex-col justify-start items-start gap-4">
+        <div class="justify-start"><span class="text-color-primary-yellow-100 text-xl font-normal font-['Italian_Plate_No2']">Question </span><span class="text-color-primary-yellow-100 text-xl font-semibold font-['Italian_Plate_No2']">13</span><span class="text-color-primary-yellow-100 text-xl font-normal font-['Italian_Plate_No2']">/20</span></div>
+        <div class="w-20 h-20 p-2.5 relative bg-color-secondary-white rounded-[999px] shadow-[0px_0px_8px_0px_rgba(0,0,0,0.25)] flex flex-col justify-center items-center gap-2.5">
+            <div class="w-8 h-3 text-center justify-start text-color-primary-yellow-100 text-xl font-semibold font-['Italian_Plate_No2'] uppercase">56</div>
+            <div class="w-16 h-16 left-[6.08px] top-[6.08px] absolute bg-color-primary-yellow-100 rounded-full"></div>
+        </div>
+    </div>
+    <div class="w-72 justify-start text-color-secondary-black text-xl font-normal font-['Italian_Plate_No2']">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod  tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim  veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea  commodo consequat. Duis aute irure dolor in reprehenderit in voluptate  velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint  occaecat cupidatat non proident, sunt in culpa qui officia deserunt  mollit anim id est laborum.</div>
+    <div class="w-8 h-2.5 bg-color-functional-success-100 rounded-lg"></div>
+    <div class="text-center justify-start text-color-functional-success-100 text-base font-semibold font-['Italian_Plate_No2'] uppercase">07</div>
+    <div class="w-8 h-2.5 bg-color-functional-error-100 rounded-lg"></div>
+    <div class="text-center justify-start text-color-functional-error-100 text-base font-semibold font-['Italian_Plate_No2'] uppercase">07</div>
+</div>
+
+09091A; // 
+39A05D; // 
+B9473B; // 
+FFC72C; // 
+FFFFFF; // 
+// Question 
+text-color-primary-yellow-100
+text-xl
+font-normal
+font-['Italian_Plate_No2']
+---
+// 13
+text-color-primary-yellow-100
+text-xl
+font-semibold
+font-['Italian_Plate_No2']
+---
+// /20
+text-color-primary-yellow-100
+text-xl
+font-normal
+font-['Italian_Plate_No2']
+---
+// 56
+text-color-primary-yellow-100
+text-xl
+font-semibold
+font-['Italian_Plate_No2']
+uppercase
+---
+// Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod  tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim  veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea  commodo consequat. Duis aute irure dolor in reprehenderit in voluptate  velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint  occaecat cupidatat non proident, sunt in culpa qui officia deserunt  mollit anim id est laborum.
+text-color-secondary-black
+text-xl
+font-normal
+font-['Italian_Plate_No2']
+---
+// 07
+text-color-functional-success-100
+text-base
+font-semibold
+font-['Italian_Plate_No2']
+uppercase
+---
+// 07
+text-color-functional-error-100
+text-base
+font-semibold
+font-['Italian_Plate_No2']
+uppercase
+
+card/timer-module
+<div class="w-96 h-60 relative">
+    <div class="w-96 h-60 p-8 left-0 top-0 absolute bg-gradient-to-br from-black to-black/0 inline-flex flex-col justify-start items-start gap-6">
+        <div class="flex flex-col justify-start items-start gap-3">
+            <div class="justify-start text-color-primary-yellow-10 text-base font-semibold font-['Italian_Plate_No2'] uppercase">new event</div>
+            <div class="w-64 justify-start text-color-primary-yellow-10 text-3xl font-semibold font-['Italian_Plate_No2'] uppercase">Father's day</div>
+        </div>
+        <div data-disabled="true" data-status="default" class="h-14 max-w-80 min-w-14 p-6 outline outline-2 outline-offset-[-2px] outline-color-primary-yellow-10 inline-flex justify-center items-center gap-2.5">
+            <div class="justify-start text-color-primary-yellow-10 text-base font-bold font-['Italian_Plate_No2'] uppercase">go to event</div>
+        </div>
+    </div>
+    <div data-with-booster="true" class="w-96 h-6 left-0 top-[211px] absolute bg-color-primary-yellow-100 inline-flex justify-center items-center">
+        <div class="justify-start"><span class="text-color-secondary-black text-xl font-semibold font-['Italian_Plate_No2']">08 </span><span class="text-color-secondary-black text-xl font-normal font-['Italian_Plate_No2']">D</span><span class="text-color-secondary-black text-xl font-semibold font-['Italian_Plate_No2']"> 12 </span><span class="text-color-secondary-black text-xl font-normal font-['Italian_Plate_No2']">H</span><span class="text-color-secondary-black text-xl font-semibold font-['Italian_Plate_No2']"> 24 </span><span class="text-color-secondary-black text-xl font-normal font-['Italian_Plate_No2']">M</span></div>
+        <div class="w-11 h-11 left-[47px] top-[-19px] absolute bg-amber-400 rounded-[100px]">
+            <div class="left-[12px] top-[15px] absolute justify-start text-black text-2xl font-semibold font-['Italian_Plate_No2']">x2</div>
+        </div>
+    </div>
+</div>
+000000; // 
+09091A; // 
+FDF8E9; // 
+FFC72C; // 
+FFC72C; // 
+// new event
+text-color-primary-yellow-10
+text-base
+font-semibold
+font-['Italian_Plate_No2']
+uppercase
+---
+// Father's day
+text-color-primary-yellow-10
+text-3xl
+font-semibold
+font-['Italian_Plate_No2']
+uppercase
+---
+// go to event
+text-color-primary-yellow-10
+text-base
+font-bold
+font-['Italian_Plate_No2']
+uppercase
+---
+// 08 
+text-color-secondary-black
+text-xl
+font-semibold
+font-['Italian_Plate_No2']
+---
+// D
+text-color-secondary-black
+text-xl
+font-normal
+font-['Italian_Plate_No2']
+---
+//  12 
+text-color-secondary-black
+text-xl
+font-semibold
+font-['Italian_Plate_No2']
+---
+// H
+text-color-secondary-black
+text-xl
+font-normal
+font-['Italian_Plate_No2']
+---
+//  24 
+text-color-secondary-black
+text-xl
+font-semibold
+font-['Italian_Plate_No2']
+---
+// M
+text-color-secondary-black
+text-xl
+font-normal
+font-['Italian_Plate_No2']
+---
+// x2
+text-black
+text-2xl
+font-semibold
+font-['Italian_Plate_No2']

@@ -1,0 +1,84 @@
+InputVertical status true
+<div class="w-40 h-32 p-6 bg-color-functional-success-10 rounded-lg outline outline-1 outline-offset-[-1px] outline-color-functional-success-100 inline-flex justify-center items-center gap-2.5 flex-wrap content-center overflow-hidden">
+    <img class="w-36 h-24" src="https://placehold.co/143x97" />
+    <div class="flex-1 justify-start text-color-functional-success-100 text-base font-medium font-['Italian_Plate_No2']">Response</div>
+    <div class="justify-start text-color-functional-success-100 text-base font-medium font-['Italian_Plate_No2']">+ 1000</div>
+</div>
+39A05D; // 
+ECFEF2; // 
+// Response
+text-color-functional-success-100
+text-base
+font-medium
+font-['Italian_Plate_No2']
+---
+// + 1000
+text-color-functional-success-100
+text-base
+font-medium
+font-['Italian_Plate_No2']
+
+inside is 
+<img class="w-36 h-24" src="https://placehold.co/143x97" />
+the response text
+<div class="self-stretch justify-start text-color-functional-success-100 text-base font-medium font-['Italian_Plate_No2']">Response</div>
+39A05D; // 
+// Response
+text-color-functional-success-100
+text-base
+font-medium
+font-['Italian_Plate_No2']
+Next to it is the point gained
+<div class="justify-start text-color-functional-success-100 text-base font-medium font-['Italian_Plate_No2']">+ 1000</div>
+39A05D; // 
+// + 1000
+text-color-functional-success-100
+text-base
+font-medium
+font-['Italian_Plate_No2']
+
+Input vertical status False
+<div class="w-40 h-32 px-6 py-2.5 bg-color-functional-error-10 rounded-lg outline outline-1 outline-offset-[-1px] outline-color-functional-error-100 inline-flex justify-center items-center gap-2.5 flex-wrap content-center overflow-hidden">
+    <img class="w-36 h-24" src="https://placehold.co/143x97" />
+    <div class="flex-1 justify-start text-color-functional-error-100 text-base font-medium font-['Italian_Plate_No2']">Response</div>
+</div>
+B9473B; // 
+FFEBE9; // 
+// Response
+text-color-functional-error-100
+text-base
+font-medium
+font-['Italian_Plate_No2']
+inside is 
+<img class="w-36 h-24" src="https://placehold.co/143x97" />
+Response is 
+<div class="self-stretch justify-start text-color-functional-error-100 text-base font-medium font-['Italian_Plate_No2']">Response</div>
+B9473B; // 
+// Response
+text-color-functional-error-100
+text-base
+font-medium
+font-['Italian_Plate_No2']
+
+
+Input vertical status Selected
+<div class="w-40 h-32 p-6 bg-color-primary-yellow-25 rounded-lg outline outline-1 outline-offset-[-1px] outline-color-primary-blue-100 inline-flex justify-center items-center gap-2.5 flex-wrap content-center overflow-hidden">
+    <img class="w-36 h-24" src="https://placehold.co/143x97" />
+    <div class="flex-1 justify-start text-color-secondary-black text-base font-semibold font-['Italian_Plate_No2']">Response</div>
+</div>
+072C54; // 
+09091A; // 
+FAF0C7; // 
+// Response
+text-color-secondary-black
+text-base
+font-semibold
+font-['Italian_Plate_No2']
+<img class="w-36 h-24" src="https://placehold.co/143x97" />
+<div class="self-stretch justify-start text-color-secondary-black text-base font-semibold font-['Italian_Plate_No2']">Response</div>
+09091A; // 
+// Response
+text-color-secondary-black
+text-base
+font-semibold
+font-['Italian_Plate_No2']

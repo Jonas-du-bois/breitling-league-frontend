@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Table Components Demo - Based on component.txt</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        
+        /* Custom properties for exact color matching from component.txt */
+        :root {
+            --table-border-color: #09091A;
+            --table-text-color: #09091A;
+            --table-avatar-bg: #09091A;
+            --table-current-user-bg: #FFC72C;
+            --table-row-hover: rgba(9, 9, 26, 0.02);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fafafa;
+        }
+
+        /* Table component styling */
+        .table-row {
+            width: 384px;
+            padding: 8px 32px;
+            border-bottom: 1px solid var(--table-border-color);
+            display: inline-flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .table-header {
+            width: 384px;
+            padding: 8px 32px;
+            border-bottom: 2px solid var(--table-border-color);
+            display: inline-flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .table-row:hover {
+            background-color: var(--table-row-hover);
+        }
+
+        .table-current-user {
+            background-color: var(--table-current-user-bg);
+        }
+
+        .table-current-user:hover {
+            background-color: rgba(255, 199, 44, 0.8);
+        }
+
+        .table-cell {
+            display: flex;
+            justify-content: center;
+            color: var(--table-text-color);
+            font-size: 12px;
+            font-family: 'Italian Plate No2', 'Inter', sans-serif;
+        }
+
+        .table-cell-rank { width: 24px; }
+        .table-cell-avatar { width: 36px; height: 48px; position: relative; }
+        .table-cell-username { width: 96px; }
+        .table-cell-country { width: 36px; }
+        .table-cell-score { width: 44px; }
+
+        .avatar-placeholder {
+            width: 36px;
+            height: 48px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            background-color: var(--table-avatar-bg);
+            border-radius: 6px;
+        }
+
+        .font-normal { font-weight: 400; }
+        .font-semibold { font-weight: 600; }
+
+        .opacity-0 { opacity: 0; }
+
+        /* Demo styling */
+        .demo-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .demo-section {
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .component-showcase {
+            display: flex;
+            justify-content: center;
+            margin: 2rem 0;
+            padding: 2rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .color-swatch {
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            color: white;
+            margin: 0.5rem;
+            min-width: 150px;
+        }
+
+        .stats {
+            background: #e3f2fd;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            text-align: center;
+        }
+
+        .click-feedback {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #4caf50;
+            color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .click-feedback.show {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold mb-4" style="color: #09091A;">📊 Table Components Demo</h1>
+            <p class="text-lg text-gray-600 mb-4">Interactive demonstration based on component.txt specifications</p>
+            <div class="stats">
+                <span class="font-semibold">Total Clicks: <span id="clickCount">0</span></span>
+                <span class="ml-4">Last Action: <span id="lastAction">None</span></span>
+            </div>
+        </div>
+
+        <!-- Complete Data Table -->
+        <div class="demo-section">
+            <h2 class="text-2xl font-bold mb-4" style="color: #09091A;">🏆 Complete Leaderboard Table</h2>
+            <p class="text-gray-600 mb-4">Full table with header, current user highlighting, and player rankings</p>
+            
+            <div class="component-showcase">
+                <div class="table-container">
+                    <!-- Table Header -->
+                    <div class="table-header">
+                        <div class="table-cell table-cell-rank font-normal">Rank</div>
+                        <div class="table-cell table-cell-avatar font-normal opacity-0">Avatar</div>
+                        <div class="table-cell table-cell-username font-normal">Pseudo</div>
+                        <div class="table-cell table-cell-country font-normal">Country</div>
+                        <div class="table-cell table-cell-score font-normal">Score</div>
+                    </div>
+
+                    <!-- Table Body -->
+                    <div class="inline-flex flex-col justify-start items-start">
+                        <!-- Current User Row -->
+                        <div class="table-current-user table-row" onclick="handleTableClick('Current User: YourUsername', 'current-user')">
+                            <div class="table-cell table-cell-rank font-semibold">15</div>
+                            <div class="table-cell-avatar">
+                                <div class="avatar-placeholder"></div>
+                            </div>
+                            <div class="table-cell table-cell-username font-semibold">YourUsername</div>
+                            <div class="table-cell table-cell-country font-semibold">FR</div>
+                            <div class="table-cell table-cell-score font-semibold">123'456</div>
+                        </div>
+
+                        <!-- Regular Player Rows -->
+                        <div class="table-row" onclick="handleTableClick('Player: ProGamer2024', 'player')">
+                            <div class="table-cell table-cell-rank font-normal">1</div>
+                            <div class="table-cell-avatar">
+                                <div class="avatar-placeholder"></div>
+                            </div>
+                            <div class="table-cell table-cell-username font-normal">ProGamer2024</div>
+                            <div class="table-cell table-cell-country font-normal">KR</div>
+                            <div class="table-cell table-cell-score font-normal">2'456'789</div>
+                        </div>
+
+                        <div class="table-row" onclick="handleTableClick('Player: SkillMaster', 'player')">
+                            <div class="table-cell table-cell-rank font-normal">2</div>
+                            <div class="table-cell-avatar">
+                                <div class="avatar-placeholder"></div>
+                            </div>
+                            <div class="table-cell table-cell-username font-normal">SkillMaster</div>
+                            <div class="table-cell table-cell-country font-normal">JP</div>
+                            <div class="table-cell table-cell-score font-normal">2'234'567</div>
+                        </div>
+
+                        <div class="table-row" onclick="handleTableClick('Player: TopPlayer', 'player')">
+                            <div class="table-cell table-cell-rank font-normal">3</div>
+                            <div class="table-cell-avatar">
+                                <div class="avatar-placeholder"></div>
+                            </div>
+                            <div class="table-cell table-cell-username font-normal">TopPlayer</div>
+                            <div class="table-cell table-cell-country font-normal">US</div>
+                            <div class="table-cell table-cell-score font-normal">1'987'654</div>
+                        </div>
+
+                        <div class="table-row" onclick="handleTableClick('Player: ChampionX', 'player')">
+                            <div class="table-cell table-cell-rank font-normal">4</div>
+                            <div class="table-cell-avatar">
+                                <div class="avatar-placeholder"></div>
+                            </div>
+                            <div class="table-cell table-cell-username font-normal">ChampionX</div>
+                            <div class="table-cell table-cell-country font-normal">DE</div>
+                            <div class="table-cell table-cell-score font-normal">1'765'432</div>
+                        </div>
+
+                        <div class="table-row" onclick="handleTableClick('Player: EliteGamer', 'player')">
+                            <div class="table-cell table-cell-rank font-normal">5</div>
+                            <div class="table-cell-avatar">
+                                <div class="avatar-placeholder"></div>
+                            </div>
+                            <div class="table-cell table-cell-username font-normal">EliteGamer</div>
+                            <div class="table-cell table-cell-country font-normal">UK</div>
+                            <div class="table-cell table-cell-score font-normal">1'543'210</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-gray-50 p-4 rounded-lg mt-4">
+                <h4 class="font-semibold mb-2">Technical Specifications:</h4>
+                <ul class="list-disc list-inside text-sm text-gray-600 space-y-1">
+                    <li>Fixed width table (384px)</li>
+                    <li>Current user highlighted with #FFC72C background</li>
+                    <li>Font: Italian_Plate_No2, text-xs (12px)</li>
+                    <li>Avatar placeholders (36x48px)</li>
+                    <li>Score formatting with apostrophes</li>
+                    <li>Exact color specifications from component.txt</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Individual Components -->
+        <div class="demo-section">
+            <h2 class="text-2xl font-bold mb-4" style="color: #09091A;">🧩 Individual Components</h2>
+            
+            <!-- Table Header -->
+            <div class="mb-6">
+                <h3 class="text-lg font-semibold mb-2">📋 Table Header</h3>
+                <div class="component-showcase">
+                    <div class="table-header">
+                        <div class="table-cell table-cell-rank font-normal">Rank</div>
+                        <div class="table-cell table-cell-avatar font-normal opacity-0">Avatar</div>
+                        <div class="table-cell table-cell-username font-normal">Pseudo</div>
+                        <div class="table-cell table-cell-country font-normal">Country</div>
+                        <div class="table-cell table-cell-score font-normal">Score</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Player Row -->
+            <div class="mb-6">
+                <h3 class="text-lg font-semibold mb-2">👤 Player Row (Default)</h3>
+                <div class="component-showcase">
+                    <div class="table-row" onclick="handleTableClick('Demo Player Row', 'demo')">
+                        <div class="table-cell table-cell-rank font-normal">42</div>
+                        <div class="table-cell-avatar">
+                            <div class="avatar-placeholder"></div>
+                        </div>
+                        <div class="table-cell table-cell-username font-normal">DemoPlayer</div>
+                        <div class="table-cell table-cell-country font-normal">CA</div>
+                        <div class="table-cell table-cell-score font-normal">456'789</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Current User Row -->
+            <div class="mb-6">
+                <h3 class="text-lg font-semibold mb-2">⭐ Current User Row</h3>
+                <div class="component-showcase">
+                    <div class="table-current-user table-row" onclick="handleTableClick('Demo Current User', 'demo-current')">
+                        <div class="table-cell table-cell-rank font-semibold">8</div>
+                        <div class="table-cell-avatar">
+                            <div class="avatar-placeholder"></div>
+                        </div>
+                        <div class="table-cell table-cell-username font-semibold">CurrentUser</div>
+                        <div class="table-cell table-cell-country font-semibold">FR</div>
+                        <div class="table-cell table-cell-score font-semibold">789'123</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Color Palette -->
+        <div class="demo-section">
+            <h2 class="text-2xl font-bold mb-4" style="color: #09091A;">🎨 Color Palette</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="color-swatch" style="background-color: #09091A;">
+                    <div class="font-bold">#09091A</div>
+                    <div class="text-sm">Text/Border Color</div>
+                </div>
+                <div class="color-swatch" style="background-color: #FFC72C;">
+                    <div class="font-bold text-black">#FFC72C</div>
+                    <div class="text-sm text-black">Current User Background</div>
+                </div>
+                <div class="color-swatch" style="background-color: rgba(9, 9, 26, 0.02); border: 1px solid #ccc;">
+                    <div class="font-bold text-black">rgba(9, 9, 26, 0.02)</div>
+                    <div class="text-sm text-black">Row Hover</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Usage Examples -->
+        <div class="demo-section">
+            <h2 class="text-2xl font-bold mb-4" style="color: #09091A;">💻 Usage Examples</h2>
+            <div class="bg-gray-50 p-4 rounded-lg">
+                <pre class="text-sm"><code>&lt;DataTable 
+  :players="playersData"
+  :current-user="currentUserData"
+  @row-click="handleRowClick"
+/&gt;
+
+&lt;TableRowPlayer 
+  :player="playerData"
+  @row-click="handlePlayerClick"
+/&gt;
+
+&lt;TableRowCurrentUser 
+  :player="currentUserData"
+  @row-click="handleCurrentUserClick"
+/&gt;</code></pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- Click Feedback -->
+    <div id="clickFeedback" class="click-feedback">
+        <span id="feedbackText">Clicked!</span>
+    </div>
+
+    <script>
+        let clickCount = 0;
+        
+        function handleTableClick(action, type) {
+            clickCount++;
+            document.getElementById('clickCount').textContent = clickCount;
+            document.getElementById('lastAction').textContent = action;
+            
+            // Show feedback
+            const feedback = document.getElementById('clickFeedback');
+            const feedbackText = document.getElementById('feedbackText');
+            feedbackText.textContent = action;
+            feedback.classList.add('show');
+            
+            // Log to console
+            console.log(`Table Interaction: ${action} (${type})`);
+            
+            // Hide feedback after 2 seconds
+            setTimeout(() => {
+                feedback.classList.remove('show');
+            }, 2000);
+        }
+
+        // Add some interactive effects
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Table Components Demo Loaded');
+            console.log('Click on any table row to see interactions');
+            
+            // Add hover sound effect (optional)
+            const rows = document.querySelectorAll('.table-row');
+            rows.forEach(row => {
+                row.addEventListener('mouseenter', function() {
+                    this.style.transform = 'scale(1.01)';
+                    this.style.transition = 'transform 0.2s ease';
+                });
+                
+                row.addEventListener('mouseleave', function() {
+                    this.style.transform = 'scale(1)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

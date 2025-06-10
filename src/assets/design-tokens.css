@@ -1,0 +1,208 @@
+/**
+ * Design Tokens - CSS Custom Properties
+ * 
+ * Centralized design system variables for consistent styling across components.
+ * Based on Figma design system specifications.
+ */
+
+:root {
+  /* ===== BUTTON TOKENS ===== */
+  
+  /* Button Dimensions */
+  --button-width-max: 338px;
+  --button-width-min: 60px;
+  --button-height-default: 60px;
+  --button-padding: 24px;
+  
+  /* Button Styling */
+  --button-radius: 0px;
+  --button-background-color: #FFC72C;
+    /* Button Typography */
+  --button-font-size: 16px;
+  --button-font-weight: 500;
+  --button-font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+  
+  /* Extended Button Typography (from Figma) */
+  --button-label-color-dark: #072C54;
+  --button-fontsize: 16px;
+  --button-letter-spacing: 1.92px;
+  
+  /* ===== COLOR SYSTEM ===== */
+  
+  /* Primary Colors */
+  --primary-color: #007bff;
+  --primary-color-dark: #0056b3;
+  --primary-color-darker: #004085;
+  --primary-color-light: #66b3ff;
+  --primary-color-lighter: #b3d9ff;
+  
+  /* Secondary Colors */
+  --secondary-color: #6c757d;
+  --secondary-color-dark: #545b62;
+  --secondary-color-light: #adb5bd;
+  
+  /* Status Colors */
+  --success-color: #28a745;
+  --success-color-dark: #1e7e34;
+  --success-color-light: #71dd8a;
+  
+  --danger-color: #dc3545;
+  --danger-color-dark: #c82333;
+  --danger-color-light: #f1818a;
+  
+  --warning-color: #ffc107;
+  --warning-color-dark: #e0a800;
+  --warning-color-light: #ffe066;
+  
+  --info-color: #17a2b8;
+  --info-color-dark: #138496;
+  --info-color-light: #7cc8d3;
+  
+  /* Neutral Colors */
+  --white: #ffffff;
+  --black: #000000;
+  --gray-100: #f8f9fa;
+  --gray-200: #e9ecef;
+  --gray-300: #dee2e6;
+  --gray-400: #ced4da;
+  --gray-500: #adb5bd;
+  --gray-600: #6c757d;
+  --gray-700: #495057;
+  --gray-800: #343a40;
+  --gray-900: #212529;
+  
+  /* ===== BREITLING LEAGUE BRAND COLORS ===== */
+  
+  /* Brand Primary */
+  --breitling-gold: #FFC72C;
+  --breitling-gold-dark: #e6b329;
+  --breitling-gold-light: #ffdc70;
+  
+  /* Brand Secondary */
+  --breitling-navy: #1a365d;
+  --breitling-navy-dark: #0f1929;
+  --breitling-navy-light: #2d5a87;
+  
+  /* ===== TYPOGRAPHY TOKENS ===== */
+    /* Font Families */
+  --font-family-primary: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+  --font-family-secondary: 'Roboto', 'Segoe UI', Tahoma, sans-serif;
+  --font-family-mono: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  
+  /* Figma Typography System */
+  --fontfamily-default: "Italian Plate No2", "Helvetica Neue", Arial, sans-serif;
+  
+  /* Font Sizes */
+  --font-size-xs: 12px;
+  --font-size-sm: 14px;
+  --font-size-base: 16px;
+  --font-size-lg: 18px;
+  --font-size-xl: 20px;
+  --font-size-2xl: 24px;
+  --font-size-3xl: 30px;
+  --font-size-4xl: 36px;
+  
+  /* Font Weights */
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+  
+  /* ===== SPACING TOKENS ===== */
+  
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-2xl: 48px;
+  --spacing-3xl: 64px;
+  
+  /* ===== BORDER RADIUS TOKENS ===== */
+  
+  --radius-none: 0px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 24px;
+  --radius-full: 9999px;
+  
+  /* ===== SHADOW TOKENS ===== */
+  
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15);
+  --shadow-2xl: 0 25px 50px rgba(0, 0, 0, 0.25);
+  
+  /* ===== TRANSITION TOKENS ===== */
+  
+  --transition-fast: 150ms ease-in-out;
+  --transition-base: 300ms ease-in-out;
+  --transition-slow: 500ms ease-in-out;
+  
+  /* ===== Z-INDEX TOKENS ===== */
+  
+  --z-index-dropdown: 1000;
+  --z-index-sticky: 1020;
+  --z-index-fixed: 1030;
+  --z-index-modal-backdrop: 1040;
+  --z-index-modal: 1050;
+  --z-index-popover: 1060;
+  --z-index-tooltip: 1070;
+  
+  /* ===== COMPONENT-SPECIFIC TOKENS ===== */
+  
+  /* Input Components */
+  --input-border-radius: var(--radius-md);
+  --input-border-color: var(--gray-300);
+  --input-focus-color: var(--primary-color);
+  --input-padding: var(--spacing-md);
+  
+  /* Card Components */
+  --card-border-radius: var(--radius-lg);
+  --card-shadow: var(--shadow-md);
+  --card-padding: var(--spacing-lg);
+  
+  /* Quiz-Specific */
+  --quiz-primary-color: var(--breitling-gold);
+  --quiz-secondary-color: var(--breitling-navy);
+  --quiz-timer-color: var(--danger-color);
+  --quiz-success-color: var(--success-color);
+}
+
+/* ===== DARK MODE SUPPORT ===== */
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Dark mode color overrides */
+    --primary-color: #4dabf7;
+    --button-background-color: #FFD700;
+    
+    /* Dark mode grays */
+    --gray-100: #212529;
+    --gray-200: #343a40;
+    --gray-300: #495057;
+    --gray-400: #6c757d;
+    --gray-500: #adb5bd;
+    --gray-600: #ced4da;
+    --gray-700: #dee2e6;
+    --gray-800: #e9ecef;
+    --gray-900: #f8f9fa;
+  }
+}
+
+/* ===== RESPONSIVE BREAKPOINT TOKENS ===== */
+
+/* These are for reference - use in @media queries */
+/*
+--breakpoint-xs: 480px;
+--breakpoint-sm: 640px;
+--breakpoint-md: 768px;
+--breakpoint-lg: 1024px;
+--breakpoint-xl: 1280px;
+--breakpoint-2xl: 1536px;
+*/

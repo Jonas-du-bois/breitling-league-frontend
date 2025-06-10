@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Card Components Demo - Breitling League</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        
+        /* Custom font family for Italian_Plate_No2 fallback */
+        .font-italian-plate {
+            font-family: 'Italian_Plate_No2', 'Inter', sans-serif;
+        }
+
+        /* Color system based on component.txt specifications */
+        .text-color-primary-yellow-100 {
+            color: #FFC72C;
+        }
+
+        .text-color-primary-yellow-10 {
+            color: #FDF8E9;
+        }
+
+        .text-color-secondary-black {
+            color: #09091A;
+        }
+
+        .text-color-functional-success-100 {
+            color: #39A05D;
+        }
+
+        .text-color-functional-error-100 {
+            color: #B9473B;
+        }
+
+        .bg-color-secondary-white {
+            background-color: #FFFFFF;
+        }
+
+        .bg-color-primary-yellow-100 {
+            background-color: #FFC72C;
+        }
+
+        .bg-color-functional-success-100 {
+            background-color: #39A05D;
+        }
+
+        .bg-color-functional-error-100 {
+            background-color: #B9473B;
+        }
+
+        .outline-color-primary-yellow-10 {
+            outline-color: #FDF8E9;
+        }
+
+        /* Demo styling */
+        .demo-container {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .component-showcase {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .interactive-button {
+            transition: all 0.3s ease;
+        }
+
+        .interactive-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Custom shadows */
+        .shadow-yellow {
+            box-shadow: 0px 4px 8px 0px rgba(255, 199, 43, 0.40);
+        }
+
+        .shadow-dark {
+            box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.25);
+        }
+    </style>
+</head>
+<body>
+    <div id="app" class="demo-container p-8">
+        <!-- Header -->
+        <div class="text-center mb-12">
+            <h1 class="text-5xl font-bold text-gray-800 mb-4">🃏 New Card Components Demo</h1>
+            <p class="text-xl text-gray-600 mb-2">Breitling League - Question & Timer Module Cards</p>
+            <p class="text-sm text-gray-500">Based on exact specifications from component.txt</p>
+        </div>
+
+        <!-- Question Card Showcase -->
+        <section class="mb-16">
+            <div class="component-showcase p-8">
+                <h2 class="text-3xl font-bold text-gray-800 mb-6">❓ Question Card Component</h2>
+                <p class="text-gray-600 mb-8">Interactive quiz question card with timer, progress tracking, and statistics</p>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                    <!-- Default Question Card -->
+                    <div class="text-center">
+                        <h3 class="text-lg font-semibold mb-4 text-gray-700">Default Configuration</h3>
+                        <question-card></question-card>
+                        <div class="mt-4 text-sm text-gray-600">
+                            <p>Question 13/20 • 56 seconds remaining</p>
+                            <p>7 correct • 7 incorrect answers</p>
+                        </div>
+                    </div>
+
+                    <!-- Custom Question Card -->
+                    <div class="text-center">
+                        <h3 class="text-lg font-semibold mb-4 text-gray-700">Custom Configuration</h3>
+                        <question-card
+                            :current-question="5"
+                            :total-questions="15"
+                            :time-remaining="42"
+                            question-text="What is the primary component of stellar fusion in main sequence stars?"
+                            :correct-answers="4"
+                            :incorrect-answers="1">
+                        </question-card>
+                        <div class="mt-4 text-sm text-gray-600">
+                            <p>Question 5/15 • 42 seconds remaining</p>
+                            <p>4 correct • 1 incorrect answers</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Interactive Question Card -->
+                <div class="text-center">
+                    <h3 class="text-xl font-semibold mb-4 text-gray-700">Interactive Demo</h3>
+                    <div class="flex justify-center mb-4">
+                        <question-card
+                            :current-question="interactiveQuestion.current"
+                            :total-questions="interactiveQuestion.total"
+                            :time-remaining="interactiveQuestion.timeRemaining"
+                            :question-text="interactiveQuestion.text"
+                            :correct-answers="interactiveQuestion.correct"
+                            :incorrect-answers="interactiveQuestion.incorrect">
+                        </question-card>
+                    </div>
+                    <div class="flex justify-center gap-4">
+                        <button 
+                            @click="nextQuestion"
+                            class="interactive-button px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 font-semibold">
+                            Next Question
+                        </button>
+                        <button 
+                            @click="decreaseTime"
+                            class="interactive-button px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 font-semibold">
+                            Decrease Time
+                        </button>
+                        <button 
+                            @click="addCorrectAnswer"
+                            class="interactive-button px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 font-semibold">
+                            Correct Answer
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Timer Module Card Showcase -->
+        <section class="mb-16">
+            <div class="component-showcase p-8">
+                <h2 class="text-3xl font-bold text-gray-800 mb-6">⏱️ Timer Module Card Component</h2>
+                <p class="text-gray-600 mb-8">Event countdown cards with boosters and interactive buttons</p>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                    <!-- Default Timer Module -->
+                    <div class="text-center">
+                        <h3 class="text-lg font-semibold mb-4 text-gray-700">Default Configuration</h3>
+                        <timer-module-card @event-click="handleEventClick"></timer-module-card>
+                        <div class="mt-4 text-sm text-gray-600">
+                            <p>Father's Day Event • 8D 12H 24M remaining</p>
+                            <p>x2 booster active • Button disabled</p>
+                        </div>
+                    </div>
+
+                    <!-- Custom Timer Module -->
+                    <div class="text-center">
+                        <h3 class="text-lg font-semibold mb-4 text-gray-700">Custom Configuration</h3>
+                        <timer-module-card
+                            event-label="special event"
+                            event-title="Christmas Sale"
+                            button-text="join event"
+                            :button-disabled="false"
+                            :timer="{ days: '15', hours: '06', minutes: '45' }"
+                            :has-booster="true"
+                            booster-multiplier="x3"
+                            @event-click="handleEventClick">
+                        </timer-module-card>
+                        <div class="mt-4 text-sm text-gray-600">
+                            <p>Christmas Sale Event • 15D 6H 45M remaining</p>
+                            <p>x3 booster active • Button enabled</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Interactive Timer Module -->
+                <div class="text-center">
+                    <h3 class="text-xl font-semibold mb-4 text-gray-700">Interactive Demo</h3>
+                    <div class="flex justify-center mb-4">
+                        <timer-module-card
+                            :event-label="interactiveTimer.label"
+                            :event-title="interactiveTimer.title"
+                            :button-text="interactiveTimer.buttonText"
+                            :button-disabled="interactiveTimer.disabled"
+                            :timer="interactiveTimer.timer"
+                            :has-booster="interactiveTimer.hasBooster"
+                            :booster-multiplier="interactiveTimer.booster"
+                            @event-click="handleInteractiveEventClick">
+                        </timer-module-card>
+                    </div>
+                    <div class="flex justify-center gap-4">
+                        <button 
+                            @click="decreaseTimerTime"
+                            class="interactive-button px-4 py-2 bg-orange-500 text-white rounded hover:bg-orange-600 font-semibold">
+                            Decrease Timer
+                        </button>
+                        <button 
+                            @click="toggleBooster"
+                            class="interactive-button px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600 font-semibold">
+                            Toggle Booster
+                        </button>
+                        <button 
+                            @click="toggleButton"
+                            class="interactive-button px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 font-semibold">
+                            Toggle Button
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Technical Specifications -->
+        <section class="mb-16">
+            <div class="component-showcase p-8">
+                <h2 class="text-3xl font-bold text-gray-800 mb-6">🔧 Technical Specifications</h2>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Question Card Specs -->
+                    <div>
+                        <h3 class="text-xl font-semibold mb-4">Question Card Specifications</h3>
+                        <div class="space-y-3 text-sm">
+                            <div class="bg-gray-50 p-3 rounded">
+                                <strong>Dimensions:</strong> 320px × 176px (w-80 h-44)
+                            </div>
+                            <div class="bg-gray-50 p-3 rounded">
+                                <strong>Colors:</strong>
+                                <div class="grid grid-cols-2 gap-2 mt-2">
+                                    <div class="flex items-center space-x-2">
+                                        <div class="w-4 h-4 bg-color-primary-yellow-100 rounded"></div>
+                                        <span>#FFC72C</span>
+                                    </div>
+                                    <div class="flex items-center space-x-2">
+                                        <div class="w-4 h-4 bg-color-secondary-black rounded"></div>
+                                        <span>#09091A</span>
+                                    </div>
+                                    <div class="flex items-center space-x-2">
+                                        <div class="w-4 h-4 bg-color-functional-success-100 rounded"></div>
+                                        <span>#39A05D</span>
+                                    </div>
+                                    <div class="flex items-center space-x-2">
+                                        <div class="w-4 h-4 bg-color-functional-error-100 rounded"></div>
+                                        <span>#B9473B</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-gray-50 p-3 rounded">
+                                <strong>Typography:</strong> Italian_Plate_No2, text-xl primary
+                            </div>
+                            <div class="bg-gray-50 p-3 rounded">
+                                <strong>Props:</strong> currentQuestion, totalQuestions, timeRemaining, questionText, correctAnswers, incorrectAnswers
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Timer Module Specs -->
+                    <div>
+                        <h3 class="text-xl font-semibold mb-4">Timer Module Specifications</h3>
+                        <div class="space-y-3 text-sm">
+                            <div class="bg-gray-50 p-3 rounded">
+                                <strong>Dimensions:</strong> 384px × 240px (w-96 h-60)
+                            </div>
+                            <div class="bg-gray-50 p-3 rounded">
+                                <strong>Colors:</strong>
+                                <div class="grid grid-cols-2 gap-2 mt-2">
+                                    <div class="flex items-center space-x-2">
+                                        <div class="w-4 h-4 bg-color-primary-yellow-10 rounded"></div>
+                                        <span>#FDF8E9</span>
+                                    </div>
+                                    <div class="flex items-center space-x-2">
+                                        <div class="w-4 h-4 bg-color-primary-yellow-100 rounded"></div>
+                                        <span>#FFC72C</span>
+                                    </div>
+                                    <div class="flex items-center space-x-2">
+                                        <div class="w-4 h-4 bg-amber-400 rounded"></div>
+                                        <span>#fbbf24</span>
+                                    </div>
+                                    <div class="flex items-center space-x-2">
+                                        <div class="w-4 h-4 bg-black rounded"></div>
+                                        <span>#000000</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-gray-50 p-3 rounded">
+                                <strong>Typography:</strong> Italian_Plate_No2, text-3xl for title
+                            </div>
+                            <div class="bg-gray-50 p-3 rounded">
+                                <strong>Props:</strong> eventLabel, eventTitle, timer, hasBooster, buttonDisabled
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Event Log -->
+        <section v-if="eventLog.length > 0" class="mb-16">
+            <div class="component-showcase p-8">
+                <h2 class="text-3xl font-bold text-gray-800 mb-6">📋 Event Log</h2>
+                <div class="bg-gray-50 p-4 rounded-lg max-h-60 overflow-y-auto">
+                    <div 
+                        v-for="(event, index) in eventLog" 
+                        :key="index"
+                        class="text-sm py-2 border-b border-gray-200 last:border-b-0"
+                    >
+                        <span class="font-mono text-xs text-gray-500">{{ event.timestamp }}</span>
+                        <span class="ml-3 text-gray-700">{{ event.message }}</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="text-center text-gray-500 text-sm">
+            <p>Breitling League New Card Components - Implemented per exact specifications</p>
+            <p class="mt-2">Question Card & Timer Module Card components follow the design system defined in component.txt</p>
+        </footer>
+    </div>
+
+    <script>
+        const { createApp } = Vue;
+
+        // Question Card Component
+        const QuestionCard = {
+            props: {
+                currentQuestion: { type: [Number, String], default: 13 },
+                totalQuestions: { type: [Number, String], default: 20 },
+                timeRemaining: { type: [Number, String], default: 56 },
+                questionText: { 
+                    type: String, 
+                    default: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+                },
+                correctAnswers: { type: [Number, String], default: "07" },
+                incorrectAnswers: { type: [Number, String], default: "07" }
+            },
+            template: `
+                <div class="w-80 h-44 px-9 pb-16 bg-color-secondary-white rounded-lg shadow-yellow inline-flex flex-col justify-center items-center gap-8">
+                    <div class="flex flex-col justify-start items-start gap-4">
+                        <div class="justify-start">
+                            <span class="text-color-primary-yellow-100 text-xl font-normal font-italian-plate">Question </span>
+                            <span class="text-color-primary-yellow-100 text-xl font-semibold font-italian-plate">{{ currentQuestion }}</span>
+                            <span class="text-color-primary-yellow-100 text-xl font-normal font-italian-plate">/{{ totalQuestions }}</span>
+                        </div>
+                        <div class="w-20 h-20 p-2.5 relative bg-color-secondary-white rounded-full shadow-dark flex flex-col justify-center items-center gap-2.5">
+                            <div class="w-8 h-3 text-center justify-start text-color-primary-yellow-100 text-xl font-semibold font-italian-plate uppercase">{{ timeRemaining }}</div>
+                            <div class="w-16 h-16 left-[6.08px] top-[6.08px] absolute bg-color-primary-yellow-100 rounded-full"></div>
+                        </div>
+                    </div>
+                    <div class="w-72 justify-start text-color-secondary-black text-xl font-normal font-italian-plate">
+                        {{ questionText }}
+                    </div>
+                    <div class="flex flex-col items-center gap-2">
+                        <div class="w-8 h-2.5 bg-color-functional-success-100 rounded-lg"></div>
+                        <div class="text-center justify-start text-color-functional-success-100 text-base font-semibold font-italian-plate uppercase">{{ correctAnswers }}</div>
+                        <div class="w-8 h-2.5 bg-color-functional-error-100 rounded-lg"></div>
+                        <div class="text-center justify-start text-color-functional-error-100 text-base font-semibold font-italian-plate uppercase">{{ incorrectAnswers }}</div>
+                    </div>
+                </div>
+            `
+        };
+
+        // Timer Module Card Component
+        const TimerModuleCard = {
+            props: {
+                eventLabel: { type: String, default: 'new event' },
+                eventTitle: { type: String, default: "Father's day" },
+                buttonText: { type: String, default: 'go to event' },
+                buttonDisabled: { type: Boolean, default: true },
+                buttonStatus: { type: String, default: 'default' },
+                timer: { 
+                    type: Object, 
+                    default: () => ({ days: '08', hours: '12', minutes: '24' })
+                },
+                hasBooster: { type: Boolean, default: true },
+                boosterMultiplier: { type: String, default: 'x2' }
+            },
+            emits: ['event-click'],
+            methods: {
+                handleEventClick() {
+                    if (!this.buttonDisabled) {
+                        this.$emit('event-click');
+                    }
+                }
+            },
+            template: `
+                <div class="w-96 h-60 relative">
+                    <div class="w-96 h-60 p-8 left-0 top-0 absolute bg-gradient-to-br from-black to-transparent inline-flex flex-col justify-start items-start gap-6">
+                        <div class="flex flex-col justify-start items-start gap-3">
+                            <div class="justify-start text-color-primary-yellow-10 text-base font-semibold font-italian-plate uppercase">{{ eventLabel }}</div>
+                            <div class="w-64 justify-start text-color-primary-yellow-10 text-3xl font-semibold font-italian-plate uppercase">{{ eventTitle }}</div>
+                        </div>
+                        <div 
+                            :data-disabled="buttonDisabled" 
+                            :data-status="buttonStatus" 
+                            class="h-14 max-w-80 min-w-14 p-6 outline outline-2 outline-offset-[-2px] outline-color-primary-yellow-10 inline-flex justify-center items-center gap-2.5 cursor-pointer hover:bg-white hover:bg-opacity-10 transition-all duration-200"
+                            :class="{ 'cursor-not-allowed opacity-80': buttonDisabled }"
+                            @click="handleEventClick"
+                        >
+                            <div class="justify-start text-color-primary-yellow-10 text-base font-bold font-italian-plate uppercase">{{ buttonText }}</div>
+                        </div>
+                    </div>
+                    <div 
+                        :data-with-booster="hasBooster" 
+                        class="w-96 h-6 left-0 top-[211px] absolute bg-color-primary-yellow-100 inline-flex justify-center items-center"
+                    >
+                        <div class="justify-start">
+                            <span class="text-color-secondary-black text-xl font-semibold font-italian-plate">{{ timer.days }} </span>
+                            <span class="text-color-secondary-black text-xl font-normal font-italian-plate">D</span>
+                            <span class="text-color-secondary-black text-xl font-semibold font-italian-plate"> {{ timer.hours }} </span>
+                            <span class="text-color-secondary-black text-xl font-normal font-italian-plate">H</span>
+                            <span class="text-color-secondary-black text-xl font-semibold font-italian-plate"> {{ timer.minutes }} </span>
+                            <span class="text-color-secondary-black text-xl font-normal font-italian-plate">M</span>
+                        </div>
+                        <div 
+                            v-if="hasBooster"
+                            class="w-11 h-11 left-[47px] top-[-19px] absolute bg-amber-400 rounded-full"
+                        >
+                            <div class="left-[12px] top-[15px] absolute justify-start text-black text-2xl font-semibold font-italian-plate">{{ boosterMultiplier }}</div>
+                        </div>
+                    </div>
+                </div>
+            `
+        };
+
+        // Main App
+        createApp({
+            components: {
+                QuestionCard,
+                TimerModuleCard
+            },
+            data() {
+                return {
+                    interactiveQuestion: {
+                        current: 8,
+                        total: 20,
+                        timeRemaining: 45,
+                        text: "Interactive question: What happens when you click the buttons below?",
+                        correct: 3,
+                        incorrect: 2
+                    },
+                    interactiveTimer: {
+                        label: "interactive event",
+                        title: "Demo Event",
+                        buttonText: "click me",
+                        disabled: false,
+                        timer: { days: '02', hours: '14', minutes: '30' },
+                        hasBooster: true,
+                        booster: "x2"
+                    },
+                    eventLog: []
+                };
+            },
+            methods: {
+                nextQuestion() {
+                    if (this.interactiveQuestion.current < this.interactiveQuestion.total) {
+                        this.interactiveQuestion.current++;
+                        this.logEvent(`Advanced to question ${this.interactiveQuestion.current}`);
+                    }
+                },
+                decreaseTime() {
+                    if (this.interactiveQuestion.timeRemaining > 0) {
+                        this.interactiveQuestion.timeRemaining--;
+                        this.logEvent(`Time decreased to ${this.interactiveQuestion.timeRemaining} seconds`);
+                    }
+                },
+                addCorrectAnswer() {
+                    this.interactiveQuestion.correct++;
+                    this.logEvent(`Correct answers increased to ${this.interactiveQuestion.correct}`);
+                },
+                handleEventClick() {
+                    this.logEvent('Default timer module event clicked');
+                },
+                handleInteractiveEventClick() {
+                    this.logEvent('Interactive timer module event clicked');
+                },
+                decreaseTimerTime() {
+                    const timer = this.interactiveTimer.timer;
+                    let minutes = parseInt(timer.minutes);
+                    if (minutes > 0) {
+                        timer.minutes = String(minutes - 1).padStart(2, '0');
+                        this.logEvent(`Timer decreased to ${timer.days}D ${timer.hours}H ${timer.minutes}M`);
+                    }
+                },
+                toggleBooster() {
+                    this.interactiveTimer.hasBooster = !this.interactiveTimer.hasBooster;
+                    this.logEvent(`Booster ${this.interactiveTimer.hasBooster ? 'enabled' : 'disabled'}`);
+                },
+                toggleButton() {
+                    this.interactiveTimer.disabled = !this.interactiveTimer.disabled;
+                    this.logEvent(`Button ${this.interactiveTimer.disabled ? 'disabled' : 'enabled'}`);
+                },
+                logEvent(message) {
+                    const timestamp = new Date().toLocaleTimeString();
+                    this.eventLog.unshift({ timestamp, message });
+                    if (this.eventLog.length > 10) {
+                        this.eventLog.pop();
+                    }
+                }
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>
