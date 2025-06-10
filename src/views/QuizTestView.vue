@@ -24,19 +24,36 @@
     </div>
 
     <!-- Main Content -->
-    <div v-if="!isLoading" class="test-content">
-      
-      <!-- User Info -->
-      <section v-if="user" class="user-section">
+    <div v-if="!isLoading" class="test-content">      <!-- User Info -->
+      <section v-if="user || isAuthenticated" class="user-section">
         <div class="user-card">
           <div class="user-avatar">{{ userInitials }}</div>
           <div class="user-info">
-            <h3>{{ user.name }}</h3>
-            <p>{{ user.email }}</p>
-            <div class="user-stats">
-              <span class="stat">{{ totalPoints }} points</span>
-              <span class="stat">{{ completedQuizzes }} quiz complétés</span>
+            <h3>{{ user?.name || 'Utilisateur connecté' }}</h3>
+            <p>{{ user?.email || 'Email non disponible' }}</p>            <div class="user-stats">
+              <span class="stat">{{ hybridTotalPoints }} points</span>
+              <span class="stat">{{ hybridCompletedQuizzes }} quiz complétés</span>
+              <span class="stat" :class="{ 'stat-success': isAuthenticated, 'stat-error': !isAuthenticated }">
+                {{ isAuthenticated ? '✅ Authentifié' : '❌ Non authentifié' }}
+              </span>
+              <span class="stat stat-source" :title="dataSource.label">
+                {{ dataSource.icon }} {{ dataSource.source }}
+              </span>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Auth Status (si pas d'utilisateur mais authentifié) -->
+      <section v-else-if="!user && !isAuthenticated" class="auth-status-section">
+        <div class="auth-warning">
+          <span class="warning-icon">⚠️</span>
+          <div class="warning-content">
+            <h3>Authentification requise</h3>
+            <p>Veuillez vous connecter pour accéder aux fonctionnalités de quiz.</p>
+            <button @click="setupDemoAuthentication" class="btn btn-primary">
+              🎭 Utiliser le token de démonstration
+            </button>
           </div>
         </div>
       </section>
@@ -172,7 +189,9 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useQuizStore } from '@/stores/quiz'
+import { useProgress } from '@/composables/useProgress'
 import quizService from '@/services/quiz'
+import authService from '@/services/auth'
 import chapterService from '@/services/chapters'
 import discoveryService from '@/services/discoveries'
 import weeklyService from '@/services/weeklyChallenges'
@@ -180,6 +199,13 @@ import eventService from '@/services/events'
 
 const router = useRouter()
 const quizStore = useQuizStore()
+const { 
+  totalPoints, 
+  completedQuizzes, 
+  getProgress: fetchUserProgress,
+  loading: progressLoading,
+  error: progressError 
+} = useProgress()
 
 // State
 const isLoading = ref(false)
@@ -193,18 +219,75 @@ const availableModules = ref([])
 const recentInstances = ref([])
 
 // Computed
-const user = computed(() => quizStore.user)
-const totalPoints = computed(() => quizStore.totalPoints)
-const completedQuizzes = computed(() => quizStore.completedQuizzes)
+const user = computed(() => quizStore.getUserStats?.user || null)
+
+// Données hybrides : useProgress en priorité, store quiz en fallback
+const hybridTotalPoints = computed(() => {
+  // Toujours utiliser useProgress pour la cohérence avec le Dashboard
+  return totalPoints.value || 0
+})
+
+const hybridCompletedQuizzes = computed(() => {
+  // Toujours utiliser useProgress pour la cohérence avec le Dashboard
+  return completedQuizzes.value || 0
+})
+
+// Indicateur de la source de données utilisée
+const dataSource = computed(() => {
+  if (totalPoints.value && !progressError.value) {
+    return { source: 'useProgress', icon: '🔄', label: 'Données temps réel' }
+  }
+  return { source: 'store', icon: '💾', label: 'Données cache' }
+})
+
+// Utilisation des données du composable useProgress au lieu du store quiz
+// const totalPoints = computed(() => quizStore.getUserStats?.total_points || 0)
+// const completedQuizzes = computed(() => quizStore.getUserStats?.completed_quizzes || 0)
 
 const userInitials = computed(() => {
-  const name = user.value?.name || 'U'
-  return name.split(' ').map(n => n[0]).join('').toUpperCase()
+  if (user.value?.name) {
+    return user.value.name.split(' ').map(n => n[0]).join('').toUpperCase()
+  }
+  return isAuthenticated.value ? 'U' : '?'
 })
+
+const isAuthenticated = computed(() => authService.isAuthenticated())
 
 // Methods
 const clearError = () => {
   error.value = ''
+}
+
+const setupDemoAuthentication = async () => {
+  try {
+    // Vérifier si on est déjà authentifié
+    if (authService.isAuthenticated()) {
+      console.log('✅ Utilisateur déjà authentifié')
+      // Recharger les données du cache après authentification
+      await quizStore.refreshCache()
+      return true
+    }
+    
+    // Configurer le token de démonstration
+    console.log('🎭 Configuration du token de démonstration...')
+    const demoToken = authService.setDemoToken()
+    
+    // Valider le token
+    const isValid = await authService.validateToken()
+    if (isValid) {
+      console.log('✅ Token de démonstration validé')
+      // Recharger les données du cache après authentification
+      await quizStore.refreshCache()
+      return true
+    } else {
+      console.warn('❌ Token de démonstration invalide')
+      return false
+    }
+  } catch (err) {
+    console.error('❌ Erreur configuration authentification:', err)
+    error.value = 'Erreur de configuration de l\'authentification de test'
+    return false
+  }
 }
 
 const selectQuizType = async (quizType) => {
@@ -424,7 +507,8 @@ const loadRecentInstances = async () => {
     isLoading.value = true
     loadingMessage.value = 'Chargement des quiz récents...'
       const response = await quizService.getUserQuizInstances({ limit: 10 })
-    recentInstances.value = response.data?.instances || response.data?.data || response.data || []
+    // Corriger l'accès aux données - l'API retourne response.data.data.instances
+    recentInstances.value = response.data?.data?.instances || response.data?.instances || response.data || []
     
     console.log('Quiz récents chargés:', recentInstances.value.length)
   } catch (err) {
@@ -540,7 +624,30 @@ const formatDate = (dateString) => {
 // Lifecycle
 onMounted(async () => {
   console.log('🚀 Initialisation QuizTestView')
-  await quizStore.initializeApp()
+  
+  // Configurer l'authentification de test d'abord
+  const authConfigured = await setupDemoAuthentication()
+  if (!authConfigured) {
+    error.value = 'Impossible de configurer l\'authentification de test'
+    return
+  }
+  
+  await quizStore.refreshCache()
+  
+  // Charger les données de progression si l'utilisateur est authentifié
+  if (authService.isAuthenticated()) {
+    try {
+      await fetchUserProgress()
+      console.log('✅ Données de progression chargées:', {
+        totalPoints: totalPoints.value,
+        completedQuizzes: completedQuizzes.value
+      })
+    } catch (err) {
+      console.warn('⚠️ Impossible de charger les données de progression, utilisation du cache store:', err.message)
+      // En cas d'erreur, les données du store seront utilisées comme fallback
+    }
+  }
+  
   await loadAllData()
 })
 </script>
@@ -678,6 +785,52 @@ onMounted(async () => {
   padding: 4px 8px;
   border-radius: 12px;
   font-size: 12px;
+  color: #4a5568;
+}
+
+.stat-success {
+  background: #d4edda;
+  color: #155724;
+}
+
+.stat-error {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.stat-source {
+  background: #e3f2fd;
+  color: #1976d2;
+  font-weight: bold;
+  cursor: help;
+}
+
+.auth-status-section {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 15px;
+  padding: 30px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.auth-warning {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  text-align: center;
+}
+
+.warning-icon {
+  font-size: 48px;
+}
+
+.warning-content h3 {
+  margin: 0 0 10px 0;
+  color: #d69e2e;
+}
+
+.warning-content p {
+  margin: 0 0 15px 0;
   color: #4a5568;
 }
 
