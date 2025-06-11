@@ -5,13 +5,19 @@
     @click="handleClick"
     :type="type"
   >
+    <Icon v-if="icon" :name="icon" :size="iconSize" class="button-icon" />
     <slot>{{ label }}</slot>
   </button>
 </template>
 
 <script>
+import Icon from '../Icon.vue'
+
 export default {
   name: 'OutlineButton',
+  components: {
+    Icon
+  },
   props: {
     label: {
       type: String,
@@ -25,6 +31,14 @@ export default {
       type: String,
       default: 'button',
       validator: (value) => ['button', 'submit', 'reset'].includes(value)
+    },
+    icon: {
+      type: String,
+      default: null
+    },
+    iconSize: {
+      type: String,
+      default: 'sm'
     }
   },
   emits: ['click'],
@@ -82,11 +96,15 @@ export default {
   &:active:not(:disabled) {
     transform: translateY(0);
   }
-    &.disabled {
+  &.disabled {
     opacity: 0.5;
     cursor: not-allowed;
     border-color: var(--gray-300, #ccc);
     color: var(--gray-300, #ccc);
   }
+}
+
+.button-icon {
+  flex-shrink: 0;
 }
 </style>

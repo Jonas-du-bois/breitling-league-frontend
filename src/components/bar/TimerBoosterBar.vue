@@ -1,5 +1,5 @@
 <template>
-  <div class="w-96 h-6 px-4 py-1.5 relative bg-[#FFC72C] inline-flex justify-center items-center gap-2.5 font-italian-plate">
+  <div class="w-full h-6 px-4 py-1.5 relative bg-[#FFC72C] inline-flex justify-center items-center gap-2.5 font-italian-plate">
     <!-- Timer Display -->
     <div class="justify-start">
       <span class="text-[#09091A] text-xl font-semibold font-['Italian_Plate_No2']">{{ formatTime(timer.days) }} </span>

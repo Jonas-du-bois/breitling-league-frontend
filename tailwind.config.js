@@ -28,8 +28,7 @@ export default {
     // Box shadows
     'shadow-[0px_0px_8px_0px_rgba(193,200,210,1.00)]',
     // Font families
-    'font-italian-plate-no2',
-    // Custom colors
+    'font-italian-plate-no2',    // Custom colors
     'bg-color-primary-yellow-100',
     'text-color-secondary-black',
     'text-card-text-color-dark',
@@ -43,13 +42,25 @@ export default {
     'outline-card-stroke-color',
     'outline-color-primary-blue-100',
     'outline-icon-color-dark-default',
+    'outline-button-stroke-color-dark',
+    'text-button-label-color-dark',
+    'bg-button-background-color-disabled',    'text-button-label-color-light-disabled',
     'border-t',
     'border-color-primary-blue-100',
     'hover:bg-gray-100',
     'transition-colors',
     'max-w-md',
     'leading-tight',
-    'items-baseline'
+    'items-baseline',
+    'backdrop-blur-[2px]',
+    'bg-white/90',
+    'tracking-widest',    'text-icon-color-dark-default',
+    'text-icon-color-highlighted',
+    'bg-icon-color-dark-default',
+    'bg-icon-color-highlighted',
+    'outline-icon-color-dark-default',
+    'border-icon-color-highlighted',
+    'bg-zinc-500'
   ],
   theme: {
     extend: {      colors: {
@@ -61,8 +72,15 @@ export default {
         'icon-color-dark-default': '#09091A',
         'badge-label-color-light': '#76787B',
         'color-primary-yellow-100': '#FFC72C',
-        'card-background-color-light': '#FFFFFF',
-      },      fontFamily: {
+        'card-background-color-light': '#FFFFFF',        // Button Colors
+        'button-stroke-color-dark': '#072C54',
+        'button-label-color-dark': '#072C54',
+        'button-background-color-disabled': '#C1C8D2',
+        'button-label-color-light-disabled': '#FFFFFF',
+        // Navigation Colors
+        'icon-color-highlighted': '#FFC72C',
+        'color-secondary-grey': '#71717B',
+      },fontFamily: {
         'italian-plate': ['Italian Plate No2', 'Inter', 'sans-serif'],
         'italian-plate-no2': ['Italian Plate No2', 'Inter', 'sans-serif'],
       },width: {

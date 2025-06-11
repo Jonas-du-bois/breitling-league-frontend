@@ -236,6 +236,85 @@
                         </button>
                     </div>
                 </div>
+            </div>        </section>
+
+        <!-- SpecialistCard Showcase -->
+        <section class="mb-16">
+            <div class="component-showcase p-8">
+                <h2 class="text-3xl font-bold text-gray-800 mb-6">🎓 SpecialistCard Component</h2>
+                <p class="text-gray-600 mb-8">Specialist progression card with background image and progress tracking</p>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+                    <!-- Beginner Progress -->
+                    <div class="text-center">
+                        <h3 class="text-lg font-semibold mb-4 text-gray-700">Beginner Progress</h3>
+                        <specialist-card
+                            :units-learned="3"
+                            :total-units="15">
+                        </specialist-card>
+                        <div class="mt-4 text-sm text-gray-600">
+                            <p>3/15 units completed • 20% progress</p>
+                            <p>Background with Breitling specialist image</p>
+                        </div>
+                    </div>
+
+                    <!-- Intermediate Progress -->
+                    <div class="text-center">
+                        <h3 class="text-lg font-semibold mb-4 text-gray-700">Intermediate Progress</h3>
+                        <specialist-card
+                            :units-learned="9"
+                            :total-units="15">
+                        </specialist-card>
+                        <div class="mt-4 text-sm text-gray-600">
+                            <p>9/15 units completed • 60% progress</p>
+                            <p>Progress dots showing advancement</p>
+                        </div>
+                    </div>
+
+                    <!-- Nearly Complete -->
+                    <div class="text-center">
+                        <h3 class="text-lg font-semibold mb-4 text-gray-700">Almost Complete</h3>
+                        <specialist-card
+                            :units-learned="14"
+                            :total-units="15">
+                        </specialist-card>
+                        <div class="mt-4 text-sm text-gray-600">
+                            <p>14/15 units completed • 93% progress</p>
+                            <p>Almost ready for specialist certification</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Interactive SpecialistCard -->
+                <div class="text-center">
+                    <h3 class="text-xl font-semibold mb-4 text-gray-700">Interactive Demo</h3>
+                    <div class="flex justify-center mb-4">
+                        <specialist-card
+                            :units-learned="interactiveSpecialist.unitsLearned"
+                            :total-units="interactiveSpecialist.totalUnits"
+                            @card-click="handleSpecialistClick">
+                        </specialist-card>
+                    </div>
+                    <div class="flex justify-center gap-4">
+                        <button 
+                            @click="increaseProgress"
+                            :disabled="interactiveSpecialist.unitsLearned >= interactiveSpecialist.totalUnits"
+                            class="interactive-button px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 font-semibold disabled:opacity-50 disabled:cursor-not-allowed">
+                            Complete Unit (+1)
+                        </button>
+                        <button 
+                            @click="decreaseProgress"
+                            :disabled="interactiveSpecialist.unitsLearned <= 0"
+                            class="interactive-button px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 font-semibold disabled:opacity-50 disabled:cursor-not-allowed">
+                            Reset Unit (-1)
+                        </button>
+                        <button 
+                            @click="resetProgress"
+                            class="interactive-button px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 font-semibold">
+                            Reset All
+                        </button>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -446,6 +525,84 @@
                         >
                             <div class="left-[12px] top-[15px] absolute justify-start text-black text-2xl font-semibold font-italian-plate">{{ boosterMultiplier }}</div>
                         </div>
+                    </div>
+                </div>
+            `        };
+
+        // SpecialistCard Component
+        const SpecialistCard = {
+            props: {
+                unitsLearned: { type: Number, default: 7 },
+                totalUnits: { type: Number, default: 15 },
+                totalDots: { type: Number, default: 6 },
+                backgroundImage: { type: String, default: null }
+            },
+            emits: ['card-click'],
+            computed: {
+                completedDots() {
+                    return Math.floor((this.unitsLearned / this.totalUnits) * this.totalDots);
+                },
+                progressBarWidth() {
+                    const progressPercentage = (this.unitsLearned / this.totalUnits) * 100;
+                    return `${Math.min(progressPercentage, 100)}%`;
+                },
+                progressPercentage() {
+                    return Math.round((this.unitsLearned / this.totalUnits) * 100);
+                }
+            },
+            methods: {
+                handleCardClick() {
+                    this.$emit('card-click', {
+                        unitsLearned: this.unitsLearned,
+                        totalUnits: this.totalUnits,
+                        progressPercentage: this.progressPercentage
+                    });
+                }
+            },
+            template: `
+                <div class="specialist-card" @click="handleCardClick">
+                    <div class="card-content">
+                        <!-- Main Title Section -->
+                        <div class="title-section">
+                            <div class="main-title">
+                                <span class="become-text">Become</span>
+                                <span class="specialist-text"> Breitling Specialist</span>
+                            </div>
+                            <div class="subtitle">And build the watch of the year</div>
+                        </div>
+                        
+                        <!-- Progress Bar Section -->
+                        <div class="progress-section">
+                            <!-- Progress Bar Container -->
+                            <div class="progress-bar-container">
+                                <div class="progress-bar-background"></div>
+                                <div class="progress-bar-fill" :style="{ width: progressBarWidth }"></div>
+                            </div>
+                            
+                            <!-- Progress Dots -->
+                            <div class="progress-dots">
+                                <div 
+                                    v-for="(dot, index) in totalDots" 
+                                    :key="index"
+                                    class="progress-dot"
+                                    :class="{ 'completed': index < completedDots }"
+                                ></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Stats Section -->
+                        <div class="stats-section">
+                            <div class="specialist-icon">
+                                <div class="cert-icon"></div>
+                            </div>
+                            <div class="stats-text">
+                                <div class="stats-numbers">{{ unitsLearned }}/{{ totalUnits }}</div>
+                                <div class="stats-label">units learned</div>
+                            </div>
+                        </div>
+
+                        <!-- Decorative Line -->
+                        <div class="decorative-line"></div>
                     </div>
                 </div>
             `

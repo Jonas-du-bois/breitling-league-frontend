@@ -1,34 +1,47 @@
-<template>
-  <div class="w-80 h-11 relative font-italian-plate">
-    <!-- Back Button -->
+<template>  <div class="w-full max-w-md h-11 relative font-italian-plate">
+    <!-- Back Button - Conditional -->
     <div 
+      v-if="withBack"
       :data-direction="direction" 
-      class="left-0 top-0 absolute inline-flex justify-start items-start cursor-pointer"
+      class="left-0 top-0 absolute inline-flex justify-start items-start cursor-pointer z-10"
       @click="handleBackClick"
     >
       <div class="w-11 h-11 flex justify-start items-center hover:bg-gray-100 rounded transition-colors">
-        <div class="w-6 h-6 relative overflow-hidden">
-          <div class="w-4 h-4 left-[3px] top-[4px] absolute" :class="iconColorClass"></div>
-        </div>
+        <Icon 
+          :name="direction === 'right' ? 'arrow-forward' : 'arrow-back'" 
+          size="sm" 
+          alt="Navigation arrow"
+          class="nav-arrow-icon"
+        />
       </div>
     </div>
     
-    <!-- Page Title -->
-    <div class="h-7 p-2.5 left-[128.50px] top-[7px] absolute border-b-2 border-[#FFC72C] inline-flex justify-center items-center gap-2.5">
-      <div class="text-center justify-start text-[#072C54] text-base font-semibold font-['Italian_Plate_No2'] uppercase">
-        {{ pageTitle }}
+    <!-- Page Title - Centered -->
+    <div class="w-full h-11 flex justify-center items-center">
+      <div class="h-7 px-4 py-2.5 border-b-2 border-[#FFC72C] inline-flex justify-center items-center">
+        <div class="text-center text-[#072C54] text-base font-semibold font-['Italian_Plate_No2'] uppercase">
+          {{ pageTitle }}
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import Icon from '../Icon.vue'
+
 export default {
   name: 'HeaderBar',
-  props: {
+  components: {
+    Icon
+  },  props: {
     pageTitle: {
       type: String,
       default: 'Page title'
+    },
+    withBack: {
+      type: Boolean,
+      default: true
     },
     direction: {
       type: String,

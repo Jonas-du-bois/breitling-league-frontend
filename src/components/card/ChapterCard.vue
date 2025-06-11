@@ -24,13 +24,13 @@
         <div class="points-section">
           <span class="points-number">{{ pointsLeft }}</span>
           <span class="points-label">pts left</span>
-        </div>
-        
-        <div class="action-icon" @click="toggleExpanded">
-          <div class="icon-container">
-            <div class="icon-line-horizontal"></div>
-            <div v-if="!isExpanded" class="icon-line-vertical"></div>
-          </div>
+        </div>        <div class="action-icon" @click="toggleExpanded">
+          <Icon 
+            :name="isExpanded ? 'dropdown-close' : 'dropdown-open'" 
+            size="lg" 
+            :alt="isExpanded ? 'Collapse chapter' : 'Expand chapter'"
+            class="expand-icon"
+          />
         </div>
       </div>
     </div>      <div v-if="isExpanded" class="units-container">
@@ -53,13 +53,15 @@
 <script>
 import { OutlineButton, FilledButton } from '../button'
 import UnitCard from './UnitCard.vue'
+import Icon from '../Icon.vue'
 
 export default {
   name: 'ChapterCard',
   components: {
     OutlineButton,
     FilledButton,
-    UnitCard
+    UnitCard,
+    Icon
   },
   props: {
     title: {
@@ -317,6 +319,14 @@ export default {
 
 .action-icon:hover {
   background-color: rgba(0, 0, 0, 0.05);
+}
+
+.expand-icon {
+  transition: transform 0.3s ease;
+}
+
+.expand-icon:hover {
+  transform: scale(1.1);
 }
 
 .icon-container {

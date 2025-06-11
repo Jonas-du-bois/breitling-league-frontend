@@ -57,7 +57,24 @@ All Vue.js card components have been successfully implemented based on the exact
 - **Location**: `src/components/card/UnitCard.vue`
 - **Features**: Unit information display with completion status
 
-#### 5. NewCardDemo.vue ✅
+#### 5. SpecialistCard.vue ✅
+- **Purpose**: Specialist progression card with gradient background
+- **Location**: `src/components/card/SpecialistCard.vue`
+- **Features**:
+  - Exact dimensions: 384px × 208px (w-96 h-52)
+  - Black-to-transparent gradient background
+  - Dynamic progress bar and dots based on units learned
+  - Specialist certification status display
+  - Interactive click handling with progress data emission
+- **Props**:
+  - `unitsLearned`: Number (default: 7) - Number of completed units
+  - `totalUnits`: Number (default: 15) - Total number of units
+  - `totalDots`: Number (default: 6) - Number of progress dots
+  - `backgroundImage`: String (default: null) - Optional background image
+- **Events**: Emits 'card-click' with progress data
+- **Colors**: #000000 (gradient), #FFFFFF (white text/bars), #FFC72C (yellow accents), #072C54 (blue stats)
+
+#### 6. NewCardDemo.vue ✅
 - **Purpose**: Interactive demo for new card components
 - **Location**: `src/components/card/NewCardDemo.vue`
 - **Features**:
@@ -72,7 +89,7 @@ All Vue.js card components have been successfully implemented based on the exact
 #### Component Exports
 - **File**: `src/components/card/index.js`
 - **Status**: ✅ All components properly exported
-- **Exports**: ChapterCard, UnitCard, QuestionCard, TimerModuleCard, NewCardDemo
+- **Exports**: ChapterCard, UnitCard, QuestionCard, TimerModuleCard, SpecialistCard, NewCardDemo
 - **Usage Examples**: ✅ Comprehensive usage documentation included
 
 #### App Integration

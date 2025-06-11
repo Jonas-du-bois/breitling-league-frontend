@@ -8,10 +8,11 @@
     <main class="navigation-content">
       <!-- Component Categories Grid -->
       <div class="categories-grid">
-        
-        <!-- Bar Components -->
+          <!-- Bar Components -->
         <div class="category-card">
-          <div class="category-icon">🧭</div>
+          <div class="category-icon">
+            <Icon name="arrow-forward" size="lg" alt="Bar Components" />
+          </div>
           <h2>Bar Components</h2>
           <p>Navigation bars, search bars, progress indicators, and header components</p>
           <div class="component-count">7 Components</div>
@@ -27,11 +28,11 @@
             <span class="component-tag">HorizontalScrollingBar</span>
             <span class="component-tag">BarDemo</span>
           </div>
-        </div>
-
-        <!-- Button Components -->
+        </div>        <!-- Button Components -->
         <div class="category-card">
-          <div class="category-icon">🎯</div>
+          <div class="category-icon">
+            <Icon name="playground" size="lg" alt="Button Components" />
+          </div>
           <h2>Button Components</h2>
           <p>Interactive buttons with various styles, states, and behaviors</p>
           <div class="component-count">2 Components</div>
@@ -42,11 +43,11 @@
             <span class="component-tag">OutlineButton</span>
             <span class="component-tag">FilledButton</span>
           </div>
-        </div>
-
-        <!-- Card Components -->
+        </div>        <!-- Card Components -->
         <div class="category-card">
-          <div class="category-icon">🃏</div>
+          <div class="category-icon">
+            <Icon name="book" size="lg" alt="Card Components" />
+          </div>
           <h2>Card Components</h2>
           <p>Information cards for displaying course content, quizzes, and modules</p>
           <div class="component-count">5 Components</div>
@@ -160,9 +161,7 @@
             <span class="component-tag">LoginForm</span>
             <span class="component-tag">UserProfile</span>
           </div>
-        </div>
-
-        <!-- Interactive Quiz Demo -->
+        </div>        <!-- Interactive Quiz Demo -->
         <div class="category-card quiz-demo-card">
           <div class="category-icon">🎮</div>
           <h2>Interactive Quiz Demo</h2>
@@ -179,6 +178,30 @@
               🧩 Component Showcase
             </button>
           </div>
+          <div class="component-list">
+            <span class="component-tag highlight">Enhanced QuestionCard</span>
+            <span class="component-tag highlight">ProgressCircle</span>
+            <span class="component-tag highlight">SVGProgressCircle</span>
+            <span class="component-tag">QuizPage</span>
+            <span class="component-tag">QuizReviewPage</span>
+          </div>
+        </div>
+
+        <!-- Playzone Demo -->
+        <div class="category-card playzone-demo-card">
+          <div class="category-icon">
+            <Icon name="playground" size="lg" alt="Playzone" />
+          </div>
+          <h2>Playzone Page Demo</h2>
+          <p>Complete mobile-first playzone interface with hero sections, event cards, and learning units</p>
+          <div class="component-count">Full Page Demo</div>          <a 
+            href="/playzone" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            class="demo-button primary playzone-link"
+          >
+            🎯 View Playzone Page
+          </a>
           <div class="component-list">
             <span class="component-tag highlight">Enhanced QuestionCard</span>
             <span class="component-tag highlight">ProgressCircle</span>
@@ -217,8 +240,13 @@
 </template>
 
 <script>
+import Icon from './Icon.vue'
+
 export default {
-  name: 'ComponentNavigation',  methods: {
+  name: 'ComponentNavigation',
+  components: {
+    Icon
+  },methods: {
     navigateToDemo(category) {
       // Emit event to parent component to handle navigation
       this.$emit('navigate', category);
@@ -252,17 +280,22 @@ export default {
           }
         }
       }
-    },
-
-    // Quiz demo navigation methods
+    },    // Quiz demo navigation methods
     navigateToQuizStart() {
       this.$emit('navigate', 'quiz-start');
     },
 
     navigateToQuizReview() {
       this.$emit('navigate', 'quiz-review');
-    },    navigateToComponentShowcase() {
+    },
+
+    navigateToComponentShowcase() {
       this.$emit('navigate', 'special');
+    },    // Playzone navigation method
+    navigateToPlayzone() {
+      // Open playzone page in a new tab/window
+      const url = `${window.location.origin}/playzone`;
+      window.open(url, '_blank');
     }
   }
 }
@@ -487,6 +520,36 @@ export default {
   background: linear-gradient(135deg, #FFC72C 0%, #FFB800 100%);
   color: #072C54;
   font-weight: 700;
+}
+
+.playzone-demo-card {
+  background: linear-gradient(135deg, #e8f5e8 0%, #d4f4d4 100%);
+  border: 2px solid #4CAF50;
+  position: relative;
+}
+
+.playzone-demo-card::before {
+  content: "🎮";
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: #4CAF50;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.playzone-demo-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 40px rgba(76, 175, 80, 0.2);
+}
+
+.playzone-link {
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
 }
 
 .quiz-demo-buttons .demo-button.secondary {

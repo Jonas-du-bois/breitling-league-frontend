@@ -13,6 +13,9 @@ export { default as UnitCard } from './UnitCard.vue'
 // Chapter card for displaying chapter information with bonus and time
 export { default as ChapterCard } from './ChapterCard.vue'
 
+// Specialist card for showing progression toward specialist status
+export { default as SpecialistCard } from './SpecialistCard.vue'
+
 // ===== INTERACTIVE CARDS =====
 
 // Question card for quiz questions with timer and stats
@@ -29,7 +32,7 @@ export { default as NewCardDemo } from './NewCardDemo.vue'
 /**
  * Usage Examples:
  * 
- * import { UnitCard, ChapterCard, QuestionCard, TimerModuleCard } from '@/components/card'
+ * import { UnitCard, ChapterCard, QuestionCard, TimerModuleCard, SpecialistCard } from '@/components/card'
  * 
  * <UnitCard title="Mathematics" :points-left="450" @action="startUnit" />
  * <ChapterCard 
@@ -57,5 +60,10 @@ export { default as NewCardDemo } from './NewCardDemo.vue'
  *   :has-booster="true"
  *   booster-multiplier="x2"
  *   @event-click="handleEventClick"
+ * />
+ * <SpecialistCard
+ *   :units-learned="7"
+ *   :total-units="15"
+ *   @card-click="handleSpecialistClick"
  * />
  */

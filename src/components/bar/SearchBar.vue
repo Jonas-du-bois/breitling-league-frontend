@@ -1,10 +1,8 @@
-<template>
-  <div class="w-80 h-14 p-3 rounded-lg outline outline-2 outline-offset-[-2px] outline-[#76787B] inline-flex justify-between items-center">
+<template>  <div class="w-80 h-14 p-3 rounded-lg outline outline-2 outline-offset-[-2px] outline-[#76787B] inline-flex justify-between items-center">
     <div class="w-32 flex justify-start items-center gap-3.5">
       <!-- Search Icon -->
       <div class="w-6 h-6 relative overflow-hidden cursor-pointer" @click="handleSearchClick">
-        <div class="w-4 h-4 left-[3px] top-[3px] absolute outline outline-2 outline-offset-[-1px] outline-black"></div>
-        <div class="w-1 h-1 left-[16.70px] top-[16.70px] absolute outline outline-2 outline-offset-[-1px] outline-black"></div>
+        <Icon name="book" size="sm" alt="Search" class="search-icon" />
       </div>
       
       <!-- Input Field -->
@@ -32,8 +30,13 @@
 </template>
 
 <script>
+import Icon from '../Icon.vue'
+
 export default {
   name: 'SearchBar',
+  components: {
+    Icon
+  },
   props: {
     placeholder: {
       type: String,

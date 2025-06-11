@@ -1,12 +1,15 @@
 <template>
-  <div class="user-profile">
-    <div class="profile-header">
+  <div class="user-profile">    <div class="profile-header">
+      <div class="profile-avatar">
+        <Icon name="user" size="lg" alt="User Avatar" />
+      </div>
       <h3>Welcome back!</h3>
       <p v-if="user">{{ user.name || 'User' }}</p>
     </div>
     
     <div class="profile-actions">
       <button class="logout-button" @click="handleLogout">
+        <Icon name="arrow-back" size="sm" alt="Logout" class="logout-icon" />
         Logout
       </button>
     </div>
@@ -14,8 +17,13 @@
 </template>
 
 <script>
+import Icon from './Icon.vue'
+
 export default {
   name: 'UserProfile',
+  components: {
+    Icon
+  },
   props: {
     user: {
       type: Object,
@@ -43,6 +51,12 @@ export default {
   text-align: center;
 }
 
+.profile-avatar {
+  margin-bottom: 15px;
+  display: flex;
+  justify-content: center;
+}
+
 .profile-header h3 {
   color: #2c3e50;
   margin-bottom: 10px;
@@ -62,9 +76,17 @@ export default {
   cursor: pointer;
   font-weight: 500;
   transition: background 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 auto;
 }
 
 .logout-button:hover {
   background: #c82333;
+}
+
+.logout-icon {
+  filter: brightness(0) invert(1);
 }
 </style>
