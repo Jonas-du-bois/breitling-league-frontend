@@ -15,29 +15,53 @@
       <!-- Individual Card Examples -->
       <section class="component-section">
         <h2>🎴 Individual Card Examples</h2>
-        
-        <!-- UnitCard Examples -->
+          <!-- UnitCard Examples -->
         <div class="example-group">
-          <h3>UnitCard - Course Units</h3>
-          <div class="card-grid">
+          <h3>UnitCard - Course Units</h3>          <div class="card-grid">
             <UnitCard 
-              title="Mathematics Fundamentals"
-              :points-left="100300"
-              button-text="START"
-              @action="handleUnitAction"
+              :unit="{
+                id: 'unit-1',
+                title: 'Mathematics Fundamentals',
+                points: '45',
+                totalPoints: '100',
+                badgeText: 'Beginner',
+                isLearned: false,
+                chapterId: 'math-ch1'
+              }"
+              :isClicked="clickedCards.has('unit-1')"
+              @unit-click="handleUnitClick"
+              @learn-unit="handleLearnUnit"
+              @quiz-unit="handleQuizUnit"
             />
             <UnitCard 
-              title="Advanced Physics"
-              :points-left="75500"
-              button-text="CONTINUE"
-              @action="handleUnitAction"
+              :unit="{
+                id: 'unit-2',
+                title: 'Advanced Physics',
+                points: '25',
+                totalPoints: '100',
+                badgeText: 'Intermediate',
+                isLearned: false,
+                chapterId: 'physics-ch1'
+              }"
+              :isClicked="clickedCards.has('unit-2')"
+              @unit-click="handleUnitClick"
+              @learn-unit="handleLearnUnit"
+              @quiz-unit="handleQuizUnit"
             />
             <UnitCard 
-              title="Quantum Mechanics"
-              :points-left="0"
-              :disabled="true"
-              button-text="COMPLETED"
-              @action="handleUnitAction"
+              :unit="{
+                id: 'unit-3',
+                title: 'Quantum Mechanics',
+                points: '0',
+                totalPoints: '100',
+                badgeText: 'Advanced',
+                isLearned: true,
+                chapterId: 'physics-ch2'
+              }"
+              :isClicked="clickedCards.has('unit-3')"
+              @unit-click="handleUnitClick"
+              @learn-unit="handleLearnUnit"
+              @quiz-unit="handleQuizUnit"
             />
           </div>
         </div>
@@ -106,23 +130,62 @@
               @answer-selected="handleAnswerSelected"
             />
           </div>
-        </div>
-
-        <!-- TimerModuleCard Examples -->
+        </div>        <!-- TimerModuleCard Examples -->
         <div class="example-group">
-          <h3>TimerModuleCard - Timed Modules</h3>
+          <h3>TimerModuleCard - Event Modules with Timer</h3>
           <div class="card-grid">
             <TimerModuleCard 
-              :module="timerModules[0]"
-              @start="handleModuleStart"
-              @pause="handleModulePause"
-              @complete="handleModuleComplete"
+              event-label="New Event"
+              event-title="Father's Day"
+              button-text="Discover"
+              :button-disabled="false"
+              :timer="{ days: '08', hours: '21', minutes: '58' }"
+              :has-booster="false"
+              @event-click="handleTimerModuleClick"
             />
             <TimerModuleCard 
-              :module="timerModules[1]"
-              @start="handleModuleStart"
-              @pause="handleModulePause"
-              @complete="handleModuleComplete"
+              event-label="Novelty"
+              event-title="September 2025"
+              button-text="Go to Event"
+              :button-disabled="false"
+              :timer="{ days: '12', hours: '06', minutes: '30' }"
+              :has-booster="true"
+              booster-multiplier="x2"
+              @event-click="handleTimerModuleClick"
+              @booster-click="handleBoosterClick"
+            />
+            <TimerModuleCard 
+              event-label="Limited Time"
+              event-title="Flash Sale"
+              button-text="Shop Now"
+              :button-disabled="true"
+              :timer="{ days: '00', hours: '02', minutes: '15' }"
+              :has-booster="true"
+              booster-multiplier="x3"
+              @event-click="handleTimerModuleClick"
+              @booster-click="handleBoosterClick"
+            />
+          </div>
+        </div>
+
+        <!-- SpecialistCard Examples -->
+        <div class="example-group">
+          <h3>SpecialistCard - Specialist Progress</h3>
+          <div class="card-grid">
+            <SpecialistCard 
+              :units-learned="7"
+              :total-units="15"
+              @card-click="handleSpecialistClick"
+            />
+            <SpecialistCard 
+              :units-learned="12"
+              :total-units="15"
+              @card-click="handleSpecialistClick"
+            />
+            <SpecialistCard 
+              :units-learned="15"
+              :total-units="15"
+              @card-click="handleSpecialistClick"
             />
           </div>
         </div>
@@ -144,14 +207,17 @@
                 <label>
                   Title:
                   <input v-model="builderConfig.title" type="text" placeholder="Enter card title">
+                </label>                <label v-if="builderConfig.type === 'unit'">
+                  Points Left:
+                  <input v-model.number="builderConfig.points" type="number" placeholder="Points remaining" min="0" max="100">
                 </label>
                 <label v-if="builderConfig.type === 'unit'">
-                  Points:
-                  <input v-model.number="builderConfig.points" type="number" placeholder="Points remaining">
+                  Badge Text:
+                  <input v-model="builderConfig.buttonText" type="text" placeholder="Badge label (e.g., Beginner)">
                 </label>
                 <label v-if="builderConfig.type === 'unit'">
-                  Button Text:
-                  <input v-model="builderConfig.buttonText" type="text" placeholder="Button label">
+                  <input v-model="builderConfig.disabled" type="checkbox">
+                  Mark as Completed
                 </label>
                 <label v-if="builderConfig.type === 'chapter'">
                   Bonus Multiplier:
@@ -163,15 +229,22 @@
               </div>
             </div>
             <div class="builder-preview">
-              <h4>Preview</h4>
-              <div class="preview-container">
+              <h4>Preview</h4>              <div class="preview-container">
                 <UnitCard 
                   v-if="builderConfig.type === 'unit'"
-                  :title="builderConfig.title || 'Custom Unit'"
-                  :points-left="builderConfig.points || 0"
-                  :button-text="builderConfig.buttonText || 'ACTION'"
-                  :disabled="builderConfig.disabled"
-                  @action="handleCustomAction"
+                  :unit="{
+                    id: 'builder-unit',
+                    title: builderConfig.title || 'Custom Unit',
+                    points: builderConfig.points?.toString() || '50',
+                    totalPoints: '100',
+                    badgeText: builderConfig.buttonText || 'Custom',
+                    isLearned: builderConfig.disabled || false,
+                    chapterId: 'custom-ch1'
+                  }"
+                  :isClicked="clickedCards.has('builder-unit')"
+                  @unit-click="handleCustomUnitClick"
+                  @learn-unit="handleCustomLearnUnit"
+                  @quiz-unit="handleCustomQuizUnit"
                 />
                 <ChapterCard 
                   v-else
@@ -198,24 +271,41 @@
             <span class="log-type" :class="action.type">{{ action.type }}</span>
             <span class="log-message">{{ action.message }}</span>
           </div>
+        </div>        <button class="clear-log-button" @click="clearLog">Clear Log</button>
+      </section>
+
+      <!-- Bottom Navigation Demo -->
+      <section class="component-section">
+        <h2>📱 Bottom Navigation</h2>
+        <div class="example-group">
+          <h3>BottomNavigation - Tab Navigation</h3>
+          <p class="example-description">Interactive bottom navigation with icons and home indicator</p>
+          <div class="navigation-demo-container">
+            <BottomNavigation 
+              :active-tab="activeNavigationTab"
+              @navigate="handleNavigationDemo"
+            />
+          </div>
+          <p class="demo-note">Current active tab: <strong>{{ activeNavigationTab }}</strong></p>
         </div>
-        <button class="clear-log-button" @click="clearLog">Clear Log</button>
       </section>
     </main>
   </div>
 </template>
 
 <script>
-import { UnitCard, ChapterCard, QuestionCard, TimerModuleCard, NewCardDemo } from './card'
+import { UnitCard, ChapterCard, QuestionCard, TimerModuleCard, NewCardDemo, SpecialistCard } from './card'
+import BottomNavigation from './bar/BottomNavigation.vue'
 
 export default {
-  name: 'CardDemoPage',
-  components: {
+  name: 'CardDemoPage',  components: {
     UnitCard,
     ChapterCard,
     QuestionCard,
     TimerModuleCard,
-    NewCardDemo
+    NewCardDemo,
+    SpecialistCard,
+    BottomNavigation
   },
   data() {
     return {
@@ -232,25 +322,7 @@ export default {
           text: "Which planet is known as the Red Planet?",
           options: ["Venus", "Mars", "Jupiter", "Saturn"],
           correctAnswer: 1
-        }
-      ],
-      
-      timerModules: [
-        {
-          id: 1,
-          title: "Speed Reading Challenge",
-          duration: 300, // 5 minutes
-          difficulty: "Medium",
-          points: 1500
-        },
-        {
-          id: 2,
-          title: "Math Sprint",
-          duration: 180, // 3 minutes
-          difficulty: "Hard",
-          points: 2000
-        }
-      ],
+        }      ],
       
       // Card builder configuration
       builderConfig: {
@@ -259,16 +331,35 @@ export default {
         points: 1000,
         buttonText: 'START',
         bonusMultiplier: 'x2',
-        disabled: false
-      },
+        disabled: false      },
       
       // Action logging
-      actionLog: []
+      actionLog: [],
+        // Track clicked cards for overlay display
+      clickedCards: new Set(),
+      
+      // Bottom navigation demo state
+      activeNavigationTab: 'playzone'
     }
-  },
-  methods: {
-    handleUnitAction(unitData) {
-      this.logAction('unit', `Unit action: ${unitData.title} (${unitData.pointsLeft} pts)`);
+    },  methods: {
+    handleUnitClick(unit) {
+      // Toggle the clicked state for overlay display
+      if (this.clickedCards.has(unit.id)) {
+        this.clickedCards.delete(unit.id);
+      } else {
+        // Close other overlays first (only one overlay at a time)
+        this.clickedCards.clear();
+        this.clickedCards.add(unit.id);
+      }
+      this.logAction('unit', `Unit clicked: ${unit.title} (${unit.points} pts left)`);
+    },
+    
+    handleLearnUnit(unit) {
+      this.logAction('unit', `Learn unit: ${unit.title}`);
+    },
+    
+    handleQuizUnit(unit) {
+      this.logAction('unit', `Quiz unit: ${unit.title} (${unit.isLearned ? 'Completed' : 'Not ready'})`);
     },
     
     handleChapterToggle(chapterData) {
@@ -278,21 +369,35 @@ export default {
     handleAnswerSelected(questionData) {
       this.logAction('question', `Answer selected for question ${questionData.questionId}: Option ${questionData.selectedAnswer + 1}`);
     },
-    
-    handleModuleStart(moduleData) {
-      this.logAction('timer', `Module started: ${moduleData.title}`);
+      handleTimerModuleClick() {
+      this.logAction('timer', `Timer module event clicked`);
     },
     
-    handleModulePause(moduleData) {
-      this.logAction('timer', `Module paused: ${moduleData.title}`);
+    handleBoosterClick() {
+      this.logAction('timer', `Booster clicked`);
     },
     
-    handleModuleComplete(moduleData) {
-      this.logAction('timer', `Module completed: ${moduleData.title} (${moduleData.points} pts earned)`);
+    handleSpecialistClick(specialistData) {
+      this.logAction('specialist', `Specialist card clicked: ${specialistData.unitsLearned}/${specialistData.totalUnits} units (${specialistData.progressPercentage}% complete)`);
+        },
+      handleCustomUnitClick(unit) {
+      // Toggle the clicked state for overlay display
+      if (this.clickedCards.has(unit.id)) {
+        this.clickedCards.delete(unit.id);
+      } else {
+        // Close other overlays first (only one overlay at a time)
+        this.clickedCards.clear();
+        this.clickedCards.add(unit.id);
+      }
+      this.logAction('custom', `Custom unit clicked: ${unit.title}`);
     },
     
-    handleCustomAction(cardData) {
-      this.logAction('custom', `Custom unit action: ${cardData.title}`);
+    handleCustomLearnUnit(unit) {
+      this.logAction('custom', `Custom learn unit: ${unit.title}`);
+    },
+    
+    handleCustomQuizUnit(unit) {
+      this.logAction('custom', `Custom quiz unit: ${unit.title}`);
     },
     
     handleCustomToggle(cardData) {
@@ -308,12 +413,43 @@ export default {
       if (this.actionLog.length > 25) {
         this.actionLog = this.actionLog.slice(0, 25);
       }
-    },
+        },
     
     clearLog() {
       this.actionLog = [];
-    }
-  }
+    },
+    
+    handleNavigationDemo(tab) {
+      this.activeNavigationTab = tab;
+      this.logAction('navigation', `Navigation tab clicked: ${tab}`);
+    },
+    
+    handleClickOutside(event) {
+      // Check if click is outside any unit card
+      const unitCards = document.querySelectorAll('.unit-card');
+      let clickedInsideCard = false;
+      
+      unitCards.forEach(card => {
+        if (card.contains(event.target)) {
+          clickedInsideCard = true;
+        }
+      });
+      
+      // Close all overlays if clicked outside
+      if (!clickedInsideCard) {
+        this.clickedCards.clear();
+      }
+    },
+  },
+  mounted() {
+    // Add click outside handler to close overlays
+    document.addEventListener('click', this.handleClickOutside);
+  },
+
+  beforeUnmount() {
+    // Clean up event listener
+    document.removeEventListener('click', this.handleClickOutside);
+  },
 }
 </script>
 
@@ -544,6 +680,32 @@ export default {
 
 .clear-log-button:hover {
   background: #c82333;
+}
+
+/* Navigation Demo Styling */
+.navigation-demo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 20px 0;
+}
+
+.example-description {
+  color: #6c757d;
+  font-size: 0.95rem;
+  margin-bottom: 15px;
+  font-style: italic;
+}
+
+.demo-note {
+  color: #495057;
+  font-size: 0.9rem;
+  margin-top: 15px;
+  text-align: center;
 }
 
 /* Responsive Design */

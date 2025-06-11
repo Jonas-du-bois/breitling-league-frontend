@@ -16,6 +16,9 @@ export { default as NavBar } from './NavBar.vue'
 // Bottom navigation bar with indicator
 export { default as BottomBar } from './BottomBar.vue'
 
+// Bottom navigation with tabs and home indicator
+export { default as BottomNavigation } from './BottomNavigation.vue'
+
 // Horizontal scrolling category chips
 export { default as HorizontalScrollingBar } from './HorizontalScrollingBar.vue'
 

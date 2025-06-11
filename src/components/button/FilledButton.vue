@@ -5,13 +5,19 @@
     @click="handleClick"
     :type="type"
   >
+    <Icon v-if="icon" :name="icon" :size="iconSize" class="button-icon" />
     <slot>{{ label }}</slot>
   </button>
 </template>
 
 <script>
+import Icon from '../Icon.vue'
+
 export default {
   name: 'FilledButton',
+  components: {
+    Icon
+  },
   props: {
     label: {
       type: String,
@@ -30,6 +36,14 @@ export default {
       type: String,
       default: 'primary',
       validator: (value) => ['primary', 'secondary', 'success', 'danger', 'warning'].includes(value)
+    },
+    icon: {
+      type: String,
+      default: null
+    },
+    iconSize: {
+      type: String,
+      default: 'sm'
     }
   },
   emits: ['click'],
@@ -133,10 +147,13 @@ export default {
   background: var(--warning-color, #ffc107);
   border-color: var(--warning-color, #ffc107);
   color: var(--dark-color, #212529);
-  
-  &:hover:not(:disabled) {
+    &:hover:not(:disabled) {
     background: var(--warning-color-dark, #e0a800);
     border-color: var(--warning-color-dark, #e0a800);
   }
+}
+
+.button-icon {
+  flex-shrink: 0;
 }
 </style>

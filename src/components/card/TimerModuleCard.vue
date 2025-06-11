@@ -14,31 +14,31 @@
         <div class="justify-start text-color-primary-yellow-10 text-base font-bold font-['Italian_Plate_No2'] uppercase">{{ buttonText }}</div>
       </div>
     </div>
+    
+    <!-- Timer bar positioned at bottom with full width -->
     <div 
       :data-with-booster="hasBooster" 
-      class="w-96 h-6 left-0 top-[211px] absolute bg-color-primary-yellow-100 inline-flex justify-center items-center"
+      class="w-full left-0 bottom-0 absolute"
     >
-      <div class="justify-start">
-        <span class="text-color-secondary-black text-xl font-semibold font-['Italian_Plate_No2']">{{ timer.days }} </span>
-        <span class="text-color-secondary-black text-xl font-normal font-['Italian_Plate_No2']">D</span>
-        <span class="text-color-secondary-black text-xl font-semibold font-['Italian_Plate_No2']"> {{ timer.hours }} </span>
-        <span class="text-color-secondary-black text-xl font-normal font-['Italian_Plate_No2']">H</span>
-        <span class="text-color-secondary-black text-xl font-semibold font-['Italian_Plate_No2']"> {{ timer.minutes }} </span>
-        <span class="text-color-secondary-black text-xl font-normal font-['Italian_Plate_No2']">M</span>
-      </div>
-      <div 
-        v-if="hasBooster"
-        class="w-11 h-11 left-[47px] top-[-19px] absolute bg-amber-400 rounded-[100px]"
-      >
-        <div class="left-[12px] top-[15px] absolute justify-start text-black text-2xl font-semibold font-['Italian_Plate_No2']">{{ boosterMultiplier }}</div>
-      </div>
+      <TimerBoosterBar 
+        :timer="timer"
+        :has-booster="hasBooster"
+        :booster-multiplier="boosterMultiplier"
+        @booster-click="handleBoosterClick"
+        class="w-full"
+      />
     </div>
   </div>
 </template>
 
 <script>
+import TimerBoosterBar from '../bar/TimerBoosterBar.vue'
+
 export default {
   name: 'TimerModuleCard',
+  components: {
+    TimerBoosterBar
+  },
   props: {
     eventLabel: {
       type: String,
@@ -76,13 +76,15 @@ export default {
       type: String,
       default: 'x2'
     }
-  },
-  emits: ['event-click'],
+  },  emits: ['event-click', 'booster-click'],
   methods: {
     handleEventClick() {
       if (!this.buttonDisabled) {
         this.$emit('event-click');
       }
+    },
+    handleBoosterClick() {
+      this.$emit('booster-click');
     }
   }
 }
@@ -92,14 +94,6 @@ export default {
 /* Color system based on component.txt specifications */
 .text-color-primary-yellow-10 {
   color: #FDF8E9;
-}
-
-.text-color-secondary-black {
-  color: #09091A;
-}
-
-.bg-color-primary-yellow-100 {
-  background-color: #FFC72C;
 }
 
 .outline-color-primary-yellow-10 {
@@ -123,10 +117,5 @@ export default {
 /* Custom gradient backgrounds */
 .bg-gradient-to-br {
   background: linear-gradient(to bottom right, #000000, rgba(0, 0, 0, 0));
-}
-
-/* Booster styling */
-.bg-amber-400 {
-  background-color: #fbbf24;
 }
 </style>
