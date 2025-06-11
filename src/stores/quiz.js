@@ -1,297 +1,206 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import quizService from '@/services/quiz.js'
-import userService from '@/services/user.js'
+import authService from '@/services/auth.js'
 
+/**
+ * Store Quiz - Version CLEAN, DRY, KISS
+ * Responsabilité unique : gestion de l'état du quiz
+ */
 export const useQuizStore = defineStore('quiz', () => {
-  // État réactif
-  const user = ref(null)
-  const userStats = ref(null)
-  const availableQuizTypes = ref([])
-  const currentQuizInstance = ref(null)
-  const currentQuizSession = ref(null)
-  const userProgress = ref({
-    discovery: null,
-    novelty: null,
-    weekly: null,
-    event: null
-  })
+  // === STATE ===
+  const currentQuiz = ref(null)
+  const userAnswers = ref([])
   const isLoading = ref(false)
   const error = ref(null)
-
-  // Computed properties
-  const isAuthenticated = computed(() => !!user.value)
-  const userRank = computed(() => user.value?.rank || null)
-  const totalPoints = computed(() => userStats.value?.total_points || 0)
-  const completedQuizzes = computed(() => userStats.value?.completed_quizzes || 0)
   
-  const nextRecommendedQuiz = computed(() => {
-    if (!availableQuizTypes.value.length) return null
-    
-    // Logique de recommandation automatique
-    const userLevel = user.value?.rank?.level || 1
-    
-    // Priorité: Discovery -> Weekly -> Novelty -> Event
-    const priorities = ['discovery', 'weekly', 'novelty', 'event']
-    
-    for (const priority of priorities) {
-      const quizType = availableQuizTypes.value.find(
-        type => type.morph_type === priority && !hasCompletedToday(type)
-      )
-      if (quizType) return quizType
-    }
-    
-    return availableQuizTypes.value[0] || null
+  // Cache data for performance
+  const cache = ref({
+    types: null,
+    stats: null,
+    instances: null
   })
 
-  // Actions
-  const setError = (message) => {
-    error.value = message
-    setTimeout(() => error.value = null, 5000)
+  // === COMPUTED ===
+  const hasCurrentQuiz = computed(() => !!currentQuiz.value)
+  const currentQuizId = computed(() => currentQuiz.value?.quiz_instance_id)
+  const isQuizActive = computed(() => hasCurrentQuiz.value && currentQuiz.value?.status === 'started')
+  
+  // === ACTIONS ===
+  
+  /**
+   * Charge et démarre un quiz
+   */
+  async function loadQuiz(quizInstanceId) {
+    try {
+      isLoading.value = true
+      error.value = null
+      
+      const response = await quizService.getInstance(quizInstanceId)
+      currentQuiz.value = response.data
+      userAnswers.value = []
+      
+      return response.data
+    } catch (err) {
+      error.value = 'Erreur lors du chargement du quiz'
+      throw err
+    } finally {
+      isLoading.value = false
+    }
   }
 
-  const clearError = () => {
+  /**
+   * Démarre un nouveau quiz
+   */
+  async function startQuiz(quizData) {
+    try {
+      isLoading.value = true
+      error.value = null
+      
+      const response = await quizService.start(quizData)
+      currentQuiz.value = response.data
+      userAnswers.value = []
+      
+      return response.data
+    } catch (err) {
+      error.value = 'Erreur lors du démarrage du quiz'
+      throw err
+    } finally {
+      isLoading.value = false
+    }
+  }
+
+  /**
+   * Ajoute une réponse utilisateur
+   */
+  function addAnswer(questionId, choiceId, timeTaken = 10) {
+    const existingIndex = userAnswers.value.findIndex(a => a.question_id === questionId)
+    
+    const answer = {
+      question_id: questionId,
+      choice_id: choiceId,
+      time_taken: timeTaken
+    }
+    
+    if (existingIndex >= 0) {
+      userAnswers.value[existingIndex] = answer
+    } else {
+      userAnswers.value.push(answer)
+    }
+  }
+
+  /**
+   * Soumet le quiz
+   */
+  async function submitQuiz(totalTime = 300) {
+    if (!currentQuizId.value || !userAnswers.value.length) {
+      throw new Error('Aucune réponse à soumettre')
+    }
+
+    try {
+      isLoading.value = true
+      error.value = null
+      
+      const submissionData = {
+        quiz_instance_id: currentQuizId.value,
+        answers: userAnswers.value,
+        total_time: totalTime
+      }
+      
+      const response = await quizService.submit(submissionData)
+      currentQuiz.value = null
+      userAnswers.value = []
+      
+      return response.data
+    } catch (err) {
+      error.value = 'Erreur lors de la soumission'
+      throw err
+    } finally {
+      isLoading.value = false
+    }
+  }  /**
+   * Recharge les données mises en cache
+   */
+  async function refreshCache() {
+    try {
+      // Récupérer les données utilisateur réelles
+      const userPromise = authService.getMe().catch(() => null)
+      
+      const [types, stats, instances, userData] = await Promise.all([
+        quizService.getQuizTypes(),
+        quizService.getUserStats(),
+        quizService.getUserQuizInstances({ limit: 10 }),
+        userPromise
+      ])
+      
+      // Enrichir les stats avec les données utilisateur réelles
+      // userData contient directement l'objet utilisateur depuis authService.getMe()
+      const enrichedStats = {
+        ...stats.data,
+        user: userData || null
+      }
+        cache.value = {
+        types: types.data?.data || types.data || [],
+        stats: enrichedStats,
+        instances: instances.data?.data?.instances || instances.data?.instances || instances.data || []
+      }
+      
+      console.log('✅ Cache rafraîchi avec données réelles:', {
+        types: cache.value.types?.length || 0,
+        user: cache.value.stats?.user?.name || 'Non authentifié',
+        instances: cache.value.instances?.length || 0
+      })
+      
+    } catch (err) {
+      console.warn('Erreur lors du rafraîchissement du cache:', err)
+    }
+  }
+
+  /**
+   * Réinitialise l'état
+   */
+  function resetState() {
+    currentQuiz.value = null
+    userAnswers.value = []
+    error.value = null
+    isLoading.value = false
+  }
+
+  /**
+   * Clear error
+   */
+  function clearError() {
     error.value = null
   }
 
-  const loadUser = async () => {
-    try {
-      isLoading.value = true
-      const response = await userService.getCurrentUser()
-      user.value = response.data
-    } catch (err) {
-      setError('Erreur lors du chargement de l\'utilisateur')
-      console.error('Erreur loadUser:', err)
-    } finally {
-      isLoading.value = false
-    }
-  }
-
-  const loadUserStats = async () => {
-    try {
-      const response = await quizService.getUserStats()
-      userStats.value = response.data
-    } catch (err) {
-      setError('Erreur lors du chargement des statistiques')
-      console.error('Erreur loadUserStats:', err)
-    }
-  }
-
-  const loadQuizTypes = async () => {
-    try {
-      const response = await quizService.getQuizTypes()
-      availableQuizTypes.value = response.data
-    } catch (err) {
-      setError('Erreur lors du chargement des types de quiz')
-      console.error('Erreur loadQuizTypes:', err)
-    }
-  }
-
-  const loadUserProgress = async () => {
-    try {      // Charger le progrès pour chaque type de quiz
-      const progressPromises = Object.keys(userProgress.value).map(async (type) => {
-        try {
-          const response = await quizService.getUserQuizInstances({
-            module_type: type,
-            status: 'in_progress',
-            limit: 1
-          })
-          
-          // Vérifier la structure de la réponse
-          const instances = response.data?.instances || response.data || []
-          return { type, data: Array.isArray(instances) ? instances[0] || null : instances }
-        } catch (err) {
-          console.warn(`Erreur chargement progrès ${type}:`, err)
-          return { type, data: null }
-        }
-      })
-
-      const results = await Promise.all(progressPromises)
-      results.forEach(({ type, data }) => {
-        userProgress.value[type] = data
-      })
-    } catch (err) {
-      console.error('Erreur loadUserProgress:', err)
-    }
-  }
-
-  const startAutomaticQuiz = async (forceType = null) => {
-    try {
-      isLoading.value = true
-      
-      const quizType = forceType || nextRecommendedQuiz.value
-      if (!quizType) {
-        setError('Aucun quiz disponible pour le moment')
-        return null
-      }
-
-      const quizData = {
-        quiz_type_id: quizType.id,
-        quizable_type: quizType.morph_type,
-        quiz_mode: 'auto'
-      }
-
-      // Ajouter des données spécifiques selon le type
-      if (quizType.morph_type === 'weekly') {
-        // Pour les quiz hebdomadaires, prendre le challenge actuel
-        const weeklyResponse = await quizService.getCurrentWeeklyChallenge()
-        if (weeklyResponse.data) {
-          quizData.quizable_id = weeklyResponse.data.id
-        }
-      } else if (quizType.morph_type === 'discovery') {
-        // Pour discovery, prendre le prochain chapitre non complété
-        const progressResponse = await quizService.getUserProgress()
-        const nextChapter = progressResponse.data.next_discovery
-        if (nextChapter) {
-          quizData.quizable_id = nextChapter.id
-        }
-      }
-
-      const response = await quizService.start(quizData)
-      currentQuizInstance.value = response.data
-
-      return response.data
-    } catch (err) {
-      setError('Erreur lors du démarrage automatique du quiz')
-      console.error('Erreur startAutomaticQuiz:', err)
-      return null
-    } finally {
-      isLoading.value = false
-    }
-  }
-
-  const continueQuiz = async (quizInstanceId) => {
-    try {
-      isLoading.value = true
-      const response = await quizService.getQuizInstance(quizInstanceId)
-      currentQuizInstance.value = response.data
-      return response.data
-    } catch (err) {
-      setError('Erreur lors de la reprise du quiz')
-      console.error('Erreur continueQuiz:', err)
-      return null
-    } finally {
-      isLoading.value = false
-    }
-  }
-
-  const submitAnswer = async (questionId, selectedAnswer) => {
-    try {
-      if (!currentQuizInstance.value) {
-        throw new Error('Aucune instance de quiz active')
-      }
-
-      const response = await quizService.submitAnswer({
-        quiz_instance_id: currentQuizInstance.value.id,
-        question_id: questionId,
-        selected_answer: selectedAnswer,
-        answered_at: new Date().toISOString()
-      })
-
-      // Mettre à jour l'instance locale
-      if (response.data.quiz_instance) {
-        currentQuizInstance.value = response.data.quiz_instance
-      }
-
-      return response.data
-    } catch (err) {
-      setError('Erreur lors de la soumission de la réponse')
-      console.error('Erreur submitAnswer:', err)
-      throw err
-    }
-  }
-
-  const completeQuiz = async () => {
-    try {
-      if (!currentQuizInstance.value) {
-        throw new Error('Aucune instance de quiz active')
-      }
-
-      const response = await quizService.complete(currentQuizInstance.value.id)
-      
-      // Recharger les stats utilisateur après completion
-      await loadUserStats()
-      await loadUser() // Pour mettre à jour les points et le rang
-      
-      // Nettoyer l'instance courante
-      currentQuizInstance.value = null
-      
-      return response.data
-    } catch (err) {
-      setError('Erreur lors de la completion du quiz')
-      console.error('Erreur completeQuiz:', err)
-      throw err
-    }
-  }
-
-  const initializeApp = async () => {
-    try {
-      isLoading.value = true
-      await Promise.all([
-        loadUser(),
-        loadQuizTypes(),
-        loadUserStats(),
-        loadUserProgress()
-      ])
-    } catch (err) {
-      setError('Erreur lors de l\'initialisation de l\'application')
-      console.error('Erreur initializeApp:', err)
-    } finally {
-      isLoading.value = false
-    }
-  }
-
-  // Helpers
-  const hasCompletedToday = (quizType) => {
-    if (!userStats.value?.today_completed) return false
-    return userStats.value.today_completed.some(
-      completed => completed.quiz_type_id === quizType.id
-    )
-  }
-
-  const hasInProgressQuiz = (quizType) => {
-    const progress = userProgress.value[quizType.morph_type]
-    return progress && progress.status === 'in_progress'
-  }
-
-  const getInProgressQuiz = (quizType) => {
-    return userProgress.value[quizType.morph_type]
-  }
+  // === GETTERS POUR LE CACHE ===
+  const getQuizTypes = computed(() => cache.value.types || [])
+  const getUserStats = computed(() => cache.value.stats || {})
+  const getRecentInstances = computed(() => cache.value.instances || [])
 
   return {
-    // État
-    user,
-    userStats,
-    availableQuizTypes,
-    currentQuizInstance,
-    currentQuizSession,
-    userProgress,
+    // State
+    currentQuiz,
+    userAnswers,
     isLoading,
     error,
+    cache,
     
     // Computed
-    isAuthenticated,
-    userRank,
-    totalPoints,
-    completedQuizzes,
-    nextRecommendedQuiz,
+    hasCurrentQuiz,
+    currentQuizId,
+    isQuizActive,
+    getQuizTypes,
+    getUserStats,
+    getRecentInstances,
     
     // Actions
-    setError,
-    clearError,
-    loadUser,
-    loadUserStats,
-    loadQuizTypes,
-    loadUserProgress,
-    startAutomaticQuiz,
-    continueQuiz,
-    submitAnswer,
-    completeQuiz,
-    initializeApp,
-    
-    // Helpers
-    hasCompletedToday,
-    hasInProgressQuiz,
-    getInProgressQuiz
+    loadQuiz,
+    startQuiz,
+    addAnswer,
+    submitQuiz,
+    refreshCache,
+    resetState,
+    clearError
   }
 })

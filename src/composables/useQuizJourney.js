@@ -1,305 +1,163 @@
-import { computed, ref, watch } from 'vue'
-import { useQuizStore } from '@/stores/quiz'
+import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 
 /**
- * Composable pour la gestion automatique du parcours utilisateur des quiz
- * Implemente la logique KISS et DRY pour une UX fluide
+ * Composable pour la navigation dans un quiz
+ * Version CLEAN : une seule responsabilité - navigation entre questions
  */
 export function useQuizJourney() {
-  const quizStore = useQuizStore()
   const router = useRouter()
   
-  const currentStep = ref('loading') // loading, dashboard, quiz, completed, error
-  const quizProgress = ref({
-    currentQuestionIndex: 0,
-    totalQuestions: 0,
-    answers: {},
-    startTime: null,
-    timeSpent: 0
-  })
-
-  // Computed pour l'état de l'interface
-  const journeyState = computed(() => {
-    const { user, isLoading, nextRecommendedQuiz, userProgress } = quizStore
-    
-    if (isLoading) return 'loading'
-    if (!user) return 'auth_required'
-    
-    // Vérifier s'il y a un quiz en cours
-    const inProgressQuiz = Object.values(userProgress).find(
-      progress => progress && progress.status === 'in_progress'
-    )
-    
-    if (inProgressQuiz) return 'resume_available'
-    if (nextRecommendedQuiz) return 'ready_to_start'
-    
-    return 'no_quiz_available'
-  })
-
-  const currentQuizMeta = computed(() => {
-    const instance = quizStore.currentQuizInstance
-    if (!instance) return null
-
-    return {
-      type: instance.quiz_type?.name || 'Quiz',
-      description: instance.quiz_type?.description || '',
-      totalQuestions: instance.questions?.length || 0,
-      currentQuestion: quizProgress.value.currentQuestionIndex + 1,
-      timeLimit: instance.quiz_type?.time_limit_minutes || null,
-      pointsPerCorrect: instance.quiz_type?.points_per_correct_answer || 1
-    }
-  })
-
-  const currentQuestion = computed(() => {
-    const instance = quizStore.currentQuizInstance
-    if (!instance?.questions) return null
-
-    const questions = instance.questions
-    const index = quizProgress.value.currentQuestionIndex
-    
-    if (index >= questions.length) return null
-    
-    return questions[index]
-  })
-
-  const isQuizCompleted = computed(() => {
-    const meta = currentQuizMeta.value
-    if (!meta) return false
-    
-    return quizProgress.value.currentQuestionIndex >= meta.totalQuestions
-  })
-
-  const progressPercentage = computed(() => {
-    const meta = currentQuizMeta.value
-    if (!meta || meta.totalQuestions === 0) return 0
-    
-    return Math.round((quizProgress.value.currentQuestionIndex / meta.totalQuestions) * 100)
-  })
-
-  // Actions automatiques
-  const startQuizJourney = async (forceType = null) => {
-    try {
-      currentStep.value = 'loading'
-      
-      // Démarrer automatiquement le quiz le plus approprié
-      const quizInstance = await quizStore.startAutomaticQuiz(forceType)
-      
-      if (quizInstance) {
-        initializeQuizSession(quizInstance)
-        currentStep.value = 'quiz'
-        return quizInstance
-      } else {
-        currentStep.value = 'error'
-        return null
-      }
-    } catch (error) {
-      console.error('Erreur startQuizJourney:', error)
-      currentStep.value = 'error'
-      return null
+  // === STATE ===
+  const currentQuestionIndex = ref(0)
+  const startTime = ref(null)
+  const answers = ref(new Map())
+  
+  // === COMPUTED ===
+  const isFirstQuestion = computed(() => currentQuestionIndex.value === 0)
+  const canGoBack = computed(() => !isFirstQuestion.value)
+  
+  function isLastQuestion(totalQuestions) {
+    return currentQuestionIndex.value >= totalQuestions - 1
+  }
+  
+  function getProgressPercentage(totalQuestions) {
+    if (totalQuestions === 0) return 0
+    return Math.round((currentQuestionIndex.value / totalQuestions) * 100)
+  }
+  
+  // === NAVIGATION ===
+  
+  /**
+   * Va à la question suivante
+   */
+  function nextQuestion(totalQuestions) {
+    if (!isLastQuestion(totalQuestions)) {
+      currentQuestionIndex.value++
     }
   }
-
-  const resumeQuiz = async (quizInstanceId) => {
-    try {
-      currentStep.value = 'loading'
-      
-      const quizInstance = await quizStore.continueQuiz(quizInstanceId)
-      
-      if (quizInstance) {
-        initializeQuizSession(quizInstance)
-        currentStep.value = 'quiz'
-        return quizInstance
-      } else {
-        currentStep.value = 'error'
-        return null
-      }
-    } catch (error) {
-      console.error('Erreur resumeQuiz:', error)
-      currentStep.value = 'error'
-      return null
+  
+  /**
+   * Va à la question précédente
+   */
+  function previousQuestion() {
+    if (canGoBack.value) {
+      currentQuestionIndex.value--
     }
   }
-
-  const initializeQuizSession = (quizInstance) => {
-    const answeredQuestions = Object.keys(quizInstance.user_answers || {}).length
+  
+  /**
+   * Va directement à une question spécifique
+   */
+  function goToQuestion(index, totalQuestions) {
+    if (index >= 0 && index < totalQuestions) {
+      currentQuestionIndex.value = index
+    }
+  }
+  
+  // === QUIZ SESSION ===
+  
+  /**
+   * Démarre une session de quiz
+   */
+  function startSession() {
+    startTime.value = Date.now()
+    currentQuestionIndex.value = 0
+    answers.value.clear()
+  }
+  
+  /**
+   * Enregistre une réponse pour la question courante
+   */
+  function saveAnswer(questionId, choiceId) {
+    const answerTime = Date.now()
+    const timeTaken = startTime.value ? Math.round((answerTime - startTime.value) / 1000) : 10
     
-    quizProgress.value = {
-      currentQuestionIndex: answeredQuestions,
-      totalQuestions: quizInstance.questions?.length || 0,
-      answers: { ...quizInstance.user_answers },
-      startTime: quizInstance.started_at ? new Date(quizInstance.started_at) : new Date(),
-      timeSpent: 0
-    }
+    answers.value.set(questionId, {
+      choice_id: choiceId,
+      time_taken: timeTaken,
+      answered_at: answerTime
+    })
   }
-
-  const submitCurrentAnswer = async (selectedAnswer) => {
-    try {
-      const question = currentQuestion.value
-      if (!question) throw new Error('Aucune question courante')
-
-      // Enregistrer la réponse localement
-      quizProgress.value.answers[question.id] = selectedAnswer
-
-      // Soumettre au backend
-      await quizStore.submitAnswer(question.id, selectedAnswer)
-
-      // Passer à la question suivante ou terminer
-      if (quizProgress.value.currentQuestionIndex < quizProgress.value.totalQuestions - 1) {
-        quizProgress.value.currentQuestionIndex++
-      } else {
-        // Quiz terminé
-        await completeCurrentQuiz()
-      }
-
-      return true
-    } catch (error) {
-      console.error('Erreur submitCurrentAnswer:', error)
-      quizStore.setError('Erreur lors de la soumission de la réponse')
-      return false
-    }
+  
+  /**
+   * Récupère toutes les réponses au format API
+   */
+  function getAnswersForSubmission() {
+    return Array.from(answers.value.entries()).map(([questionId, answer]) => ({
+      question_id: parseInt(questionId),
+      choice_id: answer.choice_id,
+      time_taken: answer.time_taken
+    }))
   }
-
-  const completeCurrentQuiz = async () => {
-    try {
-      currentStep.value = 'loading'
-      
-      const result = await quizStore.completeQuiz()
-      
-      currentStep.value = 'completed'
-      
-      // Auto-navigation vers le dashboard après 3 secondes
-      setTimeout(() => {
-        returnToDashboard()
-      }, 3000)
-      
-      return result
-    } catch (error) {
-      console.error('Erreur completeCurrentQuiz:', error)
-      currentStep.value = 'error'
-      return null
-    }
+  
+  /**
+   * Calcule le temps total écoulé
+   */
+  function getTotalTime() {
+    if (!startTime.value) return 0
+    return Math.round((Date.now() - startTime.value) / 1000)
   }
-
-  const returnToDashboard = () => {
-    currentStep.value = 'dashboard'
-    quizProgress.value = {
-      currentQuestionIndex: 0,
-      totalQuestions: 0,
-      answers: {},
-      startTime: null,
-      timeSpent: 0
-    }
+  
+  /**
+   * Réinitialise la session
+   */
+  function resetSession() {
+    currentQuestionIndex.value = 0
+    startTime.value = null
+    answers.value.clear()
   }
-
-  const skipToNextRecommended = async () => {
-    try {
-      // Trouver le prochain quiz recommandé différent de l'actuel
-      const currentType = quizStore.currentQuizInstance?.quiz_type?.morph_type
-      const available = quizStore.availableQuizTypes.filter(
-        type => type.morph_type !== currentType && !quizStore.hasCompletedToday(type)
-      )
-      
-      if (available.length === 0) {
-        quizStore.setError('Aucun autre quiz disponible aujourd\'hui')
-        return false
-      }
-      
-      await startQuizJourney(available[0])
-      return true
-    } catch (error) {
-      console.error('Erreur skipToNextRecommended:', error)
-      return false
-    }
+  
+  // === NAVIGATION ENTRE VUES ===
+  
+  /**
+   * Navigue vers la page de quiz
+   */
+  function goToQuiz(quizInstanceId) {
+    router.push(`/quiz/${quizInstanceId}`)
   }
-
-  // Auto-initialisation des timers
-  const startTimeTracking = () => {
-    if (quizProgress.value.startTime) {
-      const interval = setInterval(() => {
-        if (currentStep.value === 'quiz') {
-          quizProgress.value.timeSpent = Math.floor(
-            (Date.now() - quizProgress.value.startTime.getTime()) / 1000
-          )
-        } else {
-          clearInterval(interval)
-        }
-      }, 1000)
-    }
+  
+  /**
+   * Navigue vers la page de résultats
+   */
+  function goToResults(quizInstanceId) {
+    router.push(`/quiz/${quizInstanceId}/results`)
   }
-
-  // Watchers pour l'automatisation
-  watch(currentStep, (newStep) => {
-    if (newStep === 'quiz') {
-      startTimeTracking()
-    }
-  })
-
-  // Navigation helpers
-  const navigateToQuiz = () => {
-    if (router.currentRoute.value.name !== 'QuizPlay') {
-      router.push({ name: 'QuizPlay' })
-    }
+  
+  /**
+   * Retourne au dashboard
+   */
+  function goToDashboard() {
+    router.push('/dashboard')
   }
-
-  const navigateToDashboard = () => {
-    if (router.currentRoute.value.name !== 'Dashboard') {
-      router.push({ name: 'Dashboard' })
-    }
-  }
-
-  // Initialisation automatique
-  const initializeJourney = async () => {
-    await quizStore.initializeApp()
-    
-    const state = journeyState.value
-    
-    switch (state) {
-      case 'resume_available':
-        const inProgress = Object.values(quizStore.userProgress).find(
-          p => p && p.status === 'in_progress'
-        )
-        if (inProgress) {
-          await resumeQuiz(inProgress.id)
-        }
-        break
-        
-      case 'ready_to_start':
-        currentStep.value = 'dashboard'
-        break
-        
-      case 'auth_required':
-        router.push({ name: 'Login' })
-        break
-        
-      default:
-        currentStep.value = 'dashboard'
-    }
-  }
-
+  
   return {
-    // État
-    currentStep,
-    quizProgress,
+    // State
+    currentQuestionIndex,
+    answers,
+    startTime,
     
     // Computed
-    journeyState,
-    currentQuizMeta,
-    currentQuestion,
-    isQuizCompleted,
-    progressPercentage,
+    isFirstQuestion,
+    canGoBack,
     
-    // Actions
-    startQuizJourney,
-    resumeQuiz,
-    submitCurrentAnswer,
-    completeCurrentQuiz,
-    returnToDashboard,
-    skipToNextRecommended,
-    initializeJourney,
+    // Question navigation
+    nextQuestion,
+    previousQuestion,
+    goToQuestion,
+    isLastQuestion,
+    getProgressPercentage,
     
-    // Navigation
-    navigateToQuiz,
-    navigateToDashboard
+    // Quiz session
+    startSession,
+    saveAnswer,
+    getAnswersForSubmission,
+    getTotalTime,
+    resetSession,
+    
+    // Page navigation
+    goToQuiz,
+    goToResults,
+    goToDashboard
   }
 }

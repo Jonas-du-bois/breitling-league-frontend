@@ -1,87 +1,44 @@
-import axios from 'axios';
+import axios from 'axios'
 
-// Création d'une instance axios avec l'URL de base de l'API
+/**
+ * Configuration API centralisée - Pattern CLEAN
+ */
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8000/api',
-  timeout: 10000, // Timeout de 10 secondes
+  timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
     'Accept': 'application/json',
-    'X-Requested-With': 'XMLHttpRequest' // Important pour Laravel pour identifier les requêtes AJAX
+    'X-Requested-With': 'XMLHttpRequest'
   },
-  withCredentials: false // Important: doit être false car nous utilisons des tokens et non des cookies
-});
+  withCredentials: false
+})
 
-// Intercepteur pour ajouter le token d'authentification à chaque requête
+// === REQUEST INTERCEPTOR ===
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('auth_token');
+    const token = localStorage.getItem('auth_token')
     if (token) {
-      config.headers.Authorization = token; 
-      console.log('🔑 Token ajouté à la requête:', token);
-    } else {
-      console.warn('⚠️ Aucun token d\'authentification trouvé');
+      // S'assurer que le token commence par "Bearer "
+      const formattedToken = token.startsWith('Bearer ') ? token : `Bearer ${token}`
+      config.headers.Authorization = formattedToken
     }
-    return config;
+    return config
   },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
+  (error) => Promise.reject(error)
+)
 
-// Intercepteur pour gérer les réponses et les erreurs
+// === RESPONSE INTERCEPTOR ===
 api.interceptors.response.use(
-  (response) => {
-    // Retourner directement la réponse si tout va bien
-    return response;
-  },
+  (response) => response,
   (error) => {
-    // Gestion centralisée des erreurs
-    if (error.response) {
-      // Le serveur a répondu avec un code d'erreur
-      const { status, data } = error.response;
-      
-      switch (status) {        case 401:
-          // Token expiré ou invalide
-          console.warn('Session expirée. Redirection vers la page de connexion.');
-          localStorage.removeItem('auth_token'); // Correction: utiliser 'auth_token' au lieu de 'token'
-          // Éviter la redirection automatique ici pour laisser le composant gérer
-          break;
-          
-        case 403:
-          console.error('Accès interdit. Permissions insuffisantes.');
-          break;
-          
-        case 404:
-          console.error('Ressource non trouvée.');
-          break;
-          
-        case 422:
-          // Erreurs de validation Laravel
-          console.error('Erreurs de validation:', data.errors || data.message);
-          break;
-          
-        case 429:
-          console.error('Trop de requêtes. Veuillez patienter.');
-          break;
-          
-        case 500:
-          console.error('Erreur serveur interne.');
-          break;
-          
-        default:
-          console.error(`Erreur ${status}:`, data.message || 'Une erreur est survenue.');
-      }
-    } else if (error.request) {
-      // La requête a été envoyée mais aucune réponse n'a été reçue
-      console.error('Aucune réponse du serveur. Vérifiez votre connexion internet.');
-    } else {
-      // Erreur lors de la configuration de la requête
-      console.error('Erreur de configuration:', error.message);
+    if (error.response?.status === 401) {
+      // Token expiré - nettoyage automatique
+      localStorage.removeItem('auth_token')
     }
     
-    return Promise.reject(error);
+    return Promise.reject(error)
   }
-);
+)
 
-export default api;
+export default api

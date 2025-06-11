@@ -1,272 +1,145 @@
-import api from '@/services/api';
+import api from '@/services/api'
 
 /**
- * Service pour la gestion des sessions de quiz et des réponses
+ * Service principal pour la gestion des quiz
+ * Architecture CLEAN : méthodes simples et responsabilités claires
  */
-export default {
+class QuizService {
+  // === CORE METHODS ===
+  
   /**
    * Récupère tous les types de quiz disponibles
-   * @returns {Promise} Promesse contenant la liste des types de quiz
    */
-  getQuizTypes() {
-    console.log('📋 Service Quiz - Récupération des types de quiz');
-    return api.get('/quiz/types');
-  },
+  async getQuizTypes() {
+    return api.get('/quiz/types')
+  }
 
   /**
-   * Récupère les instances de quiz de l'utilisateur avec filtres
-   * @param {Object} filters - Filtres optionnels (status, quiz_type_id, limit)
-   * @returns {Promise} Promesse contenant les instances et statistiques
+   * Récupère les instances de quiz de l'utilisateur
    */
-  getUserQuizInstances(filters = {}) {
-    console.log('📊 Service Quiz - Récupération des instances avec filtres:', filters);
-    return api.get('/quiz/instances', { params: filters });
-  },
+  async getUserQuizInstances(filters = {}) {
+    return api.get('/quiz/instances', { params: filters })
+  }
 
   /**
-   * Récupère les statistiques détaillées des quiz de l'utilisateur
-   * @returns {Promise} Promesse contenant les statistiques complètes
+   * Récupère les statistiques détaillées de l'utilisateur
    */
-  getUserStats() {
-    console.log('📈 Service Quiz - Récupération des statistiques utilisateur');
-    return api.get('/quiz/stats');
-  },
+  async getUserStats() {
+    return api.get('/quiz/stats')
+  }
+
+  /**
+   * Récupère une instance de quiz spécifique
+   */
+  async getInstance(quizInstanceId) {
+    return api.get(`/quiz/instance/${quizInstanceId}`)
+  }
 
   /**
    * Démarre une nouvelle session de quiz
-   * @param {Object} quizData - Données pour démarrer le quiz
-   * @param {number} quizData.quiz_type_id - ID du type de quiz (requis)
-   * @param {string} [quizData.quizable_type] - Type de module quiz (unit, discovery, event, weekly, novelty, reminder)
-   * @param {number} [quizData.quizable_id] - ID du module associé
-   * @param {string} [quizData.quiz_mode] - Mode de quiz personnalisé
-   * @param {number} [quizData.chapter_id] - ID du chapitre (backward compatibility)
-   * @param {string} [quizData.module_type] - Type de module (backward compatibility)
-   * @param {number} [quizData.module_id] - ID du module (backward compatibility)
-   * @returns {Promise} Promesse contenant la session de quiz créée
    */
-  start(quizData) {
-    console.log('🚀 Service Quiz - Démarrage avec données:', quizData);
-    return api.post('/quiz/start', quizData);
-  },
+  async start(quizData) {
+    return api.post('/quiz/start', this._normalizeQuizData(quizData))
+  }
 
   /**
    * Soumet les réponses d'un quiz
-   * @param {Object} submissionData - Données de soumission (quiz_instance_id, answers, total_time)
-   * @returns {Promise} Promesse contenant le résultat de la soumission
    */
-  submit(submissionData) {
-    console.log('📝 Service Quiz - Soumission avec données:', submissionData);
-    return api.post('/quiz/submit', submissionData);
-  },
+  async submit(submissionData) {
+    return api.post('/quiz/submit', submissionData)
+  }
 
   /**
    * Récupère le résultat détaillé d'un quiz
-   * @param {number} quizInstanceId - ID de l'instance de quiz
-   * @returns {Promise} Promesse contenant le résultat du quiz
    */
-  getResult(quizInstanceId) {
-    console.log('📊 Service Quiz - Récupération résultat pour:', quizInstanceId);
-    return api.get(`/quiz/${quizInstanceId}/result`);
-  },
+  async getResult(quizInstanceId) {
+    return api.get(`/quiz/${quizInstanceId}/result`)
+  }
 
-  // Alias pour compatibilité
-  startQuiz(quizData) {
-    return this.start(quizData);
-  },
-
-  submitAnswers(submissionData) {
-    return this.submit(submissionData);
-  },
-
+  // === CONVENIENCE METHODS ===
+  
   /**
-   * Méthodes utilitaires pour la nouvelle architecture polymorphique
+   * Démarre un quiz pour un module spécifique (DRY pattern)
    */
-
-  /**
-   * Démarre un quiz pour un module spécifique
-   * @param {number} quizTypeId - ID du type de quiz
-   * @param {string} quizableType - Type de module (unit, discovery, event, etc.)
-   * @param {number} quizableId - ID du module
-   * @param {string} [quizMode] - Mode de quiz optionnel
-   * @returns {Promise} Promesse contenant la session de quiz créée
-   */
-  startForModule(quizTypeId, quizableType, quizableId, quizMode = null) {
-    const quizData = {
+  async startForModule(quizTypeId, quizableType, quizableId, quizMode = null) {
+    return this.start({
       quiz_type_id: quizTypeId,
       quizable_type: quizableType,
-      quizable_id: quizableId
-    };
+      quizable_id: quizableId,
+      ...(quizMode && { quiz_mode: quizMode })
+    })
+  }
+
+  /**
+   * Méthodes spécialisées par type de module
+   */
+  async startForUnit(quizTypeId, unitId, quizMode = null) {
+    return this.startForModule(quizTypeId, 'unit', unitId, quizMode)
+  }
+
+  async startForDiscovery(quizTypeId, discoveryId, quizMode = null) {
+    return this.startForModule(quizTypeId, 'discovery', discoveryId, quizMode)
+  }
+
+  async startForEvent(quizTypeId, eventId, quizMode = null) {
+    return this.startForModule(quizTypeId, 'event', eventId, quizMode)
+  }
+
+  async startForWeekly(quizTypeId, weeklyId, quizMode = null) {
+    return this.startForModule(quizTypeId, 'weekly', weeklyId, quizMode)
+  }
+
+  async startForNovelty(quizTypeId, noveltyId, quizMode = null) {
+    return this.startForModule(quizTypeId, 'novelty', noveltyId, quizMode)
+  }
+
+  async startForReminder(quizTypeId, reminderId, quizMode = null) {
+    return this.startForModule(quizTypeId, 'reminder', reminderId, quizMode)
+  }
+
+  // === LEGACY COMPATIBILITY ===
+  
+  /**
+   * Alias pour backward compatibility
+   */
+  startQuiz(quizData) {
+    return this.start(quizData)
+  }
+
+  submitAnswers(submissionData) {
+    return this.submit(submissionData)
+  }
+
+  getQuizInstance(instanceId) {
+    return this.getInstance(instanceId)
+  }
+
+  // === PRIVATE HELPERS ===
+  
+  /**
+   * Normalise les données de quiz (KISS principle)
+   */
+  _normalizeQuizData(quizData) {
+    const normalized = { ...quizData }
     
-    if (quizMode) {
-      quizData.quiz_mode = quizMode;
-    }
-    
-    console.log('🎯 Service Quiz - Démarrage pour module:', { quizableType, quizableId });
-    return this.start(quizData);
-  },
-
-  /**
-   * Démarre un quiz pour une unité spécifique
-   * @param {number} quizTypeId - ID du type de quiz
-   * @param {number} unitId - ID de l'unité
-   * @param {string} [quizMode] - Mode de quiz optionnel
-   * @returns {Promise} Promesse contenant la session de quiz créée
-   */
-  startForUnit(quizTypeId, unitId, quizMode = null) {
-    return this.startForModule(quizTypeId, 'unit', unitId, quizMode);
-  },
-
-  /**
-   * Démarre un quiz de découverte
-   * @param {number} quizTypeId - ID du type de quiz
-   * @param {number} discoveryId - ID de la découverte
-   * @param {string} [quizMode] - Mode de quiz optionnel
-   * @returns {Promise} Promesse contenant la session de quiz créée
-   */
-  startForDiscovery(quizTypeId, discoveryId, quizMode = null) {
-    return this.startForModule(quizTypeId, 'discovery', discoveryId, quizMode);
-  },
-
-  /**
-   * Démarre un quiz d'événement
-   * @param {number} quizTypeId - ID du type de quiz
-   * @param {number} eventId - ID de l'événement
-   * @param {string} [quizMode] - Mode de quiz optionnel
-   * @returns {Promise} Promesse contenant la session de quiz créée
-   */
-  startForEvent(quizTypeId, eventId, quizMode = null) {
-    return this.startForModule(quizTypeId, 'event', eventId, quizMode);
-  },
-
-  /**
-   * Démarre un quiz hebdomadaire
-   * @param {number} quizTypeId - ID du type de quiz
-   * @param {number} weeklyId - ID du quiz hebdomadaire
-   * @param {string} [quizMode] - Mode de quiz optionnel
-   * @returns {Promise} Promesse contenant la session de quiz créée
-   */
-  startForWeekly(quizTypeId, weeklyId, quizMode = null) {
-    return this.startForModule(quizTypeId, 'weekly', weeklyId, quizMode);
-  },
-
-  /**
-   * Démarre un quiz de nouveauté
-   * @param {number} quizTypeId - ID du type de quiz
-   * @param {number} noveltyId - ID de la nouveauté
-   * @param {string} [quizMode] - Mode de quiz optionnel
-   * @returns {Promise} Promesse contenant la session de quiz créée
-   */
-  startForNovelty(quizTypeId, noveltyId, quizMode = null) {
-    return this.startForModule(quizTypeId, 'novelty', noveltyId, quizMode);
-  },
-
-  /**
-   * Démarre un quiz de rappel
-   * @param {number} quizTypeId - ID du type de quiz
-   * @param {number} reminderId - ID du rappel
-   * @param {string} [quizMode] - Mode de quiz optionnel
-   * @returns {Promise} Promesse contenant la session de quiz créée
-   */
-  startForReminder(quizTypeId, reminderId, quizMode = null) {
-    return this.startForModule(quizTypeId, 'reminder', reminderId, quizMode);
-  },
-
-  /**
-   * Helper pour migrer de l'ancienne API vers la nouvelle
-   * @param {Object} legacyData - Données dans l'ancien format
-   * @returns {Object} Données converties au nouveau format
-   */
-  convertLegacyToPolymorphic(legacyData) {
-    const converted = { ...legacyData };
-    
-    // Mapper les anciens types vers les nouveaux
-    if (legacyData.module_type && legacyData.module_id) {
+    // Conversion legacy vers polymorphic si nécessaire
+    if (quizData.module_type && quizData.module_id && !quizData.quizable_type) {
       const typeMapping = {
         'Unit': 'unit',
-        'Discovery': 'discovery',
+        'Discovery': 'discovery', 
         'Event': 'event',
         'Weekly': 'weekly',
         'Novelty': 'novelty',
         'Reminder': 'reminder'
-      };
+      }
       
-      converted.quizable_type = typeMapping[legacyData.module_type];
-      converted.quizable_id = legacyData.module_id;
-      
-      // Garder les anciens champs pour backward compatibility
-      console.log('🔄 Conversion legacy vers polymorphic:', {
-        from: { module_type: legacyData.module_type, module_id: legacyData.module_id },
-        to: { quizable_type: converted.quizable_type, quizable_id: converted.quizable_id }
-      });
+      normalized.quizable_type = typeMapping[quizData.module_type]
+      normalized.quizable_id = quizData.module_id
     }
     
-    return converted;
-  },
+    return normalized
+  }
+}
 
-  /**
-   * Récupère le challenge hebdomadaire actuel
-   * @returns {Promise} Promesse contenant le challenge de la semaine
-   */
-  getCurrentWeeklyChallenge() {
-    console.log('📅 Service Quiz - Récupération du challenge hebdomadaire actuel');
-    return api.get('/quiz/weekly/current');
-  },
-
-  /**
-   * Récupère le progrès détaillé de l'utilisateur
-   * @returns {Promise} Promesse contenant le progrès par type de quiz
-   */
-  getUserProgress() {
-    console.log('📊 Service Quiz - Récupération du progrès utilisateur détaillé');
-    return api.get('/quiz/progress');
-  },
-
-  /**
-   * Récupère une instance de quiz spécifique
-   * @param {number} instanceId - ID de l'instance de quiz
-   * @returns {Promise} Promesse contenant l'instance de quiz
-   */
-  getQuizInstance(instanceId) {
-    console.log(`🎯 Service Quiz - Récupération de l'instance ${instanceId}`);
-    return api.get(`/quiz/instances/${instanceId}`);
-  },
-
-  /**
-   * Récupère les quiz recommandés pour l'utilisateur
-   * @returns {Promise} Promesse contenant les recommandations personnalisées
-   */
-  getRecommendations() {
-    console.log('💡 Service Quiz - Récupération des recommandations');
-    return api.get('/quiz/recommendations');
-  },
-
-  /**
-   * Marque un quiz comme favori
-   * @param {number} quizTypeId - ID du type de quiz
-   * @returns {Promise} Promesse contenant la confirmation
-   */
-  toggleFavorite(quizTypeId) {
-    console.log(`❤️ Service Quiz - Toggle favori pour le type ${quizTypeId}`);
-    return api.post(`/quiz/types/${quizTypeId}/favorite`);
-  },
-
-  /**
-   * Récupère l'historique des quiz terminés
-   * @param {Object} filters - Filtres optionnels
-   * @returns {Promise} Promesse contenant l'historique
-   */
-  getHistory(filters = {}) {
-    console.log('📜 Service Quiz - Récupération de l\'historique', filters);
-    return api.get('/quiz/history', { params: filters });
-  },
-
-  /**
-   * Récupère une instance de quiz spécifique
-   * @param {number} quizInstanceId - ID de l'instance de quiz
-   * @returns {Promise} Promesse contenant les données de l'instance
-   */
-  getInstance(quizInstanceId) {
-    console.log('🔍 Service Quiz - Récupération instance:', quizInstanceId);
-    return api.get(`/quiz/instance/${quizInstanceId}`);
-  },
-};
+// Export singleton instance
+export default new QuizService()

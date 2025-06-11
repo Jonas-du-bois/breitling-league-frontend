@@ -27,7 +27,14 @@
               <span class="rank-badge" :class="rankBadgeClass">
                 {{ userRank?.name || 'Débutant' }}
               </span>
-              <span class="points">{{ totalPoints }} points</span>
+              <span class="points">
+                {{ totalPoints }} points
+                <span class="data-source-indicator" :title="`Source: ${dataSource}`">
+                  <span v-if="dataSource === 'progress'">🔄</span>
+                  <span v-else-if="dataSource === 'rank'">👤</span>
+                  <span v-else>📊</span>
+                </span>
+              </span>
               <span class="completed">{{ completedQuizzes }} quiz terminés</span>
             </div>
           </div>
@@ -108,18 +115,17 @@
               <div class="quiz-details">
                 <h3>{{ nextRecommendedQuiz.name }}</h3>
                 <p>{{ nextRecommendedQuiz.description }}</p>
-                <div class="quiz-meta">
-                  <span class="meta-item">
-                    <span class="meta-icon">⏱️</span>
-                    {{ nextRecommendedQuiz.time_limit_minutes || 'Illimité' }} min
-                  </span>
-                  <span class="meta-item">
+                <div class="quiz-meta">                  <span class="meta-item">
                     <span class="meta-icon">🎯</span>
-                    {{ nextRecommendedQuiz.points_per_correct_answer }} pts/réponse
+                    {{ nextRecommendedQuiz.base_points }} pts de base
                   </span>
                   <span class="meta-item">
-                    <span class="meta-icon">📊</span>
-                    {{ getDifficultyText(nextRecommendedQuiz.difficulty_level) }}
+                    <span class="meta-icon">⚡</span>
+                    {{ nextRecommendedQuiz.speed_bonus }}% bonus vitesse
+                  </span>
+                  <span class="meta-item">
+                    <span class="meta-icon">🎫</span>
+                    {{ nextRecommendedQuiz.gives_ticket ? 'Donne un ticket' : 'Pas de ticket' }}
                   </span>
                 </div>
               </div>
@@ -146,10 +152,9 @@
               @click="startSpecificQuiz(quiz)"
               :class="{ 'completed-today': hasCompletedToday(quiz) }"
             >
-              <div class="quiz-icon-small">{{ getQuizIcon(quiz.morph_type) }}</div>
-              <div class="quiz-info">
+              <div class="quiz-icon-small">{{ getQuizIcon(quiz.morph_type) }}</div>              <div class="quiz-info">
                 <h4>{{ quiz.name }}</h4>
-                <p>{{ quiz.points_per_correct_answer }} pts</p>
+                <p>{{ quiz.base_points }} pts de base</p>
               </div>
               <div v-if="hasCompletedToday(quiz)" class="completed-badge">✅</div>
             </div>
@@ -191,11 +196,10 @@
               <div class="stat-label">Quiz cette semaine</div>
             </div>
           </div>
-          
-          <div class="stat-card">
+            <div class="stat-card">
             <div class="stat-icon">⚡</div>
             <div class="stat-content">
-              <div class="stat-number">{{ userStats?.average_score || 0 }}%</div>
+              <div class="stat-number">{{ Math.round(userStats?.average_score || 0) }}</div>
               <div class="stat-label">Score moyen</div>
             </div>
           </div>
@@ -225,41 +229,162 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue'
 import { useQuizStore } from '@/stores/quiz'
-import { useQuizJourney } from '@/composables/useQuizJourney'
 import { useRouter } from 'vue-router'
+import { useProgress } from '@/composables/useProgress'
 import LoadingSpinner from '@/components/LoadingSpinner.vue'
 import ErrorBanner from '@/components/ErrorBanner.vue'
 import ProgressBar from '@/components/ProgressBar.vue'
 
 const quizStore = useQuizStore()
-const { 
-  journeyState, 
-  startQuizJourney, 
-  resumeQuiz, 
-  initializeJourney 
-} = useQuizJourney()
 const router = useRouter()
+const { 
+  loading: progressLoading, 
+  error: progressError, 
+  progress, 
+  rank: userRankData,
+  getProgress: fetchUserProgress,
+  getRank: fetchUserRank 
+} = useProgress()
 
 const isStarting = ref(false)
 const loadingMessage = ref('Chargement...')
 
-// Computed properties
-const user = computed(() => quizStore.user)
-const userRank = computed(() => quizStore.userRank)
-const totalPoints = computed(() => quizStore.totalPoints)
-const completedQuizzes = computed(() => quizStore.completedQuizzes)
-const userStats = computed(() => quizStore.userStats)
-const nextRecommendedQuiz = computed(() => quizStore.nextRecommendedQuiz)
-const isLoading = computed(() => quizStore.isLoading)
-const error = computed(() => quizStore.error)
+// === ÉTAT LOCAL POUR REMPLACER useQuizJourney ===
+const journeyState = ref('loading')
+
+// === MÉTHODES LOCALES ===
+async function initializeJourney() {
+  try {
+    journeyState.value = 'loading'
+    loadingMessage.value = 'Initialisation de votre parcours...'
+    
+    // Vérifier l'authentification
+    const authService = await import('@/services/auth')
+    if (!authService.default.isAuthenticated()) {
+      console.warn('⚠️ Utilisateur non authentifié')
+      journeyState.value = 'error'
+      return
+    }      // Charger les données utilisateur avec progression complète ET les types de quiz
+    await Promise.all([
+      quizStore.refreshCache(),
+      fetchUserRank(), // Récupère les données utilisateur avec rang et statistiques complètes
+      fetchUserProgress() // RÉACTIVÉ - endpoint /progress maintenant corrigé
+    ])
+    
+    // Vérifier s'il y a un quiz en cours
+    const instances = Array.isArray(quizStore.getRecentInstances) ? quizStore.getRecentInstances : []
+    const inProgress = instances.find(quiz => quiz && quiz.status === 'started')
+    
+    if (inProgress) {
+      journeyState.value = 'resume_available'    } else {
+      // Vérifier s'il y a des quiz disponibles
+      const types = Array.isArray(quizStore.getQuizTypes) ? quizStore.getQuizTypes : []
+      if (types.length > 0) {
+        journeyState.value = 'ready_to_start'
+      } else {
+        journeyState.value = 'no_quiz_available'
+      }
+    }
+  } catch (error) {
+    console.error('Erreur initialisation:', error)
+    journeyState.value = 'error'
+  }
+}
+
+async function startQuizJourney(quizType = null) {
+  try {
+    // Utiliser le quiz recommandé ou le type spécifié
+    const targetQuizType = quizType || nextRecommendedQuiz.value
+    if (!targetQuizType) {
+      throw new Error('Aucun quiz disponible')
+    }
+    
+    // Créer une instance de quiz via le store
+    const quizData = {
+      quiz_type_id: targetQuizType.id,
+      quizable_type: 'discovery', // Type par défaut
+      quizable_id: 1 // ID par défaut
+    }
+    
+    const newQuiz = await quizStore.startQuiz(quizData)
+    return newQuiz
+  } catch (error) {
+    console.error('Erreur démarrage quiz:', error)
+    throw error
+  }
+}
+
+async function resumeQuiz(quizInstanceId) {
+  try {
+    await quizStore.loadQuiz(quizInstanceId)
+    return quizStore.currentQuiz
+  } catch (error) {
+    console.error('Erreur reprise quiz:', error)
+    throw error
+  }
+}
+
+// Computed properties hybrides - Utiliser useProgress en priorité pour les données les plus complètes
+const user = computed(() => userRankData.value?.user || progress.value?.user || quizStore.getUserStats?.user || null)
+const userRank = computed(() => userRankData.value?.rank || progress.value?.current_rank || null)
+
+// Données hybrides avec priorité à useProgress
+const hybridTotalPoints = computed(() => {
+  // Priorité : progress.value (endpoint /progress) > userRankData.value > quizStore
+  return progress.value?.total_points || userRankData.value?.total_points || quizStore.getUserStats?.total_points || 0
+})
+
+const hybridCompletedQuizzes = computed(() => {
+  // Priorité : progress.value (endpoint /progress) > userRankData.value > quizStore  
+  return progress.value?.completed_quizzes || userRankData.value?.completed_quizzes || quizStore.getUserStats?.completed_quizzes || 0
+})
+
+// Utilisation des données hybrides dans les computed principales
+const totalPoints = computed(() => hybridTotalPoints.value)
+const completedQuizzes = computed(() => hybridCompletedQuizzes.value)
+
+// Source de données pour debugging
+const dataSource = computed(() => {
+  if (progress.value?.total_points) return 'progress'
+  if (userRankData.value?.total_points) return 'rank'  
+  return 'quiz-store'
+})
+const userStats = computed(() => {
+  // Combiner les données du composable useProgress avec celles du store quiz
+  const progressStats = userRankData.value || progress.value || {}
+  const quizStats = quizStore.getUserStats || {}
+  
+  return {
+    ...quizStats,
+    ...progressStats,
+    // Prioriser les données de progression qui sont plus complètes
+    user: user.value,
+    rank: userRank.value,
+    total_points: totalPoints.value,
+    completed_quizzes: completedQuizzes.value
+  }
+})
+const nextRecommendedQuiz = computed(() => {
+  const types = Array.isArray(quizStore.getQuizTypes) ? quizStore.getQuizTypes : []
+  return types[0] || null
+})
+const isLoading = computed(() => 
+  quizStore.isLoading || 
+  journeyState.value === 'loading' || 
+  progressLoading.value
+)
+const error = computed(() => quizStore.error || progressError.value)
 
 const userInitials = computed(() => {
-  const name = user.value?.name || 'U'
-  return name.split(' ').map(n => n[0]).join('').toUpperCase()
+  if (user.value?.name) {
+    return user.value.name.split(' ').map(n => n[0]).join('').toUpperCase()
+  }
+  return '?'
 })
 
 const rankBadgeClass = computed(() => {
-  const level = userRank.value?.level || 1
+  if (!userRank.value) return 'rank-bronze'
+  const level = userRank.value.level || 1
   if (level <= 2) return 'rank-bronze'
   if (level <= 4) return 'rank-silver'
   if (level <= 6) return 'rank-gold'
@@ -285,15 +410,14 @@ const dailyProgressText = computed(() => {
 })
 
 const inProgressQuiz = computed(() => {
-  const progress = quizStore.userProgress
-  return Object.values(progress).find(quiz => quiz && quiz.status === 'in_progress')
+  const instances = Array.isArray(quizStore.getRecentInstances) ? quizStore.getRecentInstances : []
+  return instances.find(quiz => quiz && quiz.status === 'started') || null
 })
 
 const otherAvailableQuizzes = computed(() => {
   const recommended = nextRecommendedQuiz.value
-  return quizStore.availableQuizTypes.filter(quiz => 
-    quiz.id !== recommended?.id && !quizStore.hasCompletedToday(quiz)
-  )
+  const types = Array.isArray(quizStore.getQuizTypes) ? quizStore.getQuizTypes : []
+  return types.filter(quiz => quiz && quiz.id !== recommended?.id)
 })
 
 // Actions
@@ -350,13 +474,6 @@ const getQuizIcon = (morphType) => {
   return icons[morphType] || '📝'
 }
 
-const getDifficultyText = (level) => {
-  if (level <= 2) return 'Facile'
-  if (level <= 4) return 'Moyen'
-  if (level <= 6) return 'Difficile'
-  return 'Expert'
-}
-
 const formatTime = (minutes) => {
   if (minutes < 60) return `${minutes}min`
   const hours = Math.floor(minutes / 60)
@@ -364,11 +481,20 @@ const formatTime = (minutes) => {
   return `${hours}h${mins > 0 ? mins + 'min' : ''}`
 }
 
-const hasCompletedToday = (quiz) => quizStore.hasCompletedToday(quiz)
+const hasCompletedToday = (quiz) => {
+  // Logique simplifiée : vérifier dans les instances récentes
+  const instances = Array.isArray(quizStore.getRecentInstances) ? quizStore.getRecentInstances : []
+  const today = new Date().toDateString()
+  return instances.some(instance => 
+    instance &&
+    instance.quiz_type_id === quiz.id && 
+    instance.status === 'completed' &&
+    new Date(instance.updated_at).toDateString() === today
+  )
+}
 
 // Initialisation
 onMounted(async () => {
-  loadingMessage.value = 'Initialisation de votre parcours...'
   await initializeJourney()
 })
 </script>
