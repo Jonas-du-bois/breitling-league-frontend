@@ -119,6 +119,8 @@ export default {
 }
 
 .card-content {
+  width: 100%; /* Fill parent width */
+  height: 100%; /* Fill parent height */
   align-self: stretch;
   flex: 1;
   padding: 32px; /* p-8 */
@@ -245,6 +247,8 @@ export default {
   justify-content: center;
   align-items: center;
   gap: 4px; /* gap-1 */
+  position: relative;
+  z-index: 15;
 }
 
 .specialist-icon {
@@ -298,6 +302,8 @@ export default {
   transform-origin: top left;
   transform: rotate(-90deg);
   border: 2px solid #FFFFFF; /* outline outline-2 outline-offset-[-1px] outline-color-secondary-white */
+  position: relative;
+  z-index: 15;
 }
 
 /* Color Variables */

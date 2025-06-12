@@ -115,10 +115,12 @@ button:focus-visible {
 }
 
 #app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  position: relative;
 }
 
 @media (prefers-color-scheme: light) {
@@ -133,3 +135,68 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+/* Utility classes for UnitCard color fixes */
+.text-card-text-color-dark {
+  color: #072C54 !important;
+}
+
+.text-color-primary-yellow-100 {
+  color: #FFC72C !important;
+}
+
+.text-color-primary-blue-100 {
+  color: #072C54 !important;
+}
+
+.bg-card-background-color-light {
+  background-color: #FFFFFF !important;
+}
+
+.outline-card-stroke-color {
+  outline-color: #072C54 !important;
+}
+
+.bg-color-primary-blue-100 {
+  background-color: #072C54 !important;
+}
+
+/* Ensure proper contrast for card content */
+.unit-card .self-stretch {
+  color: #072C54;
+}
+
+.unit-card .text-color-primary-yellow-100 {
+  color: #FFC72C;
+}
+
+.unit-card .text-color-primary-blue-100 {
+  color: #072C54;
+}
+
+/* ===== GLOBAL HEADER UTILITIES ===== */
+/* Consistent header padding across all pages */
+.header-padding-standard {
+  padding: 3rem 0 2rem 0;
+}
+
+.header-padding-mobile {
+  padding: 2rem 0 1.5rem 0;
+}
+
+.header-padding-quiz {
+  padding: 3rem 1.5rem 1.5rem 1.5rem;
+}
+
+/* Apply consistent header spacing on mobile */
+@media (max-width: 640px) {
+  .header-padding-standard {
+    padding: 2rem 0 1.5rem 0;
+  }
+  
+  .header-padding-quiz {
+    padding: 2rem 1rem 1rem 1rem;
+  }
+}
+
+/* ===== EXISTING STYLES ===== */

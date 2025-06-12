@@ -1,11 +1,10 @@
 <template>
-  <div class="playzone-page">
-    <!-- Header -->
+  <div class="playzone-page">    <!-- Header -->
     <HeaderBar 
       page-title="Playzone"
       :with-back="false"
       class="playzone-header"
-    />    <!-- Main Content -->
+    /><!-- Main Content -->
     <div class="playzone-content"><!-- Hero Section - Become Breitling Specialist -->
       <div class="hero-section">
         <SpecialistCard 
@@ -98,13 +97,29 @@
       </div>      <!-- Discovery Section -->
       <div class="discovery-section">
         <h2 class="section-title left-aligned">Discovery</h2>
+        
+        <!-- Error Message -->
+        <div v-if="error" class="error-message">
+          {{ error }}
+          <button @click="loadPlayzoneData" class="retry-button">Retry</button>
+        </div>
+        
         <div class="cards-container">
           <div class="cards-scroll">
+            <!-- Loading State -->
+            <div v-if="loading.discovery" class="loading-cards">
+              <div v-for="i in 3" :key="i" class="loading-card">
+                <div class="loading-placeholder"></div>
+              </div>
+            </div>
+            
+            <!-- Unit Cards -->
             <UnitCard
               v-for="unit in discoveryUnits"
               :key="unit.id"
               :unit="unit"
-              :is-clicked="false"
+              :is-learned="unit.isLearned"
+              :is-clicked="clickedCards.has(unit.id)"
               :is-blurred="false"
               @unit-click="handleUnitClick"
               @learn-unit="handleLearnUnit"
@@ -122,17 +137,26 @@
         <h2 class="section-title left-aligned">Novelty</h2>
         <div class="cards-container">
           <div class="cards-scroll">
+            <!-- Loading State -->
+            <div v-if="loading.novelty" class="loading-cards">
+              <div v-for="i in 3" :key="i" class="loading-card">
+                <div class="loading-placeholder"></div>
+              </div>
+            </div>
+            
+            <!-- Unit Cards -->
             <UnitCard
               v-for="unit in noveltyUnits"
               :key="unit.id"
               :unit="unit"
-              :is-clicked="false"
+              :is-learned="unit.isLearned"
+              :is-clicked="clickedCards.has(unit.id)"
               :is-blurred="false"
               @unit-click="handleUnitClick"
               @learn-unit="handleLearnUnit"
               @quiz-unit="handleQuizUnit"
             />
-            <OutlineButton 
+            <OutlineButton
               label="See more"
               class="see-more-button"
               @click="handleSeeMore('novelty')"
@@ -156,6 +180,7 @@ import { OutlineButton, FilledButton } from '../components/button'
 import UnitCard from '../components/card/UnitCard.vue'
 import SpecialistCard from '../components/card/SpecialistCard.vue'
 import Icon from '../components/Icon.vue'
+import { eventsAPI, unitsAPI, autoLogin } from '../services/api.js'
 
 export default {
   name: 'PlayzonePage',  components: {
@@ -167,71 +192,70 @@ export default {
     UnitCard,
     SpecialistCard,
     Icon
-  },
-  mounted() {
+  },  async mounted() {
     console.log('PlayzonePage mounted successfully!')
+    // Add click-outside handler to close overlays
+    document.addEventListener('click', this.handleClickOutside)
+    
+    // Perform auto-login first
+    await this.performAutoLogin()
+    
+    // Load data from API
+    this.loadPlayzoneData()
+    
+    // Expose reset method globally for development
+    if (process.env.NODE_ENV === 'development') {
+      window.resetAutoLogin = this.resetAutoLogin
+      console.log('🛠️ Development: window.resetAutoLogin() available')
+    }
   },
-  data() {
+  beforeUnmount() {
+    // Clean up event listener
+    document.removeEventListener('click', this.handleClickOutside)
+  },  data() {
     return {
-      discoveryUnits: [
-        {
-          id: 1,
-          title: 'Lorem ipsum dolor sit amet, consectetur adipisci.',
-          points: "100'300",
-          badgeText: 'Text',
-          isLearned: false
-        },
-        {
-          id: 2,
-          title: 'Lorem ipsum dolor sit amet, consectetur adipisci.',
-          points: "100'300",
-          badgeText: 'Text',
-          isLearned: false
-        },
-        {
-          id: 3,
-          title: 'Lorem ipsum dolor sit amet, consectetur adipisci.',
-          points: "100'300",
-          badgeText: 'Text',
-          isLearned: false
-        }
-      ],
-      noveltyUnits: [
-        {
-          id: 4,
-          title: 'Lorem ipsum dolor sit amet, consectetur adipisci.',
-          points: "100'300",
-          badgeText: 'Text',
-          isLearned: false
-        },
-        {
-          id: 5,
-          title: 'Lorem ipsum dolor sit amet, consectetur adipisci.',
-          points: "100'300",
-          badgeText: 'Text',
-          isLearned: false
-        },
-        {
-          id: 6,
-          title: 'Lorem ipsum dolor sit amet, consectetur adipisci.',
-          points: "100'300",
-          badgeText: 'Text',
-          isLearned: false
-        }
-      ]
+      clickedCards: new Set(), // Track which cards have their overlays open
+      discoveryUnits: [], // Will be populated from API
+      noveltyUnits: [], // Will be populated from API
+      loading: {
+        events: false,
+        discovery: false,
+        novelty: false
+      },      error: null
+    }
+    }
+  },
+  computed: {    authStatusMessage() {
+      const token = localStorage.getItem('auth_token')
+      if (token) {
+        return '🔐 Authenticated as Lucas Moreau (lucas@example.com)'
+      }
+      return this.authStatus === 'checking' ? '⏳ Checking authentication...' : '🔓 Not authenticated'
     }
   },
   methods: {
     handleKeepFlames() {
       this.$emit('keep-flames')
-    },
-    handleDiscoverEvent(eventType) {
-      this.$emit('discover-event', eventType)
+    },    handleDiscoverEvent(eventType) {
+      if (eventType === 'novelty') {
+        // Navigate to the novelty page
+        this.$router.push('/novelty')
+      } else {
+        // For other event types, emit the event
+        this.$emit('discover-event', eventType)
+      }
     },
     handleTestKnowledge() {
       this.$emit('test-knowledge')
-    },
-    handleUnitClick(unit) {
+    },    handleUnitClick(unit) {
+      // Toggle the clicked state for overlay display
+      if (this.clickedCards.has(unit.id)) {
+        this.clickedCards.delete(unit.id);
+      } else {
+        // Close other overlays first (only one overlay at a time)
+        this.clickedCards.clear();
+        this.clickedCards.add(unit.id);
+      }
       this.$emit('unit-click', unit)
     },
     handleLearnUnit(unit) {
@@ -245,12 +269,97 @@ export default {
     handleSpecialistClick(specialistData) {
       console.log('Specialist card clicked:', specialistData)
       this.$emit('specialist-click', specialistData)
-    },
-    handleBottomNavigation(item) {
+    },    handleBottomNavigation(item) {
       this.$emit('navigate', item)
       // Optional: Handle navigation here if needed
       console.log('Bottom navigation clicked:', item)
-    }
+    },
+    handleClickOutside(event) {
+      // Check if click is outside unit cards
+      const unitCard = event.target.closest('.unit-card')
+      if (!unitCard && this.clickedCards.size > 0) {
+        this.clickedCards.clear()
+      }
+    },
+    // Load data from API
+    async loadPlayzoneData() {
+      this.error = null
+      
+      try {
+        // Load discovery units (random units)
+        this.loading.discovery = true
+        const discoveryResponse = await unitsAPI.getRandomUnits(3)
+        this.discoveryUnits = discoveryResponse.data.map(unit => ({
+          id: unit.id,
+          title: unit.title || unit.name,
+          name: unit.specialist_name || `${unit.title} Specialist`,
+          points: unit.points?.toLocaleString() || "0",
+          badgeText: unit.is_certified ? 'Certified' : 'Text',
+          isLearned: unit.is_certified || false
+        }))
+      } catch (error) {
+        console.error('Error loading discovery units:', error)
+        this.error = 'Failed to load discovery units.'
+      } finally {
+        this.loading.discovery = false
+      }
+
+      try {
+        // Load novelty units (could be different endpoint or marked novelty units)
+        this.loading.novelty = true
+        const noveltyResponse = await unitsAPI.getRandomUnits(3)
+        this.noveltyUnits = noveltyResponse.data.map(unit => ({
+          id: unit.id,
+          title: unit.title || unit.name,
+          name: unit.specialist_name || `${unit.title} Specialist`,
+          points: unit.points?.toLocaleString() || "0",
+          badgeText: unit.is_certified ? 'Certified' : 'Text',
+          isLearned: unit.is_certified || false
+        }))
+      } catch (error) {
+        console.error('Error loading novelty units:', error)
+        this.error = 'Failed to load novelty units.'
+      } finally {
+        this.loading.novelty = false
+      }
+
+      try {
+        // Load events data for future use
+        this.loading.events = true
+        const eventsResponse = await eventsAPI.getEvents()
+        // Store events if needed in component state
+        console.log('Events loaded:', eventsResponse.data)
+      } catch (error) {
+        console.error('Error loading events:', error)
+        this.error = 'Failed to load events.'
+      } finally {
+        this.loading.events = false
+      }
+    },
+      // Auto-login functionality
+    async performAutoLogin() {
+      this.authStatus = 'checking'
+      try {
+        const loginSuccessful = await autoLogin.performAutoLogin()
+        if (loginSuccessful) {
+          console.log('🎉 Auto-login completed successfully')
+          this.authStatus = 'authenticated'
+        } else {
+          this.authStatus = 'guest'
+        }
+      } catch (error) {
+        console.error('❌ Auto-login error:', error)
+        this.authStatus = 'guest'
+        // Don't block the app if auto-login fails
+      }
+    },
+    
+    // Development helper to reset auto-login (can be called from browser console)
+    resetAutoLogin() {
+      localStorage.removeItem('auto_login_performed')
+      localStorage.removeItem('auth_token')
+      console.log('🔄 Auto-login flag and auth token cleared')
+    },
   },
   emits: [
     'keep-flames',
@@ -279,7 +388,7 @@ export default {
   top: 0;
   z-index: 100;
   background: #FFFFFF;
-  padding: 2rem 0 1rem 0;
+  padding: 3rem 0 2rem 0; /* Increased from 2rem 0 1rem 0 */
   display: flex;
   justify-content: center;
   width: 100%;
@@ -287,8 +396,26 @@ export default {
 
 .playzone-content {
   flex: 1;
-  padding: 0 0 2rem 0;
+  padding: 0 0 120px 0; /* Added bottom padding for navigation */
   overflow-x: hidden;
+}
+
+/* Auth Status Banner */
+.auth-status-banner {
+  background: linear-gradient(90deg, #e1f5fe, #f3e5f5);
+  color: #01579b;
+  padding: 0.5rem 1rem;
+  text-align: center;
+  font-size: 0.875rem;
+  position: relative;
+  z-index: 200;
+  border-bottom: 1px solid #b3e5fc;
+  transition: all 0.3s ease;
+}
+
+.auth-status-text {
+  margin: 0;
+  font-weight: 500;
 }
 
 /* Hero Section */
@@ -541,6 +668,7 @@ export default {
 .discovery-section,
 .novelty-section {
   margin: 2rem 0;
+  padding-top: 10px; /* Added extra padding on top */
 }
 
 .cards-container {
@@ -576,6 +704,63 @@ export default {
   color: #072C54 !important;
   background: transparent !important;
   flex-shrink: 0;
+}
+
+/* Loading and Error States */
+.error-message {
+  background: #fee2e2;
+  border: 1px solid #fecaca;
+  color: #dc2626;
+  padding: 1rem;
+  border-radius: 8px;
+  margin: 1rem 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.retry-button {
+  background: #dc2626;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: background-color 0.2s;
+}
+
+.retry-button:hover {
+  background: #b91c1c;
+}
+
+.loading-cards {
+  display: flex;
+  gap: 1rem;
+  padding: 0 1rem;
+}
+
+.loading-card {
+  width: 280px;
+  flex-shrink: 0;
+}
+
+.loading-placeholder {
+  width: 100%;
+  height: 200px;
+  background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
+  background-size: 200% 100%;
+  animation: loading-shimmer 2s infinite;
+  border-radius: 12px;
+}
+
+@keyframes loading-shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
 }
 
 /* Responsive Design */

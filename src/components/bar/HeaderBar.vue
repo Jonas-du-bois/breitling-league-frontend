@@ -1,4 +1,4 @@
-<template>  <div class="w-full max-w-md h-11 relative font-italian-plate">
+<template>  <div class="w-full max-w-md h-11 relative font-italian-plate header-bar-container">
     <!-- Back Button - Conditional -->
     <div 
       v-if="withBack"
@@ -6,11 +6,11 @@
       class="left-0 top-0 absolute inline-flex justify-start items-start cursor-pointer z-10"
       @click="handleBackClick"
     >
-      <div class="w-11 h-11 flex justify-start items-center hover:bg-gray-100 rounded transition-colors">
-        <Icon 
+      <div class="w-11 h-11 flex justify-start items-center hover:bg-gray-100 rounded transition-colors">        <Icon 
           :name="direction === 'right' ? 'arrow-forward' : 'arrow-back'" 
           size="sm" 
           alt="Navigation arrow"
+          :color="iconColor === 'white' ? 'white' : null"
           class="nav-arrow-icon"
         />
       </div>
@@ -76,6 +76,10 @@ export default {
 <style scoped>
 .font-italian-plate {
   font-family: 'Italian_Plate_No2', 'Inter', sans-serif;
+}
+
+.header-bar-container {
+  padding: 2rem 0 1.5rem 0; /* Increased top padding and bottom padding */
 }
 
 /* Color system based on component.txt specifications */

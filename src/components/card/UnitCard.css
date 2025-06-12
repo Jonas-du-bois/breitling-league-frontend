@@ -1,0 +1,68 @@
+/* UnitCard Color Fixes */
+/* Ensuring proper color mapping and preventing white text on white background */
+
+/* Force proper color values for Tailwind classes with exact specified colors */
+.text-card-text-color-dark {
+  color: #072C54 !important;
+}
+
+.text-color-primary-yellow-100 {
+  color: #FFC72C !important;
+}
+
+.text-color-primary-blue-100 {
+  color: #072C54 !important;
+}
+
+.bg-card-background-color-light {
+  background-color: #FFFFFF !important;
+}
+
+.outline-card-stroke-color {
+  outline-color: #072C54 !important;
+}
+
+.bg-color-primary-blue-100 {
+  background-color: #072C54 !important;
+}
+
+/* Specific fixes for unit card content */
+.unit-card .text-card-text-color-dark {
+  color: #072C54 !important;
+}
+
+.unit-card .text-color-primary-yellow-100 {
+  color: #FFC72C !important;
+}
+
+.unit-card .text-color-primary-blue-100 {
+  color: #072C54 !important;
+}
+
+/* Additional contrast fixes */
+.unit-card div[class*="text-"] {
+  color: inherit;
+}
+
+.unit-card .self-stretch {
+  color: #072C54;
+}
+
+/* Ensure title text is visible */
+.unit-card .self-stretch.justify-start.text-card-text-color-dark {
+  color: #072C54 !important;
+}
+
+/* Ensure "Not learned" text is properly yellow */
+.unit-card .justify-start.text-color-primary-yellow-100 {
+  color: #FFC72C !important;
+}
+
+/* Ensure points text is visible */
+.unit-card .justify-start span.text-color-primary-yellow-100 {
+  color: #FFC72C !important;
+}
+
+.unit-card .justify-start span.text-color-primary-blue-100 {
+  color: #072C54 !important;
+}

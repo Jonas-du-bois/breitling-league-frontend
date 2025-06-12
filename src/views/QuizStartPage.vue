@@ -1,36 +1,23 @@
 <template>
   <div class="quiz-start-page">
-    <!-- Status Bar -->
-    <div class="status-bar">
-      <div class="status-content">
-        <div class="time">13:41</div>
-        <div class="status-icons">
-          <div class="icon">􀛨</div>
-          <div class="icon">􀙇</div>
-        </div>
-      </div>
-    </div>
-
     <!-- Header with Back Button -->
     <div class="header-section">
       <HeaderBar 
         :with-back="true"
         :with-title="false"
+        icon-color="white"
         class="quiz-header"
-        @back="handleBack"
+        @back-click="handleBack"
       />
     </div>
 
     <!-- Main Content -->
     <div class="main-content">
       <div class="content-container">
-        <!-- Quiz Title -->
-        <div class="quiz-title">Quiz</div>
+        <!-- Quiz Title at the top center -->
+        <div class="quiz-title">{{ chapterTitle }}</div>
         
-        <!-- Chapter Title -->
-        <div class="chapter-title">{{ chapterTitle }}</div>
-        
-        <!-- Description -->
+        <!-- Description as paragraphs -->
         <div class="description">{{ description }}</div>
       </div>
     </div>
@@ -69,8 +56,7 @@ export default {
       chapterTitle: "Les innovations des années 30",
       description: "Les années 1930 ont été une décennie de progrès audacieux - dans les airs, sur terre, et au poignet. À travers ce quiz, explorez les grandes innovations de cette époque, dont certaines ont inspiré l'univers Breitling.\n\nÊtes-vous prêt à tester vos connaissances ?"
     }
-  },
-  methods: {
+  },  methods: {
     handleBack() {
       this.$emit('back')
       this.$router.back()
@@ -79,12 +65,11 @@ export default {
         unitId: this.unitId,
         chapterId: this.chapterId
       })
-      // Navigate to the actual quiz page
+      // Navigate to the new quiz question type 1 page
       this.$router.push({ 
-        name: 'Quiz', 
+        name: 'QuizQuestionType1', 
         params: { 
-          unitId: this.unitId || 'default',
-          chapterId: this.chapterId || 'default'
+          quizId: this.unitId || 'default'
         }
       })
     }
@@ -106,82 +91,13 @@ export default {
   font-family: 'Italian_Plate_No2', -webkit-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
-/* Status Bar */
-.status-bar {
-  width: 100%; /* w-96 */
-  position: absolute;
-  left: 0;
-  top: 0;
-  display: inline-flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-}
-
-.status-content {
-  align-self: stretch;
-  height: 56px; /* h-14 */
-  padding: 32px; /* px-8 pt-8 */
-  padding-top: 32px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
-}
-
-.status-content > div {
-  align-self: stretch;
-  backdrop-filter: blur(20px);
-  display: inline-flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.time {
-  text-align: center;
-  color: #FFFFFF; /* text-color-secondary-white */
-  font-size: 14px; /* text-sm */
-  font-weight: 500; /* font-medium */
-  font-family: 'Inter', sans-serif;
-}
-
-.status-icons {
-  width: 64px; /* w-16 */
-  height: 14px; /* h-3.5 */
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.status-icons .icon {
-  color: #FFFFFF; /* text-color-secondary-white */
-  font-family: 'SF_Pro_Text', sans-serif;
-}
-
-.status-icons .icon:first-child {
-  position: absolute;
-  left: 41px;
-  top: -3px;
-  font-size: 16px; /* text-base */
-  font-weight: normal;
-}
-
-.status-icons .icon:last-child {
-  position: absolute;
-  left: 21px;
-  top: -1px;
-  font-size: 14px; /* text-sm */
-  font-weight: normal;
-}
-
 /* Header */
 .header-section {
   position: absolute;
-  top: 56px;
+  top: 20px; /* Moved higher since no status bar */
   left: 0;
   width: 100%;
+  padding: 2rem 0 1rem 0;
 }
 
 .quiz-header {
@@ -197,7 +113,7 @@ export default {
   padding: 20px 0; /* py-5 */
   position: absolute;
   left: 33px;
-  top: 298px;
+  top: 180px; /* Adjusted for new layout without status bar */
   display: inline-flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -211,36 +127,29 @@ export default {
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  gap: 32px; /* gap-8 */
+  gap: 40px; /* Increased gap for better spacing */
 }
 
 .quiz-title {
   width: 288px; /* w-72 */
   text-align: center;
   color: #FFFFFF; /* text-color-secondary-white */
-  font-size: 30px; /* text-3xl */
-  font-weight: 600; /* font-semibold */
-  font-family: 'Italian_Plate_No2', sans-serif;
-  text-transform: uppercase;
-}
-
-.chapter-title {
-  width: 320px; /* w-80 */
-  text-align: center;
-  color: #FFFFFF; /* text-color-secondary-white */
-  font-size: 24px; /* text-2xl */
+  font-size: 32px; /* Increased font size for title */
   font-weight: 700; /* font-bold */
   font-family: 'Italian_Plate_No2', sans-serif;
+  text-transform: uppercase;
+  line-height: 1.2;
 }
 
 .description {
   width: 320px; /* w-80 */
-  text-align: center;
+  text-align: left; /* Changed to left align for paragraph style */
   color: #FFFFFF; /* text-color-secondary-white */
-  font-size: 20px; /* text-xl */
+  font-size: 18px; /* Slightly smaller for better readability */
   font-weight: 400; /* font-normal */
   font-family: 'Italian_Plate_No2', sans-serif;
   white-space: pre-line; /* To handle line breaks */
+  line-height: 1.6; /* Better line spacing for paragraphs */
 }
 
 /* Start Button */
@@ -253,7 +162,7 @@ export default {
   padding: 24px; /* p-6 */
   position: absolute;
   left: 32px;
-  top: 634px;
+  bottom: 60px; /* Position from bottom for better responsiveness */
   background: #FFC72C; /* bg-button-background-color */
   display: inline-flex;
   justify-content: center;
@@ -288,7 +197,6 @@ export default {
   }
   
   .quiz-title,
-  .chapter-title,
   .description {
     width: 100%;
   }

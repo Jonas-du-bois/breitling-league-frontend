@@ -360,7 +360,7 @@ export default {
 .demo-header {
   background: linear-gradient(135deg, #072C54 0%, #0f3a6b 100%);
   color: white;
-  padding: 0 0 3rem 0;
+  padding: 2rem 0 3rem 0; /* Increased top padding from 0 to 2rem */
   position: relative;
   overflow: hidden;
 }
