@@ -196,22 +196,25 @@ export default {
   align-items: center;
   gap: var(--spacing-32, 32px);
   background: var(--card-background-color-light, #FFF);
-  width: var(--dimensions-width-full, 402px);
-  min-width: var(--dimensions-width-full, 402px);
+  width: 100%;
+  max-width: 100vw;
+  box-sizing: border-box;
 }
 
 /* Image Section */
 .chapter-image {
-  width: var(--dimensions-width-full, 402px);
+  width: 100%;
+  max-width: 100vw;
   height: 130px;
   background: lightgray 50% / cover no-repeat;
   position: relative;
+  box-sizing: border-box;
 }
 
 /* Time Boost Bar */
 .time-boost-bar {
   display: flex;
-  width: var(--dimensions-width-full, 402px);
+  width: 100%;
   height: 26px;
   justify-content: center;
   align-items: center;
@@ -220,6 +223,7 @@ export default {
   position: absolute;
   bottom: 0;
   left: 0;
+  box-sizing: border-box;
 }
 
 /* Time Display */
@@ -255,15 +259,19 @@ export default {
 /* Content Box */
 .content-box {
   display: flex;
-  width: var(--dimensions-width-full-bothmargins, 338px);
+  width: 100%;
+  max-width: calc(100% - 64px);
   flex-direction: column;
   align-items: flex-start;
   gap: 32px;
+  padding: 0 32px;
+  box-sizing: border-box;
 }
 
 /* Chapter Title */
 .chapter-title {
-  width: 266px;
+  width: 100%;
+  max-width: 100%;
   color: var(--card-text-color-dark, #072C54);
   font-family: var(--fontfamily-default, "Italian Plate No2");
   font-size: var(--fontsize-32, 32px);
@@ -271,6 +279,7 @@ export default {
   font-weight: 600;
   line-height: normal;
   text-transform: uppercase;
+  word-wrap: break-word;
 }
 
 /* Points and Action Row */
@@ -593,24 +602,30 @@ export default {
 @media (max-width: 640px) {
   .chapter-card {
     gap: 24px;
-    padding-bottom: 24px;
-    width: 320px;
-    min-width: 320px;
+    padding-bottom: 16px;
+    width: 100%;
+    max-width: 100%;
+    min-width: unset;
   }
   
   .chapter-image,
   .time-boost-bar,
   .units-container {
-    width: 320px;
+    width: 100%;
   }
   
-  .content-box,
+  .content-box {
+    width: 100%;
+    max-width: calc(100% - 32px);
+    padding: 0 16px;
+  }
+  
   .bottom-divider {
-    width: 288px;
+    width: 100%;
   }
-  
-  .chapter-title {
-    width: 240px;
+    .chapter-title {
+    width: 100%;
+    max-width: 100%;
     font-size: 24px;
   }
   

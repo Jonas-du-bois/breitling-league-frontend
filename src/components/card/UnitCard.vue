@@ -7,43 +7,11 @@
       'non-certified': !unit?.isLearned
     }"
     @click="handleUnitClick"
-  >
-    <!-- Certified Card Layout (New Structure) -->
-    <div v-if="unit && unit.isLearned" class="h-52 p-4 bg-card-background-color-light shadow-[0px_0px_8px_0px_rgba(193,200,210,1.00)] outline outline-1 outline-offset-[-1px] outline-card-stroke-color inline-flex flex-col justify-between items-start overflow-hidden">
-      <div class="w-32 justify-start text-card-text-color-dark text-xl font-semibold font-['Italian_Plate_No2'] uppercase">{{ unit.title }}</div>
-      <div class="self-stretch flex flex-col justify-start items-end gap-2">
-        <div class="justify-start">
-          <span class="text-color-primary-yellow-100 text-xl font-semibold font-['Italian_Plate_No2']">{{ unit.points }} </span>
-          <span class="text-color-primary-blue-100 text-xl font-semibold font-['Italian_Plate_No2']">pts left</span>
-        </div>
-        <div data-status="certified" class="inline-flex justify-start items-start">
-          <div data-style="transparent" data-with-icon="true" data-with-label="false" class="h-6 p-1 flex justify-center items-center gap-1">
-            <div class="w-4 h-4 relative overflow-hidden">
-              <Icon 
-                :name="'specialist-full'"
-                size="sm"
-                :alt="'Unit completed'"
-                class="w-4 h-4 absolute bg-color-primary-blue-100"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Non-Certified Card Layout (Existing Structure) -->
-    <div v-else-if="unit && !unit.isLearned" class="unit-content">
+  >    <!-- Certified Card Layout (Same Structure as Non-Certified) -->
+    <div v-if="unit && unit.isLearned" class="unit-content">
       <!-- Card Header -->
       <div class="unit-header">
         <div class="unit-title">{{ unit.title }}</div>
-        <div class="unit-status-badge">
-          <Icon 
-            :name="'specialist-empty'"
-            size="sm"
-            :alt="'Unit not completed'"
-            class="status-icon"
-          />
-        </div>
       </div>
 
       <!-- Card Body -->
@@ -53,19 +21,45 @@
           <span class="unit-points-label">pts left</span>
         </div>
         
-        <!-- Progress indicator for non-certified cards -->
+        <!-- Progress indicator for certified cards -->
         <div class="unit-progress">
           <div class="progress-bar">
             <div class="progress-fill" :style="{ width: getProgressPercentage() }"></div>
           </div>
-          <span class="progress-text">{{ getProgressText() }}</span>
-        </div>
+          <span class="progress-text">{{ getProgressText() }}</span>        </div>
       </div>
 
       <!-- Card Footer -->
       <div class="unit-footer">
         <div class="unit-badge">
-          <div class="unit-badge-text">{{ unit.badgeText }}</div>
+          <Icon 
+            :name="'specialist-full'"
+            size="sm"
+            :alt="'Unit completed'"
+            class="badge-icon"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- Non-Certified Card Layout (Existing Structure) -->
+    <div v-else-if="unit && !unit.isLearned" class="unit-content">
+      <!-- Card Header -->
+      <div class="unit-header">
+        <div class="unit-title">{{ unit.title }}</div>
+      </div>
+
+      
+
+      <!-- Card Footer -->
+      <div class="unit-footer">
+        <div class="unit-badge">
+          <Icon 
+            :name="'specialist-empty'"
+            size="sm"
+            :alt="'Unit not completed'"
+            class="badge-icon"
+          />
         </div>
       </div>
     </div>
@@ -74,10 +68,8 @@
     <div v-else class="unit-error">
       <p>Error: Unit prop is undefined</p>
     </div>    <!-- Overlay when unit is clicked -->
-    <div v-if="isClicked && unit" class="unit-overlay">
-      <!-- Certified Card Overlay (existing structure) -->
+    <div v-if="isClicked && unit" class="unit-overlay">      <!-- Certified Card Overlay (existing structure) -->
       <div v-if="unit.isLearned" class="overlay-content">
-        <div class="overlay-title">{{ unit.title }}</div>
         <div class="overlay-buttons">
           <OutlineButton 
             label="Learn"
@@ -91,23 +83,20 @@
             @click="(event) => { event.stopPropagation(); handleQuizClick(); }"
           />
         </div>
-      </div>
-
-      <!-- Non-Certified Card Overlay (new Tailwind structure) -->
-      <div v-else class="w-40 h-52 p-4 bg-white/90 backdrop-blur-[2px] inline-flex flex-col justify-center items-center gap-4">
-        <div 
-          data-disabled="false" 
-          data-status="default" 
-          class="w-full h-14 max-w-80 min-w-14 p-6 outline outline-1 outline-offset-[-1px] outline-button-stroke-color-dark inline-flex justify-center items-center gap-2.5 cursor-pointer hover:bg-gray-50 transition-colors"
-          @click="(event) => { event.stopPropagation(); handleLearnClick(); }"
-        >
-          <div class="justify-start text-button-label-color-dark text-base font-bold font-['Italian_Plate_No2'] uppercase">Learn</div>
-        </div>
-        <div 
-          data-state="disabled" 
-          class="w-full h-14 max-w-80 min-w-14 min-h-11 p-6 bg-button-background-color-disabled inline-flex justify-center items-center gap-2.5 cursor-not-allowed"
-        >
-          <div class="justify-start text-button-label-color-light-disabled text-base font-bold font-['Italian_Plate_No2'] uppercase tracking-widest">Quiz</div>
+      </div>      <!-- Non-Certified Card Overlay (same structure as certified) -->
+      <div v-else class="overlay-content">
+        <div class="overlay-buttons">
+          <OutlineButton 
+            label="Learn"
+            class="learn-button-component"
+            @click="(event) => { event.stopPropagation(); handleLearnClick(); }"
+          />
+          <OutlineButton 
+            label="Quiz"
+            class="quiz-button-component"
+            :disabled="true"
+            @click="(event) => { event.stopPropagation(); }"
+          />
         </div>
       </div>
     </div>
@@ -218,10 +207,17 @@ export default {
   border-radius: 8px;
 }
 
-/* Certified cards use the new Tailwind structure */
+/* Certified cards use the same styling as non-certified */
 .unit-card.certified {
-  height: auto;
-  min-height: 208px;
+  padding: 16px;
+  background: var(--card-background-color-light, #FFF);
+  box-shadow: 0px 0px 8px 0px rgba(193, 200, 210, 1.00);
+  border: 1px solid var(--card-text-color-dark, #072C54);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: stretch;
+  overflow: hidden;
 }
 
 /* Non-certified cards use the existing Vue/CSS structure */
@@ -380,21 +376,15 @@ export default {
 
 .unit-badge {
   padding: 4px 8px;
-  background: var(--color-secondary-grey-100, #09091A);
   border-radius: 4px;
   display: inline-flex;
   justify-content: center;
   align-items: center;
 }
 
-.unit-badge-text {
-  color: var(--badge-label-color-light, #76787B);
-  font-family: "Italian Plate No2";
-  font-size: 10px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
-  text-transform: uppercase;
+.badge-icon {
+  width: 16px;
+  height: 16px;
 }
 
 /* Error display styling */
@@ -439,7 +429,7 @@ export default {
   flex-direction: column;
   align-items: center;
   gap: 16px;
-  padding: 16px;
+  padding: 8px 16px 16px 16px; /* Reduced top padding from 16px to 8px */
 }
 
 .overlay-title {
@@ -478,6 +468,7 @@ export default {
     width: 140px;
   }
   
+  .unit-card.certified,
   .unit-card.non-certified {
     padding: 12px;
     gap: 8px;
@@ -514,6 +505,7 @@ export default {
     width: 120px;
   }
   
+  .unit-card.certified,
   .unit-card.non-certified {
     padding: 10px;
   }

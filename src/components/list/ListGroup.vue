@@ -23,12 +23,13 @@
     <!-- Unit List Section -->
     <div class="demo-section">
       <h2>📦 Unit List - Course Units Grid</h2>
-      <div class="demo-container">
-        <UnitList 
+      <div class="demo-container">        <UnitList 
           :units="unitData"
           :show-see-more="true"
           :see-more-disabled="false"
           @unit-click="handleUnitClick"
+          @learn-unit="handleLearnUnit"
+          @quiz-unit="handleQuizUnit"
           @see-more-click="handleSeeMoreClick"
         />
       </div>
@@ -143,28 +144,29 @@ export default {
         { label: 'Category 3', status: 'default' },
         { label: 'Category 4', status: 'default' },
         { label: 'Category 5', status: 'default' }
-      ],
-      unitData: [
+      ],      unitData: [
         {
           id: 1,
-          title: 'Lorem ipsum dolor sit amet, consectetur adipisci.',
-          points: "100'300",
-          badgeText: 'Text',
-          state: 'default'
+          title: 'Breitling Heritage Fundamentals',
+          name: 'Heritage Specialist',
+          points: "25'300",
+          badgeText: 'Certified',
+          isLearned: true
         },
         {
           id: 2,
-          title: 'Interactive Learning Module',
-          points: "85'750",
-          badgeText: 'Active',
-          state: 'active'
+          title: 'Advanced Chronograph Technology',
+          points: "87'450",
+          badgeText: 'Text',
+          isLearned: false
         },
         {
           id: 3,
-          title: 'Advanced Concepts',
-          points: "120'500",
-          badgeText: 'Premium',
-          state: 'premium'
+          title: 'Navitimer Navigation Systems',
+          name: 'Navigation Expert',
+          points: "45'200",
+          badgeText: 'Certified',
+          isLearned: true
         }
       ],
       chapterData: [
@@ -209,10 +211,17 @@ export default {
     handleChipClick(data) {
       this.lastChipAction = `Clicked "${data.chip.label}" (index: ${data.index})`;
       console.log('Chip clicked:', data);
-    },
-    handleUnitClick(unit) {
+    },    handleUnitClick(unit) {
       this.lastUnitAction = `Clicked unit "${unit.title}" (${unit.points} pts)`;
       console.log('Unit clicked:', unit);
+    },
+    handleLearnUnit(unit) {
+      this.lastUnitAction = `Learn clicked for "${unit.title}"`;
+      console.log('Learn unit:', unit);
+    },
+    handleQuizUnit(unit) {
+      this.lastUnitAction = `Quiz clicked for "${unit.title}"`;
+      console.log('Quiz unit:', unit);
     },
     handleSeeMoreClick() {
       this.lastUnitAction = 'See More button clicked';

@@ -1,36 +1,13 @@
 <template>
-  <div class="quiz-page">
-    <!-- Header with navigation and timer -->
+  <div class="quiz-page">    <!-- Header with only back arrow -->
     <header class="quiz-header">
       <HeaderBar 
-        :page-title="quizData.title"
+        :with-back="true"
+        :with-title="false"
         direction="back"
         icon-color="white"
         @back-click="handleBackClick"
       />
-        <!-- Quiz Progress and Timer -->
-      <div class="quiz-meta">
-        <div class="quiz-progress-section">
-          <SVGProgressCircle 
-            :value="overallProgress"
-            :size="80"
-            color="#22c55e"
-            :show-percentage="true"
-            label="Progress"
-            :animated="true"
-          />
-          <span class="progress-text">{{ currentQuestionIndex + 1 }}/{{ quizData.questions.length }}</span>
-        </div>
-        
-        <TimerBoosterBar 
-          :timer="quizTimer"
-          :has-booster="quizData.hasBooster"
-          :booster-multiplier="quizData.boosterMultiplier"
-          :auto-update="true"
-          @booster-click="handleBoosterActivation"
-          @timer-update="handleTimerUpdate"
-        />
-      </div>
     </header>
 
     <!-- Main Quiz Content -->
@@ -46,11 +23,8 @@
           :correct-answers="stats.correctAnswers"
           :incorrect-answers="stats.incorrectAnswers"
         />
-      </div>
-
-      <!-- Answer Options -->
+      </div>      <!-- Answer Options -->
       <div class="answers-section">
-        <h3 class="answers-title">Choose your answer:</h3>
         <div class="answers-grid">
           <button
             v-for="(answer, index) in currentQuestion.options"
@@ -159,19 +133,17 @@
 </template>
 
 <script>
-import { HeaderBar, TimerBoosterBar } from '../components/bar'
+import { HeaderBar } from '../components/bar'
 import { QuestionCard } from '../components/card'
 import { OutlineButton, FilledButton } from '../components/button'
-import { SVGProgressCircle } from '../components/special'
+import { quizAPI } from '../services/api.js'
 
 export default {
   name: 'QuizPage',  components: {
     HeaderBar,
-    TimerBoosterBar,
     QuestionCard,
     OutlineButton,
-    FilledButton,
-    SVGProgressCircle
+    FilledButton
   },
   
   props: {
@@ -190,11 +162,10 @@ export default {
       showResults: false,
       selectedAnswer: null,
       currentQuestionIndex: 0,
-      
-      // Timer state
+        // Timer state
       timeRemaining: 60,
-      quizTimer: { days: 0, hours: 0, minutes: 5 },
-        // Statistics
+      
+      // Statistics
       stats: {
         correctAnswers: 0,
         incorrectAnswers: 0
@@ -206,8 +177,6 @@ export default {
         title: "Mathematics Fundamentals",
         description: "Test your basic mathematics knowledge",
         timeLimit: 300, // 5 minutes in seconds
-        hasBooster: true,
-        boosterMultiplier: "x2",
         totalPoints: 1000,
         questions: [
           {
@@ -266,21 +235,17 @@ export default {
       },
       
       // User answers tracking
-      userAnswers: []
+      userAnswers: [],
+      quizInstanceId: null
     }
   },
-  
-  computed: {
+    computed: {
     currentQuestion() {
       return this.quizData.questions[this.currentQuestionIndex] || {}
     },
     
     isLastQuestion() {
       return this.currentQuestionIndex === this.quizData.questions.length - 1
-    },
-    
-    overallProgress() {
-      return ((this.currentQuestionIndex + 1) / this.quizData.questions.length) * 100
     },
     
     questionProgress() {
@@ -330,27 +295,20 @@ export default {
     async loadQuizData() {
       try {
         this.isLoading = true
-        
-        // TODO: Replace with actual API call
-        // const response = await fetch(`/api/quizzes/${this.quizId}`)
-        // this.quizData = await response.json()
-        
-        // Simulate API loading
-        await new Promise(resolve => setTimeout(resolve, 1000))
-        
-        // Initialize user answers array
-        this.userAnswers = this.quizData.questions.map(q => ({
-          questionId: q.id,
-          selectedAnswer: null,
-          isCorrect: false,
-          points: 0,
-          timeSpent: 0
-        }))
-        
-        this.isLoading = false
+        // Fetch quiz data from backend
+        const response = await quizAPI.startQuiz(this.quizId)
+        // The backend should return quiz instance and questions
+        this.quizData = response.data.quiz
+        this.quizInstanceId = response.data.quiz_instance_id
+        // Reset state
+        this.currentQuestionIndex = 0
+        this.userAnswers = []
+        this.stats = { correctAnswers: 0, incorrectAnswers: 0 }
       } catch (error) {
         console.error('Failed to load quiz data:', error)
-        // Handle error - show error message or redirect
+        this.$emit('error', 'Failed to load quiz data.')
+      } finally {
+        this.isLoading = false
       }
     },
     
@@ -373,33 +331,41 @@ export default {
     },
     
     async submitAnswer() {
-      if (this.selectedAnswer === null && this.timeRemaining > 0) return
-      
+      if (this.selectedAnswer === null) return
       this.isSubmitting = true
-      
-      // Record the answer
-      const currentAnswer = this.userAnswers[this.currentQuestionIndex]
-      currentAnswer.selectedAnswer = this.selectedAnswer
-      currentAnswer.isCorrect = this.selectedAnswer === this.currentQuestion.correctAnswer
-      currentAnswer.points = currentAnswer.isCorrect ? this.currentQuestion.points : 0
-      currentAnswer.timeSpent = 60 - this.timeRemaining
-      
-      // Update statistics
-      if (currentAnswer.isCorrect) {
-        this.stats.correctAnswers++
-      } else {
-        this.stats.incorrectAnswers++
-      }
-      
-      // Show result
-      this.showResult = true
-      
-      // TODO: Send answer to backend
-      // await this.saveAnswerToBackend(currentAnswer)
+      try {
+        // Submit answer to backend
+        const question = this.currentQuestion
+        const answerPayload = {
+          quizInstanceId: this.quizInstanceId,
+          questionId: question.id,
+          answer: this.selectedAnswer
+        }
+        const response = await quizAPI.submitAnswer(
+          answerPayload.quizInstanceId,
+          answerPayload.questionId,
+          answerPayload.answer
+        )
+        // Update local state based on backend response
+        const isCorrect = response.data.is_correct
+        this.userAnswers.push({
+          questionId: question.id,
+          selected: this.selectedAnswer,
+          isCorrect,
+          points: question.points
+        })
+        if (isCorrect) {
+          this.stats.correctAnswers++
+        } else {
+          this.stats.incorrectAnswers++
+        }
+        this.showResult = true
+      } catch (error) {
+        console.error('Failed to submit answer:', error)
+        this.$emit('error', 'Failed to submit answer.')
+      } finally {
         this.isSubmitting = false
-      
-      // Clear the question timer
-      clearInterval(this.questionTimer)
+      }
     },
     
     nextQuestion() {
@@ -418,28 +384,21 @@ export default {
     },
     
     async finishQuiz() {
-      clearInterval(this.questionTimer)
-      
-      // TODO: Submit final quiz results to backend
-      // await this.submitQuizResults()
-      
-      this.showResults = true
+      try {
+        // Complete quiz and get results from backend
+        const response = await quizAPI.completeQuiz(this.quizInstanceId)
+        // Optionally update stats/results from backend
+        this.showResults = true
+      } catch (error) {
+        console.error('Failed to complete quiz:', error)
+        this.$emit('error', 'Failed to complete quiz.')
+      }
     },
-    
-    handleBackClick() {
+      handleBackClick() {
       // Show confirmation dialog before leaving
       if (confirm('Are you sure you want to leave the quiz? Your progress will be lost.')) {
         this.$router.push('/dashboard')
       }
-    },
-    
-    handleBoosterActivation() {
-      // TODO: Implement booster logic
-      console.log('Booster activated!')
-    },
-    
-    handleTimerUpdate(timer) {
-      this.quizTimer = timer
     },
     
     reviewAnswers() {
@@ -517,37 +476,16 @@ export default {
 .quiz-header {
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
-  padding: 20px;
+  padding: 3rem 1.5rem 1.5rem 1.5rem; /* Increased top padding from 20px */
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.quiz-meta {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 15px;
-  gap: 20px;
-}
-
-.quiz-progress-section {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  flex: 1;
-}
-
-.progress-text {
-  color: white;
-  font-weight: 600;
-  font-size: 14px;
-  min-width: 50px;
 }
 
 /* Main Content */
 .quiz-content {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 40px 20px;
+  width: 100vw; /* Full viewport width */
+  margin: 0;
+  padding: 40px 20px; /* Add padding for spacing */
+  box-sizing: border-box;
 }
 
 .question-section {
@@ -559,14 +497,6 @@ export default {
 /* Answer Section */
 .answers-section {
   margin-bottom: 40px;
-}
-
-.answers-title {
-  color: white;
-  font-size: 1.5rem;
-  font-weight: 600;
-  text-align: center;
-  margin-bottom: 30px;
 }
 
 .answers-grid {
@@ -643,7 +573,7 @@ export default {
 .answer-text {
   flex: 1;
   font-size: 16px;
-  color: #2d3748;
+  color: #09091A;
   font-weight: 500;
   line-height: 1.5;
 }

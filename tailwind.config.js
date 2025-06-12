@@ -21,6 +21,62 @@ export default {
     'left-[15.68px]',
     'w-[0.83px]',
     'h-[1.65px]',
+    'left-[1.42px]',
+    'top-[1.42px]',
+    // Quiz Question Type 1 specific classes
+    'w-96',
+    'h-[874px]',
+    'bg-color-primary-blue-100',
+    'w-80',
+    'h-14',
+    'left-[32px]',
+    'top-[736px]',
+    'bg-button-background-color',
+    'text-button-label-color-dark',
+    'font-italian-plate-no2',
+    'h-44',
+    'top-[189px]',
+    'bg-color-secondary-white',
+    'text-color-primary-yellow-100',
+    'text-color-secondary-black',
+    'text-color-functional-success-100',
+    'bg-color-functional-success-100',
+    'text-color-functional-error-100',
+    'bg-color-functional-error-100',
+    'text-color-secondary-white',
+    'top-[424px]',
+    'h-11',
+    'min-w-11',
+    'min-h-11',
+    'shadow-[0px_4px_8px_0px_rgba(255,199,43,0.40)]',
+    'shadow-[0px_0px_8px_0px_rgba(0,0,0,0.25)]',
+    'rounded-[999px]',
+    'w-20',
+    'h-20',
+    'w-16',
+    'h-16',
+    'left-[6.08px]',
+    'top-[6.08px]',
+    'w-72',
+    'w-8',
+    'h-2.5',
+    'font-inter',
+    'font-sf-pro',
+    'left-[41px]',
+    'top-[-3px]',
+    'left-[21px]',
+    'top-[-1px]',
+    'h-3.5',
+    'w-3',
+    'h-3',
+    // Dimensions
+    'w-40',
+    'h-52',
+    'w-4',
+    'h-4',
+    'min-w-[160px]',
+    'w-[160px]',
+    'h-[208px]',
     // Border radius
     'rounded-[100px]',
     'rounded-t-lg',
@@ -28,7 +84,7 @@ export default {
     // Box shadows
     'shadow-[0px_0px_8px_0px_rgba(193,200,210,1.00)]',
     // Font families
-    'font-italian-plate-no2',    // Custom colors
+    'font-italian-plate-no2',// Custom colors
     'bg-color-primary-yellow-100',
     'text-color-secondary-black',
     'text-card-text-color-dark',
@@ -44,7 +100,8 @@ export default {
     'outline-icon-color-dark-default',
     'outline-button-stroke-color-dark',
     'text-button-label-color-dark',
-    'bg-button-background-color-disabled',    'text-button-label-color-light-disabled',
+    'bg-button-background-color-disabled',
+    'text-button-label-color-light-disabled','text-button-label-color-light-disabled',
     'border-t',
     'border-color-primary-blue-100',
     'hover:bg-gray-100',
@@ -64,7 +121,8 @@ export default {
   ],
   theme: {
     extend: {      colors: {
-        // Breitling League Custom Colors        'color-secondary-black': '#000000',
+        // Breitling League Custom Colors        
+        'color-secondary-black': '#09091A',
         'color-primary-blue-100': '#072C54',
         'card-text-color-dark': '#072C54',
         'card-stroke-color': '#072C54',
@@ -72,7 +130,12 @@ export default {
         'icon-color-dark-default': '#09091A',
         'badge-label-color-light': '#76787B',
         'color-primary-yellow-100': '#FFC72C',
-        'card-background-color-light': '#FFFFFF',        // Button Colors
+        'card-background-color-light': '#FFFFFF',
+        'color-secondary-white': '#FFFFFF',
+        'color-functional-success-100': '#39A05D',
+        'color-functional-error-100': '#B9473B',
+        'button-background-color': '#FFC72C',
+        // Button Colors
         'button-stroke-color-dark': '#072C54',
         'button-label-color-dark': '#072C54',
         'button-background-color-disabled': '#C1C8D2',
@@ -80,9 +143,11 @@ export default {
         // Navigation Colors
         'icon-color-highlighted': '#FFC72C',
         'color-secondary-grey': '#71717B',
-      },fontFamily: {
+      },      fontFamily: {
         'italian-plate': ['Italian Plate No2', 'Inter', 'sans-serif'],
         'italian-plate-no2': ['Italian Plate No2', 'Inter', 'sans-serif'],
+        'inter': ['Inter', 'sans-serif'],
+        'sf-pro': ['SF Pro Text', 'system-ui', 'sans-serif'],
       },width: {
         '80': '20rem',  // 320px 
         '72': '18rem',  // 288px 
